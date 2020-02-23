@@ -3,7 +3,8 @@ part of './data_list.dart';
 enum DataListType {
   Normal,
   Tab, // entityTemplate=iconTabLinkGridCard
-  SelectorLinkCard // entityTemplate=selectorLinkCard 话题页
+  SelectorLinkCard, // entityTemplate=selectorLinkCard 话题页
+  Coolpic, // 酷图页...
 }
 
 class DataListSourceConfig {
@@ -26,7 +27,7 @@ class DataListConfig with ChangeNotifier {
   String get path {
     final url = sourceConfig?.url?.toString();
     this.title = sourceConfig?.title ?? "";
-    if (url.startsWith("#/")) {
+    if (url.startsWith("#/") || url.startsWith("/feed/")) {
       return "/page/dataList?url=${Uri.encodeComponent(url)}";
     }
     return url
@@ -47,7 +48,9 @@ class DataListConfig with ChangeNotifier {
   String get firstItem => data.length > 0
       ? data
           .firstWhere((element) =>
-              (element["entityId"]?.toString()?.length ?? 0) >= 4)["entityId"]
+              (element["entityId"]?.toString()?.length ?? 0) >= 4 &&
+              element["entityTemplate"] != "imageCarouselCard_1" &&
+              element["entityTemplate"] != "iconLinkGridCard")["entityId"]
           ?.toString()
       : null;
   String get lastItem => data.length > 0
@@ -96,12 +99,17 @@ class DataListConfig with ChangeNotifier {
         switch (entity["entityTemplate"]) {
           case "iconTabLinkGridCard":
             type = DataListType.Tab;
+            hasMore = false;
             return;
           case "selectorLinkCard":
             type = DataListType.SelectorLinkCard;
+            hasMore = false;
             return;
         }
       });
+      if (title == "酷图") {
+        type = DataListType.Coolpic;
+      }
     }
     if (path.startsWith(r'/user/dyhSubscribe')) needFirstItem = false;
     return tempData;
@@ -133,6 +141,8 @@ class DataListConfig with ChangeNotifier {
     page = 1;
     data.clear();
     inited = true;
+    bool tempNeedLastItem = needLastItem;
+    needLastItem = false;
     notifyListeners();
     try {
       await _fetchData();
@@ -142,6 +152,7 @@ class DataListConfig with ChangeNotifier {
     }
     loading = false;
     hasMore = true;
+    needLastItem = tempNeedLastItem;
     notifyListeners();
     return true;
   }

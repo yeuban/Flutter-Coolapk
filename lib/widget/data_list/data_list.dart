@@ -1,6 +1,7 @@
 import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/widget/common_error_widget.dart';
 import 'package:coolapk_flutter/widget/data_list/common.widget.dart';
+import 'package:coolapk_flutter/widget/data_list/data_list_type_coolpic.dart';
 import 'package:coolapk_flutter/widget/item_adapter/auto_item_adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,9 @@ class _DataListState extends State<DataList> {
               break;
             case DataListType.SelectorLinkCard:
               view = DataListTypeSelector();
+              break;
+            case DataListType.Coolpic:
+              view = DataListTypeCoolpic();
               break;
           }
           return view;

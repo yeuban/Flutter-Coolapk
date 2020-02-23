@@ -10,7 +10,7 @@ class DataListTypeSelector extends StatefulWidget {
 class _DataListTypeSelectorState extends State<DataListTypeSelector>
     with TickerProviderStateMixin {
   TabController _tabController;
-  List<dynamic> _selectorLinkCardEntityList;
+  List<dynamic> _selectorLinkCardEntityList; //
   Map<String, dynamic> _configCard; //
   List<dynamic> _configCardEntities; // tabs entity
 
