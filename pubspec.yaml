@@ -21,6 +21,8 @@ dependencies:
   qr_flutter: ^3.2.0
   flutter_speed_dial: ^1.2.5
   extended_image: ^0.7.1
+  sticky_headers: ^0.1.8
+  flutter_rating_bar: ^3.0.1
 
 dev_dependencies:
   flutter_test:

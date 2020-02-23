@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 
 class TitleCardItem extends StatelessWidget {
   final Map<String, dynamic> source;

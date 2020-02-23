@@ -1,9 +1,4 @@
-import 'package:coolapk_flutter/widget/data_list/common.widget.dart';
-import 'package:coolapk_flutter/widget/data_list/data_list.dart';
-import 'package:coolapk_flutter/widget/item_adapter/auto_item_adapter.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+part of './data_list.dart';
 
 class DataListInner extends StatefulWidget {
   final dynamic data;
@@ -11,10 +6,10 @@ class DataListInner extends StatefulWidget {
   DataListInner({Key key, this.data, this.paddingTop}) : super(key: key);
 
   @override
-  _DataListInnerState createState() => _DataListInnerState();
+  DataListInnerState createState() => DataListInnerState();
 }
 
-class _DataListInnerState extends State<DataListInner> {
+class DataListInnerState extends State<DataListInner> {
   DataListConfig _dataListConfig;
 
   @override
@@ -33,48 +28,57 @@ class _DataListInnerState extends State<DataListInner> {
     super.dispose();
   }
 
-  // void _checkAndNextPage() {
-  //   if (_dataListConfig.hasMore &&
-  //       !_dataListConfig.loading &&
-  //       !_dataListConfig.loadingMore &&
-  //       _scrollController.position.pixels >=
-  //           _scrollController.position.maxScrollExtent) {
-  //     _dataListConfig.nextPage();
-  //   }
-  // }
+  double get paddingTop => widget.paddingTop;
+
+  void _checkAndNextPage() {
+    final config = _dataListConfig;
+    if (config.hasMore && !config.loading && !config.loadingMore) {
+      config.nextPage();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: _dataListConfig,
-      child: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: _dataListConfig?.refresh,
-        child: Builder(
-          builder: (context) => Consumer<DataListConfig>(
-              builder: (context, final config, final child) {
-            if (!config.inited) {
-              _refreshIndicatorKey?.currentState?.show();
-            }
-            if (config.data.length == 0 && !config.loading) {
-              return Center(
-                child: Text(
-                  "这里没有内容~",
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
+      child: Padding(
+        padding: EdgeInsets.only(top: paddingTop),
+        child: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: _dataListConfig?.refresh,
+          child: Builder(
+            builder: (context) => Consumer<DataListConfig>(
+                builder: (context, final config, final child) {
+              if (!config.inited) {
+                _refreshIndicatorKey?.currentState?.show();
+              }
+              if (config.data.length == 0 && !config.loading) {
+                return Center(
+                  child: Text(
+                    "这里没有内容~",
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                );
+              }
+              return CustomScrollView(
+                // controller: _scrollController,
+                slivers: []
+                  ..addAll(_buildItems(config))
+                  ..addAll(_buildLoadingWidget(config))
+                  ..add(_buildLoadMoreWidget()),
               );
-            }
-            return CustomScrollView(
-              // controller: _scrollController,
-              slivers: [
-                SliverPadding(
-                    padding: EdgeInsets.only(top: widget.paddingTop ?? 0))
-              ]
-                ..addAll(_buildItems(config))
-                ..addAll(_buildLoadingWidget(config)),
-            );
-          }),
+            }),
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLoadMoreWidget() {
+    return SliverToBoxAdapter(
+      child: OutlineButton(
+        child: Text("加载更多"),
+        onPressed: () => _checkAndNextPage(),
       ),
     );
   }
@@ -103,12 +107,5 @@ class _DataListInnerState extends State<DataListInner> {
             )
           ]
         : [];
-  }
-}
-
-class AllowMultipleGestureRecognizer extends TapGestureRecognizer {
-  @override
-  void rejectGesture(int pointer) {
-    acceptGesture(pointer);
   }
 }

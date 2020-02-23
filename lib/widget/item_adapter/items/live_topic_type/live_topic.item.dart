@@ -1,7 +1,4 @@
-import 'package:coolapk_flutter/util/image_url_size_parse.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
-
+part of 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 class LiveTopicItem extends StatelessWidget {
   final Map<String, dynamic> source;
   const LiveTopicItem({Key key, this.source}) : super(key: key);

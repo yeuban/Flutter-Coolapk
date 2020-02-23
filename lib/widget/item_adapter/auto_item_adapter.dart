@@ -1,14 +1,10 @@
-import 'package:coolapk_flutter/widget/item_adapter/items/card_type/image_scale_card.item.dart';
-import 'package:coolapk_flutter/widget/item_adapter/items/card_type/image_square_scroll_card.item.dart';
-import 'package:coolapk_flutter/widget/item_adapter/items/card_type/title_card.item.dart';
-import 'package:coolapk_flutter/widget/item_adapter/items/live_topic_type/live_topic.item.dart';
-import 'package:coolapk_flutter/widget/item_adapter/items/topic_type/topic_card.item.dart';
+import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:flutter/material.dart';
 
 class AutoItemAdapter extends StatelessWidget {
   final entity;
   final sliverMode;
-  const AutoItemAdapter({Key key, this.entity, this.sliverMode = false})
+  const AutoItemAdapter({Key key, this.entity, this.sliverMode = true})
       : super(key: key);
 
   @override
@@ -33,6 +29,12 @@ class AutoItemAdapter extends StatelessWidget {
           case "imageScaleCard":
             item = ImageScaleCardItem(source: entity);
             break;
+          case "iconLinkGridCard":
+            item = IconLinkGridCard(source: entity);
+            break;
+          case "imageCarouselCard_1":
+            item = ImageCarouselCard(source: entity);
+            break;
         }
         break;
       case "liveTopic":
@@ -41,6 +43,8 @@ class AutoItemAdapter extends StatelessWidget {
       case "topic":
         item = TopicCardItem(source: entity);
         break;
+      case "product":
+        item = ProductItem(source: entity);
     }
     item = item ??
         Container(

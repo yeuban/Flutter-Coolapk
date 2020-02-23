@@ -37,7 +37,7 @@ dynamic convertValueByType(value, Type type, {String stack: ""}) {
 void tryCatch(Function f) {
   try {
     f?.call();
-  } catch (e, stack) {
+  } catch (e) {
     // debugPrint("$e");
     // debugPrint("$stack");
   }

@@ -1,5 +1,4 @@
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
+part of 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 
 class TopicCardItem extends StatelessWidget {
   final Map<String, dynamic> source;
@@ -11,6 +10,7 @@ class TopicCardItem extends StatelessWidget {
       child: ListTile(
         leading: ExtendedImage.network(
           source["logo"],
+          cache: false, // TODO:
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(8),
           width: 44,

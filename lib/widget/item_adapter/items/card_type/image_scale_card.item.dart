@@ -1,6 +1,4 @@
-import 'package:coolapk_flutter/util/image_url_size_parse.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
+part of 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 
 class ImageScaleCardItem extends StatelessWidget {
   final dynamic source;
@@ -16,6 +14,7 @@ class ImageScaleCardItem extends StatelessWidget {
           source["pic"],
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(8),
+          cache: false, // TODO:
         ),
       ),
     );

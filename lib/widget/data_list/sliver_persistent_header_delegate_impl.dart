@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of './data_list.dart';
 
 class SliverPersistentHeaderDelegateImpl
     extends SliverPersistentHeaderDelegate {
