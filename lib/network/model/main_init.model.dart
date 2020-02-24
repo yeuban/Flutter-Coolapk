@@ -2,6 +2,10 @@ import 'dart:convert' show json;
 
 import 'package:coolapk_flutter/network/model/util.dart';
 
+// 你安的所有数据 几乎都一个样子
+// 几乎都有entityId
+// 几乎都是驼峰，下划线混用
+
 class MainInitModel {
   final List<MainInitModelData> data;
 
