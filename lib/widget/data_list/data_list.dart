@@ -19,6 +19,7 @@ part './data_list_inner.dart';
 //  /dyh
 //  #/dyh  页面
 // /user/dyhFollowList 固定样式类型页面 title=我订阅的看看号
+// 以上废话
 class DataList extends StatefulWidget {
   final dynamic data;
   DataList({Key key, @required this.data}) : super(key: key);
@@ -44,7 +45,7 @@ class _DataListState extends State<DataList> {
       child: Builder(
         builder: (context) {
           final config = Provider.of<DataListConfig>(context, listen: true);
-          final type = config.type;
+          final type = config.type; // 来自DataListConfig
           Widget view;
           if (config.err != null)
             view = CommonErrorWidget(

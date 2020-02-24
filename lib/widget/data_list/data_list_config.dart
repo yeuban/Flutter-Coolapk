@@ -24,7 +24,7 @@ class DataListConfig with ChangeNotifier {
 
   bool needFirstItem;
   bool needLastItem;
-  String get path {
+  String get path { // 细品
     final url = sourceConfig?.url?.toString();
     this.title = sourceConfig?.title ?? "";
     if (url.startsWith("#/") || url.startsWith("/feed/")) {
@@ -45,6 +45,7 @@ class DataListConfig with ChangeNotifier {
   bool loadingMore = false;
   bool hasMore = true;
 
+  // 有的entityId是不能用作firstItem的
   String get firstItem => data.length > 0
       ? data
           .firstWhere((element) =>
@@ -65,7 +66,7 @@ class DataListConfig with ChangeNotifier {
 
   Future<dynamic> _fetchData() async {
     final response = (await Network.apiDio.get(path,
-        queryParameters: {}
+        queryParameters: {} // 组合参数
           ..addAll(paramBase)
           ..addAll(
             {"page": page, "title": title}
@@ -81,11 +82,11 @@ class DataListConfig with ChangeNotifier {
         options: Options(
           headers: headerBase,
         )));
-    debugPrint("""\n
-      DATA:    ${response.data["data"].length}
-      PATH:    ${response.request.path}
-      PARAM:   ${response.request.queryParameters}\n
-    """);
+//    debugPrint("""\n
+//      DATA:    ${response.data["data"].length}
+//      PATH:    ${response.request.path}
+//      PARAM:   ${response.request.queryParameters}\n
+//    """);
     final List<dynamic> d = _process(response.data["data"] as List<dynamic>);
     if (d.length <= 0) {
       hasMore = false;
@@ -93,6 +94,7 @@ class DataListConfig with ChangeNotifier {
     data.addAll(d);
   }
 
+  // 细品
   List<dynamic> _process(final tempData) {
     if (page == 1) {
       tempData.forEach((entity) {
@@ -115,6 +117,7 @@ class DataListConfig with ChangeNotifier {
     return tempData;
   }
 
+  // 令人窒息但有用的写法
   Future<bool> nextPage() async {
     if (loading || loadingMore) return false;
     loading = true;
