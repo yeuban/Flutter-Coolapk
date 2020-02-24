@@ -15,6 +15,7 @@ class TopicCardItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           width: 44,
           height: 44,
+          repeat: ImageRepeat.repeat,
         ),
         title: Text(source["title"] ?? ""),
         subtitle: Text(

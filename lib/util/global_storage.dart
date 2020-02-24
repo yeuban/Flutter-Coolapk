@@ -19,7 +19,7 @@ class GlobalStorage {
       final obj = jsonDecode(await _storageFile.readAsString());
       _storageObj = obj as Map<String, dynamic>;
     } catch (err, stack) {
-      debugPrintStack(stackTrace: stack);
+//      debugPrintStack(stackTrace: stack);
       _storageObj = Map();
     }
     return true;

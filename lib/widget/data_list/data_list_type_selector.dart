@@ -100,6 +100,7 @@ class _DataListTypeSelectorState extends State<DataListTypeSelector>
       selector: (_, final config) => config.data,
       builder: (final BuildContext context, final data, final child) {
         return NestedScrollView(
+          controller: PrimaryScrollController.of(context),
           headerSliverBuilder: (context, _) =>
               _buildHeaderSliver(context, data),
           body: Builder(
@@ -191,6 +192,7 @@ class _DataListTypeSelectorState extends State<DataListTypeSelector>
 class _SelectorTabPage extends StatefulWidget {
   final dynamic entity;
   final double paddingTop;
+
   const _SelectorTabPage({Key key, this.entity, this.paddingTop})
       : super(key: key);
 
@@ -201,12 +203,14 @@ class _SelectorTabPage extends StatefulWidget {
 class __SelectorTabPageState extends State<_SelectorTabPage>
     with AutomaticKeepAliveClientMixin {
   GlobalKey<DataListInnerState> _dataListInnerState = GlobalKey();
+
   checkAndNextPage() {
     _dataListInnerState?.currentState?._checkAndNextPage();
   }
 
   @override
   bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);

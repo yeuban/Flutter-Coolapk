@@ -2,6 +2,7 @@ part of 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 
 class IconLinkGridCard extends StatelessWidget {
   final Map<String, dynamic> source;
+
   const IconLinkGridCard({Key key, this.source}) : super(key: key);
 
   @override
@@ -27,6 +28,7 @@ class IconLinkGridCard extends StatelessWidget {
                   child: AspectRatio(
                     aspectRatio: .9,
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Expanded(
@@ -36,6 +38,7 @@ class IconLinkGridCard extends StatelessWidget {
                               entity["pic"] ?? entity["logo"],
                               cache: false, // TODO:
                               shape: BoxShape.rectangle,
+                              filterQuality: FilterQuality.low,
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
