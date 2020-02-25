@@ -113,77 +113,81 @@ class __CoolpicListState extends State<_CoolpicList> {
             ),
             itemCount: config.data.length,
             itemBuilder: (context, index) {
-              final entity = config.data[index];
-              final pic = entity["pic"] ?? "@1x1.jpg";
-              final ratio = getImageRatio(pic);
-              return MCard(
-                margin: const EdgeInsets.all(0),
-                padding: const EdgeInsets.all(0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+              return _buildCard(config, index);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCard(final config, final int index) {
+    final entity = config.data[index];
+    final pic = entity["pic"] ?? "@1x1.jpg";
+    final ratio = getImageRatio(pic);
+    return MCard(
+      margin: const EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          AspectRatio(
+            aspectRatio: ratio,
+            child: ExtendedImage.network(
+              pic,
+              cache: false, // TODO:
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(8),
+              ),
+              shape: BoxShape.rectangle,
+              fit: BoxFit.contain,
+            ),
+          ),
+          Container(
+            color: Theme.of(context).cardColor,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                HtmlText(
+                  html: entity["message"],
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Padding(padding: const EdgeInsets.only(top: 8)),
+                Row(
                   children: <Widget>[
-                    AspectRatio(
-                      aspectRatio: ratio,
-                      child: ExtendedImage.network(
-                        pic,
-                        cache: false, // TODO:
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(8),
-                        ),
-                        shape: BoxShape.rectangle,
-                        fit: BoxFit.contain,
-                      ),
+                    ExtendedImage.network(
+                      entity["userInfo"]["userSmallAvatar"],
+                      cache: false, // TODO:
+                      width: 28,
+                      height: 28,
+                      filterQuality: FilterQuality.low,
+                      shape: BoxShape.circle,
                     ),
-                    Container(
-                      color: Theme.of(context).cardColor,
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          HtmlText(
-                            html: entity["message"],
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Padding(padding: const EdgeInsets.only(top: 8)),
-                          Row(
-                            children: <Widget>[
-                              ExtendedImage.network(
-                                entity["userInfo"]["userSmallAvatar"],
-                                cache: false, // TODO:
-                                width: 28,
-                                height: 28,
-                                filterQuality: FilterQuality.low,
-                                shape: BoxShape.circle,
-                              ),
-                              Padding(padding: const EdgeInsets.only(left: 8)),
-                              Expanded(
-                                child: Text(
-                                  entity["username"],
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2
-                                        .color
-                                        .withAlpha(200),
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                    Padding(padding: const EdgeInsets.only(left: 8)),
+                    Expanded(
+                      child: Text(
+                        entity["username"],
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .subtitle2
+                              .color
+                              .withAlpha(200),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                   ],
                 ),
-              );
-            },
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
