@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/page/home/home.page.dart';
+import 'package:coolapk_flutter/page/login/login.page.dart';
 import 'package:coolapk_flutter/store/theme.store.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/global_storage.dart';
@@ -19,7 +20,7 @@ Future<bool> init(final BuildContext context) async {
   await Provider.of<ThemeStore>(context, listen: false).loadConfig();
   final loginInfo =
       await Provider.of<UserStore>(context, listen: false).checkLoginInfo();
-  print(loginInfo);
+  print("登录信息:" + loginInfo.toString());
   return true;
 }
 
@@ -83,7 +84,8 @@ class _LauncherPageState extends State<LauncherPage>
                   scale: Tween<double>(begin: 1.6, end: 1).animate(
                     CurvedAnimation(parent: anim1, curve: Curves.fastOutSlowIn),
                   ),
-                  child: HomePage(),
+                  // child: HomePage(),
+                  child: LoginPage(),
                 ),
               );
             },
