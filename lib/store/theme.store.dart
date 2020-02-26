@@ -21,10 +21,6 @@ class ThemeStore extends ChangeNotifier {
   bool get dark => _dark ?? false;
   Brightness get brightness => dark ? Brightness.dark : Brightness.light;
 
-  ThemeStore() {
-    _load();
-  }
-
   setTheme(String newTheme, bool dark) {
     if (_color != newTheme || _dark != dark) {
       if (_color != newTheme) {
@@ -57,7 +53,7 @@ class ThemeStore extends ChangeNotifier {
     super.notifyListeners();
   }
 
-  _load() {
+  loadConfig() {
     final _color =
         GlobalStorage.get<String>("theme", "color", defaultValue: "blue");
     final _dark = GlobalStorage.get<bool>("theme", "dark", defaultValue: false);

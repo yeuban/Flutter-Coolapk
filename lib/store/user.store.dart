@@ -17,15 +17,15 @@ class UserStore extends ChangeNotifier {
     }
   }
 
-  Future<bool> checkLoginInfo() async {
-    if (loginInfo != null) return true;
+  Future<LoginInfoData> checkLoginInfo({force = false}) async {
+    if (loginInfo != null && !force) return loginInfo;
     LoginInfoModel loginInfoModel = await UserApi.checkLoginInfoData();
     if (loginInfoModel == null) {
-      return false; // 没有登录信息
+      return null; // 没有登录信息
     } else {
       loginInfo = loginInfoModel.data;
     }
-    return true;
+    return loginInfo;
   }
 
   static UserStore of(final BuildContext context,

@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // 接口 /v6/main/init
   Future<bool> getMainInitModelData() async {
     if (_mainInitModelData != null) return true;
+    await Future.delayed(Duration(seconds: 800));
     _mainInitModelData = (await MainApi.getInitConfig()).data;
     return true;
   }
@@ -72,7 +73,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void _gotoTab(int pageEntityId, int page) {
     _controllerMap[pageEntityId].jumpToPage(page);
-    // duration: Duration(milliseconds: 700), curve: Curves.easeOutQuart); // animateToPage 会导致经过的页面都会拉取数据...
+    // animateToPage 会导致经过的页面都会拉取数据...
   }
 
   @override

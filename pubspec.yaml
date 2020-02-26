@@ -25,6 +25,7 @@ dependencies:
   flutter_rating_bar: ^3.0.1
   pull_to_refresh: ^1.5.2
   waterfall_flow: ^0.1.3
+  toast: ^0.1.5
   # fluro: ^1.5.2 Flutter SDK version >=1.5.0 <1.13.0
 
 dev_dependencies:
@@ -41,3 +42,6 @@ flutter:
         - asset: assets/fonts/sarasa-ui-sc-regular.ttf
         - asset: assets/fonts/sarasa-ui-sc-bold.ttf
           weight: 600
+  assets:
+    - assets/images/
+
