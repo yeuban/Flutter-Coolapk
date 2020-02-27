@@ -5,6 +5,7 @@ import 'package:coolapk_flutter/page/home/home.page.dart';
 import 'package:coolapk_flutter/page/login/login.page.dart';
 import 'package:coolapk_flutter/store/theme.store.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
+import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -76,21 +77,7 @@ class _LauncherPageState extends State<LauncherPage>
       Future.delayed(Duration(milliseconds: 800)).then((_) {
         Navigator.pushReplacement(
           context,
-          PageRouteBuilder(
-            pageBuilder: (context, anim1, anim2) {
-              return FadeTransition(
-                opacity: anim1,
-                child: ScaleTransition(
-                  scale: Tween<double>(begin: 1.6, end: 1).animate(
-                    CurvedAnimation(parent: anim1, curve: Curves.fastOutSlowIn),
-                  ),
-                  // child: HomePage(),
-                  child: LoginPage(),
-                ),
-              );
-            },
-            transitionDuration: Duration(milliseconds: 700),
-          ),
+          AnimPageRoute.use(context, LoginPage()),
         );
       });
       // ======================================= //

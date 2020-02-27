@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // 接口 /v6/main/init
   Future<bool> getMainInitModelData() async {
     if (_mainInitModelData != null) return true;
-    await Future.delayed(Duration(seconds: 800));
+    await Future.delayed(Duration(milliseconds: 700));
     _mainInitModelData = (await MainApi.getInitConfig()).data;
     return true;
   }
