@@ -1,4 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:coolapk_flutter/page/product/product.page.dart';
+import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/image_url_size_parse.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';

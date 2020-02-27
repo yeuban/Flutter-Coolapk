@@ -143,7 +143,7 @@ class _LoginFormState extends State<LoginForm> {
                   textColor: Theme.of(context).primaryTextTheme.bodyText1.color,
                   onPressed: () {
                     Navigator.of(context).pushReplacement(
-                      AnimPageRoute.use(context, HomePage()),
+                      ScaleInRoute(widget: HomePage()),
                     );
                   },
                 ),

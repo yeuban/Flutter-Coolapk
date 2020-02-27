@@ -10,6 +10,7 @@ import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 Future<bool> setupComponent() async {
   await GlobalStorage.setupGlobalStorage();
@@ -70,14 +71,14 @@ class _LauncherPageState extends State<LauncherPage>
       _animCtr.forward(from: 0.0);
       await setupComponent();
       await init(context);
-      await Future.delayed(Duration(milliseconds: 800));
+      await Future.delayed(Duration(milliseconds: 500));
       _animCtr.reset();
       _scaleAnim = _scaleAnim2;
       _animCtr.forward();
-      Future.delayed(Duration(milliseconds: 800)).then((_) {
+      Future.delayed(Duration(milliseconds: 500)).then((_) {
         Navigator.pushReplacement(
           context,
-          AnimPageRoute.use(context, LoginPage()),
+          ScaleInRoute(widget: LoginPage()),
         );
       });
       // ======================================= //
@@ -100,12 +101,18 @@ class _LauncherPageState extends State<LauncherPage>
           opacity: _scaleAnim,
           child: ScaleTransition(
             scale: _scaleAnim,
-            child: ExtendedImage.asset(
-              "assets/images/logo_256.png",
-              filterQuality: FilterQuality.high,
-              color: Color(0xff4caf50),
-              width: 80,
-              height: 80,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ExtendedImage.asset(
+                  "assets/images/logo_256.png",
+                  filterQuality: FilterQuality.high,
+                  color: Color(0xff4caf50),
+                  width: 80,
+                  height: 80,
+                ),
+                Text(Provider.of<UserStore>(context).userName ?? "加载中..."),
+              ],
             ),
           ),
         ),
