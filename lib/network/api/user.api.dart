@@ -4,8 +4,8 @@ import 'package:coolapk_flutter/network/model/login_info.model.dart';
 class UserApi {
   static Future<LoginInfoModel> checkLoginInfoData() async {
     try {
-      return LoginInfoModel.fromJson(
-          await Network.apiDio.get("/v6/account/checkLoginInfo"));
+      final resp = await Network.apiDio.get("/account/checkLoginInfo");
+      return LoginInfoModel.fromJson(resp.data);
     } catch (err) {
       return null;
     }

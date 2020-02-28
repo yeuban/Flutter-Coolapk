@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:coolapk_flutter/network/dio_setup.dart';
+import 'package:coolapk_flutter/page/home/home.page.dart';
 import 'package:coolapk_flutter/page/login/login.page.dart';
 import 'package:coolapk_flutter/store/theme.store.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
@@ -76,7 +77,12 @@ class _LauncherPageState extends State<LauncherPage>
       Future.delayed(Duration(milliseconds: 500)).then((_) {
         Navigator.pushReplacement(
           context,
-          ScaleInRoute(widget: LoginPage()),
+          ScaleInRoute(
+            widget:
+                Provider.of<UserStore>(context, listen: false).loginInfo != null
+                    ? HomePage()
+                    : LoginPage(),
+          ),
         );
       });
       // ======================================= //
