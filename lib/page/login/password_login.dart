@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:coolapk_flutter/network/api/auth.api.dart';
 import 'package:coolapk_flutter/network/dio_setup.dart';
+import 'package:coolapk_flutter/page/home/home.page.dart';
+import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/widget/common_error_widget.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class PasswordLogin extends StatefulWidget {
   PasswordLogin({Key key}) : super(key: key);
@@ -13,13 +16,18 @@ class PasswordLogin extends StatefulWidget {
   _PasswordLoginState createState() => _PasswordLoginState();
 }
 
-class _PasswordLoginState extends State<PasswordLogin> with AutomaticKeepAliveClientMixin {
-
-
+class _PasswordLoginState extends State<PasswordLogin>
+    with AutomaticKeepAliveClientMixin {
   GlobalKey<FormState> _formKey = GlobalKey();
 
   String _requestHash;
   String _captchaUrl;
+
+  String _username;
+  String _password;
+  String _captcha;
+  String _errMsg;
+  bool _logging = false;
 
   Future<bool> _getRequestHash() async {
     if (_requestHash != null) return false;
@@ -34,6 +42,44 @@ class _PasswordLoginState extends State<PasswordLogin> with AutomaticKeepAliveCl
   void initState() {
     super.initState();
     _captchaUrl = AuthApi.captchaUrl;
+  }
+
+  Future<bool> _doLogin() async {
+    setState(() {
+      _errMsg = null;
+      _logging = true;
+    });
+    try {
+      final resp = await AuthApi.login(
+        _username,
+        _password,
+        _captcha,
+        _requestHash,
+      );
+      final status = resp["status"].toString();
+      if (status != "1" && status != "400") {
+        _errMsg = resp["message"];
+        return false;
+      }
+      // 登录成功
+      if (status == 400) {
+        // 重复登录
+        _errMsg = resp["message"] + "\n将在2s后自动跳转=,=";
+        await Future.delayed(Duration(seconds: 2));
+      }
+      Navigator.of(context).pushReplacement(
+        ScaleInRoute(widget: HomePage()),
+      );
+    } catch (err, stack) {
+      _errMsg = err.toString();
+      debugPrintStack(stackTrace: stack);
+    } finally {
+      setState(() {
+        _captchaUrl = AuthApi.captchaUrl;
+        _logging = false;
+      });
+    }
+    return true;
   }
 
   @override
@@ -64,7 +110,7 @@ class _PasswordLoginState extends State<PasswordLogin> with AutomaticKeepAliveCl
       padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
-        autovalidate: true,
+        // autovalidate: true,
         child: ListView(
           children: <Widget>[]
             ..add(_buildAgreement())
@@ -101,11 +147,21 @@ class _PasswordLoginState extends State<PasswordLogin> with AutomaticKeepAliveCl
               autofocus: false,
               decoration: InputDecoration(labelText: "邮箱/手机号/用户名"),
               maxLines: 1,
+              onSaved: (newV) => _username = newV,
+              validator: (value) {
+                if (value.length == 0) return "请输入用户名";
+                return null;
+              },
             ),
             TextFormField(
               autofocus: false,
               decoration: InputDecoration(labelText: "密码"),
               maxLines: 1,
+              onSaved: (newV) => _password = newV,
+              validator: (value) {
+                if (value.length == 0) return "请输入密码";
+                return null;
+              },
             ),
             Row(
               children: <Widget>[
@@ -116,6 +172,11 @@ class _PasswordLoginState extends State<PasswordLogin> with AutomaticKeepAliveCl
                       labelText: "验证码",
                     ),
                     maxLines: 1,
+                    onSaved: (newV) => _captcha = newV,
+                    validator: (value) {
+                      if (value.length == 0) return "请输入验证码";
+                      return null;
+                    },
                   ),
                 ),
                 _buildCaptcha(),
@@ -126,12 +187,24 @@ class _PasswordLoginState extends State<PasswordLogin> with AutomaticKeepAliveCl
               thickness: 0,
               color: Colors.transparent,
             ),
+            _errMsg != null
+                ? Text(
+                    _errMsg,
+                    style: const TextStyle(color: Colors.red),
+                  )
+                : const SizedBox(),
             OutlineButton(
               child: Text("登录"),
               textColor: Theme.of(context).primaryColor,
-              onPressed: () {
-                // TODO:
-              },
+              onPressed: _logging
+                  ? null
+                  : () {
+                      // TODO:
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        _doLogin();
+                      }
+                    },
             ),
             Divider(),
             Text(
