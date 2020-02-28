@@ -13,8 +13,10 @@ class ImageSquareScrollCardItem extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           final entity = source["entities"][index];
-          final ratio =
-              getImageRatio(entity["logo"] ?? entity["pic"] ?? "@1x1.jpg");
+          if ((entity["logo"] ?? entity["pic"]) == null) {
+            return const SizedBox();
+          }
+          final ratio = getImageRatio(entity["logo"] ?? entity["pic"]);
           return Container(
             constraints: BoxConstraints(minHeight: 102, minWidth: 102),
             child: Padding(

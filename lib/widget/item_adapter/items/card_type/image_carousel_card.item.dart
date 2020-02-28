@@ -6,12 +6,14 @@ class ImageCarouselCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double aspectRatio =
-        getImageRatio(source["entities"][0]["pic"] ?? "@0x0.x");
+    if (source["entities"][0]["pic"] == null) {
+      return const SizedBox();
+    }
+    final double aspectRatio = getImageRatio(source["entities"][0]["pic"]);
     return MCard(
       padding: const EdgeInsets.all(0),
       child: CarouselSlider.builder(
-        aspectRatio: aspectRatio,
+        aspectRatio: aspectRatio <= 0.0 ? 1 : aspectRatio,
         viewportFraction: 1.0,
         autoPlay: true,
         enableInfiniteScroll: source["entities"].length > 1,

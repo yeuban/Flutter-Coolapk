@@ -10,7 +10,6 @@ import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:toast/toast.dart';
 
 Future<bool> setupComponent() async {
   await GlobalStorage.setupGlobalStorage();
@@ -53,7 +52,7 @@ class _LauncherPageState extends State<LauncherPage>
       curve: Curves.fastOutSlowIn,
     );
     _scaleAnim = Tween(begin: 0.0, end: 1.0).animate(_curvedAnim);
-    _scaleAnim2 = Tween(begin: 1.0, end: 10.0).animate(_curvedAnim);
+    _scaleAnim2 = Tween(begin: 1.0, end: 0.0).animate(_curvedAnim);
     _animCtr.addListener(() {
       setState(() {});
     });
@@ -71,14 +70,19 @@ class _LauncherPageState extends State<LauncherPage>
       _animCtr.forward(from: 0.0);
       await setupComponent();
       await init(context);
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: 600));
       _animCtr.reset();
       _scaleAnim = _scaleAnim2;
       _animCtr.forward();
-      Future.delayed(Duration(milliseconds: 500)).then((_) {
+      Future.delayed(Duration(milliseconds: 600)).then((_) {
         Navigator.pushReplacement(
           context,
-          ScaleInRoute(widget: LoginPage()),
+          ScaleInRoute(
+            widget:
+                Provider.of<UserStore>(context, listen: false).loginInfo != null
+                    ? HomePage()
+                    : LoginPage(),
+          ),
         );
       });
       // ======================================= //
@@ -95,6 +99,7 @@ class _LauncherPageState extends State<LauncherPage>
     if (err != null) {
       return Center(child: Text(err));
     }
+    final userName = Provider.of<UserStore>(context)?.loginInfo?.username;
     return Scaffold(
       body: Center(
         child: FadeTransition(
@@ -111,7 +116,7 @@ class _LauncherPageState extends State<LauncherPage>
                   width: 80,
                   height: 80,
                 ),
-                Text(Provider.of<UserStore>(context).userName ?? "加载中..."),
+                Text(userName == null ? "加载中..." : "Hi~ $userName"),
               ],
             ),
           ),

@@ -13,5 +13,6 @@ Size getImageSizeFromUrl(final String url) {
 
 double getImageRatio(final String url) {
   final size = getImageSizeFromUrl(url);
-  return size.width / size.height;
+  final r = (size.width / size.height);
+  return r.isNaN ? 1 : r;
 }
