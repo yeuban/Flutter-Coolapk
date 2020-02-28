@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:coolapk_flutter/network/dio_setup.dart';
-import 'package:coolapk_flutter/page/home/home.page.dart';
 import 'package:coolapk_flutter/page/login/login.page.dart';
 import 'package:coolapk_flutter/store/theme.store.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
@@ -10,7 +9,6 @@ import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:toast/toast.dart';
 
 Future<bool> setupComponent() async {
   await GlobalStorage.setupGlobalStorage();
