@@ -8,7 +8,16 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () {
+        final String url = source[
+            "url"]; // e.g. /product/[productId] => /v6/product/detail?id=[productId]
+        final productId = url.replaceAll(r'/product/', "");
+        Navigator.of(context).push(ScaleInRoute(
+          widget: ProductPage(
+            productId: productId,
+          ),
+        ));
+      },
       title: Text(
         source["title"],
         maxLines: 1,
@@ -29,7 +38,17 @@ class ProductItem extends StatelessWidget {
           cache: false, // TODO:
         ),
       ),
-      trailing: Column(
+      trailing: Container(
+        width: 115,
+        alignment: Alignment.center,
+        child: _buildTrailing(context),
+      ),
+    );
+  }
+
+  _buildTrailing(final BuildContext context) {
+    if (source["star_average_score"] > 0) {
+      return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
@@ -54,7 +73,32 @@ class ProductItem extends StatelessWidget {
             onRatingUpdate: (rating) {},
           )
         ],
-      ),
-    );
+      );
+    }
+    if ((source["release_time"] != null || source["release_time"].length > 0) &&
+        source["release_status"] == 0) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            source["release_time"],
+            style: TextStyle(
+              backgroundColor: Theme.of(context).primaryColor.withAlpha(50),
+              color: Theme.of(context).primaryColor,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+          Text(
+            "发布时间",
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        ],
+      );
+    }
+    return const Text("暂无人评分");
   }
 }

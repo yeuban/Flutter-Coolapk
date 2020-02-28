@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:coolapk_flutter/network/dio_setup.dart';
+import 'package:coolapk_flutter/page/home/home.page.dart';
 import 'package:coolapk_flutter/page/login/password_login.dart';
 import 'package:coolapk_flutter/page/login/token_login.dart';
+import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
@@ -134,6 +136,18 @@ class _LoginFormState extends State<LoginForm> {
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
               title: Text("登录酷安"),
+              centerTitle: false,
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("跳过登录"),
+                  textColor: Theme.of(context).primaryTextTheme.bodyText1.color,
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      ScaleInRoute(widget: HomePage()),
+                    );
+                  },
+                ),
+              ],
               bottom: TabBar(
                 // isScrollable: true,
                 tabs: _loginMethod.keys.map((key) {
