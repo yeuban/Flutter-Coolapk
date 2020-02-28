@@ -65,6 +65,7 @@ class ProductItem extends StatelessWidget {
             minRating: 0,
             maxRating: 10,
             itemCount: 5,
+            tapOnlyMode: true,
             itemSize: 18,
             itemBuilder: (context, _) => Icon(
               Icons.star,

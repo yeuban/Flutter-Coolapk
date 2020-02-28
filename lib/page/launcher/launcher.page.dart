@@ -51,7 +51,7 @@ class _LauncherPageState extends State<LauncherPage>
       curve: Curves.fastOutSlowIn,
     );
     _scaleAnim = Tween(begin: 0.0, end: 1.0).animate(_curvedAnim);
-    _scaleAnim2 = Tween(begin: 1.0, end: 10.0).animate(_curvedAnim);
+    _scaleAnim2 = Tween(begin: 1.0, end: 0.0).animate(_curvedAnim);
     _animCtr.addListener(() {
       setState(() {});
     });

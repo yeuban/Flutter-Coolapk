@@ -9,21 +9,25 @@ class ScaleInRoute extends PageRouteBuilder {
           transitionDuration: Duration(milliseconds: 500),
           transitionsBuilder: (context, anim, secondaryAnim, child) {
             final widgetAnim = FadeTransition(
-              opacity: Tween<double>(begin: 0, end: 1).animate(anim),
-              child: ScaleTransition(
-                scale: ((anim.status == AnimationStatus.forward ||
-                            anim.status == AnimationStatus.completed)
-                        ? Tween<double>(begin: 1.4, end: 1)
-                        : Tween<double>(begin: 1, end: .5))
-                    .animate(
-                  CurvedAnimation(
-                    parent: anim,
-                    curve: Curves.fastOutSlowIn,
-                  ),
+              opacity: Tween<double>(begin: 0, end: 1).animate(
+                CurvedAnimation(
+                  parent: anim,
+                  curve: Curves.fastOutSlowIn,
                 ),
-                // child: HomePage(),
-                child: child,
               ),
+              child: ScaleTransition(
+                  scale: ((anim.status == AnimationStatus.forward ||
+                              anim.status == AnimationStatus.completed)
+                          ? Tween<double>(begin: 1.4, end: 1)
+                          : Tween<double>(begin: 1.2, end: 1))
+                      .animate(
+                    CurvedAnimation(
+                      parent: anim,
+                      curve: Curves.fastOutSlowIn,
+                    ),
+                  ),
+                  // child: HomePage(),
+                  child: child),
             );
             if (exitWidget == null) return widgetAnim;
             final exitWidgetAnim = FadeTransition(
