@@ -70,11 +70,11 @@ class _LauncherPageState extends State<LauncherPage>
       _animCtr.forward(from: 0.0);
       await setupComponent();
       await init(context);
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: 600));
       _animCtr.reset();
       _scaleAnim = _scaleAnim2;
       _animCtr.forward();
-      Future.delayed(Duration(milliseconds: 500)).then((_) {
+      Future.delayed(Duration(milliseconds: 600)).then((_) {
         Navigator.pushReplacement(
           context,
           ScaleInRoute(
@@ -99,6 +99,7 @@ class _LauncherPageState extends State<LauncherPage>
     if (err != null) {
       return Center(child: Text(err));
     }
+    final userName = Provider.of<UserStore>(context)?.loginInfo?.username;
     return Scaffold(
       body: Center(
         child: FadeTransition(
@@ -115,7 +116,7 @@ class _LauncherPageState extends State<LauncherPage>
                   width: 80,
                   height: 80,
                 ),
-                Text(Provider.of<UserStore>(context).userName ?? "加载中..."),
+                Text(userName == null ? "加载中..." : "Hi~ $userName"),
               ],
             ),
           ),
