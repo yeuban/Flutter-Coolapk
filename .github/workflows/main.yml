@@ -2,7 +2,7 @@ name: CI
 
 on: [push]
 env:
-  flutter_channel: "master"
+  flutter_channel: "dev"
   java_version: "12.x"
 
 jobs:
