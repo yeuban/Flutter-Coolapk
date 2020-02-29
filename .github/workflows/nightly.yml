@@ -29,7 +29,7 @@ jobs:
     - name: flutter env
       uses: subosito/flutter-action@v1
       with:
-        channel: 'master'
+        channel: 'dev'
     - name: install dependencies
       run: flutter pub get
     - name: build android
