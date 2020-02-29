@@ -1,19 +1,32 @@
-name: Use Flutter master channel build android-arm64
+name: CI
 
 on: [push]
+env:
+  flutter_channel: "master"
+  java_version: "12.x"
 
 jobs:
   build:
-
+    name: build android-arm64
     runs-on: ubuntu-latest
-
+    timeout-minutes: 5
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
+
+    - name: Cache Flutter dependencies
+      uses: actions/cache@v1
+      with:
+        path: /opt/hostedtoolcache/flutter
+        key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
+
     - uses: subosito/flutter-action@v1
       with:
-        channel: 'master' # or: 'dev' or 'beta'
-    - run: flutter pub 
-    - run: flutter build apk --release --target-platform android-arm64
+        channel: ${{ env.flutter_channel }}'
+
+    - name: install dependencies
+      run: flutter pub get
+    - name: build
+      run: flutter build apk --release --target-platform android-arm64
