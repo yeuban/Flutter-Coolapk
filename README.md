@@ -1,4 +1,4 @@
 # Coolapk Flutter
-![.github/workflows/main.yml](https://github.com/Cyenoch/Flutter-Coolapk/workflows/.github/workflows/main.yml/badge.svg)
+![Build](https://github.com/Cyenoch/Flutter-Coolapk/workflows/CI/badge.svg?branch=master)
 
 兴趣使然
