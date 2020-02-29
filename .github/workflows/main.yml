@@ -1,13 +1,16 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:    
+      - master
 env:
   flutter_channel: "dev"
   java_version: "12.x"
 
 jobs:
   build:
-    name: build android-arm64
+    name: build windows
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -26,4 +29,4 @@ jobs:
     - name: install dependencies
       run: flutter pub get
     - name: build
-      run: flutter build apk --release --target-platform android-arm64
+      run: flutter build windows --release
