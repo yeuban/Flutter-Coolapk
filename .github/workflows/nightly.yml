@@ -39,6 +39,7 @@ jobs:
       with:
         prerelease: true
         name: Android Nightly
+        tag_name: "android_nightly"
         files: build/app/outputs/apk/release/app-release.apk
       env:
         GITHUB_TOKEN: ${{ secrets.ActionsSecret }}
