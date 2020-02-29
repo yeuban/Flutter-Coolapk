@@ -9,7 +9,7 @@ jobs:
   build:
     name: build android-arm64
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 25
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-java@v1
