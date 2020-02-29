@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
+import 'package:coolapk_flutter/widget/primary_button.dart';
 import 'package:flutter/material.dart';
 
 class AutoItemAdapter extends StatelessWidget {
@@ -50,7 +54,37 @@ class AutoItemAdapter extends StatelessWidget {
         Container(
           margin: const EdgeInsets.all(8),
           padding: const EdgeInsets.all(8),
-          child: Text(entity["entityTemplate"] ?? "null"),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                "\ntitle:${entity["title"]}\ntype:${entity["type"]}\ntemplate:${entity["entityTemplate"] ?? "null"}",
+              ),
+              PrimaryButton(
+                text: "源",
+                onPressed: () {
+                  final json = JsonEncoder.withIndent("  ").convert(entity);
+                  Navigator.of(context).push(ScaleInRoute(
+                      widget: Scaffold(
+                    appBar: AppBar(
+                      title: Text("源"),
+                    ),
+                    body: TextField(
+                      scrollPadding: const EdgeInsets.all(8),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(8),
+                      ),
+                      controller: TextEditingController.fromValue(
+                        TextEditingValue(text: json),
+                      ),
+                      maxLines: 100,
+                    ),
+                  )));
+                },
+              ),
+            ],
+          ),
         );
 
     return sliverMode ? SliverToBoxAdapter(child: item) : item;

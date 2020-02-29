@@ -1,8 +1,12 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:coolapk_flutter/network/model/main_init.model.dart'
     as MainInitModel;
+import 'package:coolapk_flutter/page/login/login.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
+import 'package:coolapk_flutter/util/anim_page_route.dart';
+import 'package:coolapk_flutter/widget/primary_button.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +61,7 @@ class HomePageDrawerState extends State<HomePageDrawer>
       padding: EdgeInsets.all(16),
       child: Material(
         borderRadius: BorderRadius.circular(8),
-        elevation: 8,
+        elevation: 4,
         child: Container(
           height: userCardHeight - 32, // - padding
           child: DrawerUserCard(),
@@ -142,9 +146,94 @@ class DrawerUserCard extends StatefulWidget {
 class _DrawerUserCardState extends State<DrawerUserCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Text("用户信息填充 \n ${UserStore.of(context).userName}"),
+    if (UserStore.of(context).loginInfo == null)
+      return PrimaryButton(
+        text: "登录",
+        onPressed: () {
+          Navigator.of(context).pushReplacement(
+            ScaleInRoute(widget: LoginPage()),
+          );
+        },
+      );
+    return InkWell(
+      onTap: () {
+        // TODO:
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            ExtendedImage.network(
+              UserStore.of(context).loginInfo.userAvatar,
+              cache: false, // TODO:
+              filterQuality: FilterQuality.low,
+              width: 40,
+              height: 40,
+              shape: BoxShape.circle,
+            ),
+            const VerticalDivider(
+              width: 8,
+              color: Colors.transparent,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4.0),
+                    child: Text(
+                      "${UserStore.of(context).userName}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Divider(height: 4,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      IconButton(
+                        padding: const EdgeInsets.all(0),
+                        constraints:
+                            const BoxConstraints(maxWidth: 20, maxHeight: 20),
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            .color
+                            .withAlpha(120),
+                        icon: Icon(
+                          Icons.settings,
+                          size: 18,
+                        ),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        padding: const EdgeInsets.all(0),
+                        constraints:
+                            const BoxConstraints(maxWidth: 24, maxHeight: 24),
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            .color
+                            .withAlpha(120),
+                        icon: Icon(
+                          Icons.mail_outline,
+                          size: 18,
+                        ),
+                        onPressed: () {},
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
