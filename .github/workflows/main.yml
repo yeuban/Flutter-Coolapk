@@ -15,17 +15,14 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
-
     - name: Cache Flutter dependencies
       uses: actions/cache@v1
       with:
         path: /opt/hostedtoolcache/flutter
         key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
-
     - uses: subosito/flutter-action@v1
       with:
-        channel: ${{ env.flutter_channel }}'
-
+        channel: 'dev'
     - name: install dependencies
       run: flutter pub get
     - name: build
