@@ -1,0 +1,44 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: "0 0 4 * * *"
+env:
+  flutter_channel: "dev"
+  java_version: "12.x"
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+    - name: java env
+      uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - name: cache flutter dependencies
+      uses: actions/cache@v1
+      with:
+        path: /opt/hostedtoolcache/flutter
+        key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
+    - name: flutter env
+      uses: subosito/flutter-action@v1
+      with:
+        channel: 'master'
+    - name: install dependencies
+      run: flutter pub get
+    - name: build android
+      run: flutter build apk --release
+    - name: upload to release
+      uses: softprops/action-gh-release@v1
+      with:
+        prerelease: true
+        name: Android Nightly
+        files: build/app/outputs/apk/release/app-release.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.ActionsSecret }}
+
+
