@@ -1,8 +1,8 @@
 name: Nightly Build
 
 on:
-  push:
-    branches: master
+  # push:
+  #   branches: master
   schedule:
     - cron: "0 4 * * *"
 env:
@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    name: build
+    name: build and upload nightly
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -41,8 +41,9 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         prerelease: true
-        draft: true
-        name: "Android Nightly ${{steps.date.outputs.date}}"
+        # draft: true
+        body: "Android每夜编译版${{steps.date.outputs.date}}\n虚拟机运行请用app-x86_64-release.apk\n暂不进行Linux|Windows|Mac os|iOS每夜编译"
+        name: "Android 每夜构建 ${{steps.date.outputs.date}}"
         tag: "android-nightly_${{steps.date.outputs.date}}"
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: "build/app/outputs/apk/release/*.apk"
