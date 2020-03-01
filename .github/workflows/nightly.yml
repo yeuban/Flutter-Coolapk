@@ -1,9 +1,9 @@
 name: Nightly Build
 
 on:
-  # [push]
-  schedule:
-    - cron: "0 4 * * *"
+  [push]
+  # schedule:
+  #   - cron: "0 4 * * *"
 
 jobs:
   build-windows:
