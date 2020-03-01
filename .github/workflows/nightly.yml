@@ -13,35 +13,45 @@ jobs:
     name: build and upload nightly
     runs-on: macos-latest
     steps:
-      - name: checkout
+      - name: 检查
         uses: actions/checkout@v1
-      - name: cache flutter dependencies
+
+      - name: 读取缓存
         uses: actions/cache@v1
         with:
           path: /opt/hostedtoolcache/flutter
           key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
-      - name: flutter env
+
+      - name: 配置Flutter
         uses: subosito/flutter-action@v1
         with:
           channel: "dev"
-      - name: install dependencies
+
+      - name: 执行flutter pub get
         run: flutter pub get
-      - name: enable macos
-        run: flutter config --enable-macos-desktop
-      - name: build
+
+      - name: 启用macos,windows,linux,android-embeding-v2
+        run: flutter config --enable-macos-desktop --enable-windows-desktop --enable-android-embedding-v2 --enable-linux-desktop
+
+      - name: 编译macos
         run: flutter build macos
-      - name: get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y/%m/%d-%H:%M')"
-      - name: upload to release
+      # - name: 编译windows
+        # run: flutter build windows
+      - name: 编译android
+        run: flutter build macos
+
+      - name: 获取当前时间
+        uses: gerred/actions/current-time@master
+        id: current-time
+
+      - name: 上传至release
         uses: ncipollo/release-action@v1
         with:
           prerelease: true
-          body: "每夜编译版${{steps.date.outputs.date}}\n虚拟机运行请用app-x86_64-release.apk\n暂不进行Linux|Windows|iOS每夜编译"
-          name: "每夜构建 ${{steps.date.outputs.date}}"
-          tag: "nightly_${{steps.date.outputs.date}}"
+          name: "Nightly_${{steps.current-time.outputs.time}}"
+          tag: "Nightly_${{steps.current-time.outputs.time}}"
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "build/macos/Build/Products/Release/*.app"
+          artifacts: "build/macos/Build/Products/Release/*.app,build/app/outputs/apk/release/*.apk"
     # build:
     # name: build and upload nightly
     # runs-on: ubuntu-latest
