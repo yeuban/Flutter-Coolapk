@@ -22,10 +22,15 @@ jobs:
           path: /opt/hostedtoolcache/flutter
           key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
 
-      - name: 配置Flutter
+      - name: 安装Flutter
         uses: subosito/flutter-action@v1
         with:
           channel: "dev"
+
+      - name: 安装Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
 
       - name: 执行flutter pub get
         run: flutter pub get
