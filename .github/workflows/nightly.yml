@@ -33,7 +33,7 @@ jobs:
     - name: install dependencies
       run: flutter pub get
     - name: build android
-      run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64,android-x86 --split-per-abi
+      run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --split-per-abi --shrink
     - name: get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y/%m/%d-%H:%M')"
