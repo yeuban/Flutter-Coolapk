@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 
 class UserStore extends ChangeNotifier {
   LoginInfoData _loginInfoData;
+  // dynamic _userData;
 
+  // dynamic get userInfo => _userData;
   LoginInfoData get loginInfo => _loginInfoData;
 
   String get userName => loginInfo?.username;

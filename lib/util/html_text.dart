@@ -3,18 +3,20 @@ import 'package:flutter_html/flutter_html.dart';
 
 class HtmlText extends StatelessWidget {
   final String html;
-  final TextStyle textStyle;
-  const HtmlText({Key key, this.html, this.textStyle}) : super(key: key);
+  final TextStyle defaultTextStyle;
+  final bool shrinkToFit;
+  const HtmlText({Key key, this.html, this.defaultTextStyle, this.shrinkToFit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Html(
       data: html,
-      defaultTextStyle: textStyle ?? TextStyle(),
+      defaultTextStyle: defaultTextStyle,
       linkStyle: TextStyle(
         decoration: TextDecoration.none,
         color: Theme.of(context).primaryColor,
       ),
+      shrinkToFit: shrinkToFit,
     );
   }
 }

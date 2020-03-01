@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:coolapk_flutter/util/anim_page_route.dart';
+import 'package:coolapk_flutter/widget/item_adapter/items/card_type/text_title_scroll_card.item.dart';
+import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed.item.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:coolapk_flutter/widget/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +41,17 @@ class AutoItemAdapter extends StatelessWidget {
           case "imageCarouselCard_1":
             item = ImageCarouselCard(source: entity);
             break;
+          // case "textTitleScrollCard":
+          //   item = TextTitleScrollCardItem(source: entity);
+          //   break;
+
+        }
+        break;
+      case "feed":
+        switch (template) {
+          case "feed":
+            item = FeedItem(source: entity);
+            break;
         }
         break;
       case "liveTopic":
@@ -59,7 +72,7 @@ class AutoItemAdapter extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                "\ntitle:${entity["title"]}\ntype:${entity["type"]}\ntemplate:${entity["entityTemplate"] ?? "null"}",
+                "\ntitle:${entity["title"]}\ntype:${entity["type"]}\nentityType:${entity["entityType"]}\ntemplate:${entity["entityTemplate"] ?? "null"}",
               ),
               PrimaryButton(
                 text: "源",
@@ -90,3 +103,4 @@ class AutoItemAdapter extends StatelessWidget {
     return sliverMode ? SliverToBoxAdapter(child: item) : item;
   }
 }
+

@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:coolapk_flutter/network/api/auth.api.dart';
 import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/page/home/home.page.dart';
+import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/widget/common_error_widget.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PasswordLogin extends StatefulWidget {
   PasswordLogin({Key key}) : super(key: key);
@@ -56,11 +58,11 @@ class _PasswordLoginState extends State<PasswordLogin>
         _requestHash,
       );
       final status = resp["status"].toString();
-      print(status);
+      // print(status);
       if (status == "400") {
         // 重复登录
         setState(() {
-          _errMsg = resp["message"] + "\n将在2s后自动跳转=,=";
+          _errMsg = resp["message"] + "\n骚后自动跳转=,=";
         });
         await Future.delayed(Duration(seconds: 2));
       }
@@ -68,6 +70,8 @@ class _PasswordLoginState extends State<PasswordLogin>
         _errMsg = resp["message"];
         return false;
       } else {
+        await Provider.of<UserStore>(context, listen: false)
+            .checkLoginInfo(force: true);
         Navigator.of(context).pushReplacement(
           ScaleInRoute(widget: HomePage()),
         );

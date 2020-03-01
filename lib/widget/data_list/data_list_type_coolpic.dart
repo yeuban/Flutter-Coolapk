@@ -151,7 +151,7 @@ class __CoolpicListState extends State<_CoolpicList> {
               children: <Widget>[
                 HtmlText(
                   html: entity["message"],
-                  textStyle: TextStyle(
+                  defaultTextStyle: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),

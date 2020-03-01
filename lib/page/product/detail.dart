@@ -86,12 +86,15 @@ class ProductDetail extends StatelessWidget {
         ),
       ),
       SliverToBoxAdapter(
+        child: _buildRecommendContent(context),
+      ),
+      SliverToBoxAdapter(
         child: _buildCoolapkRating(context),
       ),
       (_detail["description"] ?? "").length == 0
           ? const SliverToBoxAdapter(child: SizedBox())
           : SliverPadding(
-              padding: const EdgeInsets.all(16).copyWith(top: 0),
+              padding: const EdgeInsets.all(16).copyWith(bottom: 0),
               sliver: SliverToBoxAdapter(
                 child: Text(_detail["description"] ?? ""),
               ),
@@ -105,7 +108,58 @@ class ProductDetail extends StatelessWidget {
       SliverToBoxAdapter(
         child: _buildCoolapkRatingDetail(context),
       ),
+      SliverPadding(
+        padding: const EdgeInsets.only(top: 16),
+      ),
     ]);
+  }
+
+  Widget _buildRecommendContent(final BuildContext context) {
+    if (detail["recommend_content"] == null ||
+        detail["recommend_content"].length == 0) {
+      return const SizedBox();
+    }
+    return MCard(
+      padding: const EdgeInsets.all(0),
+      child: InkWell(
+        onTap: () {
+          // TODO:
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: detail["recommend_content"].map<Widget>((entity) {
+            if (entity["entityType"] != "headline") {
+              return const SizedBox();
+            }
+            final url = entity["url"];
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Text(
+                    entity["entityTypeName"],
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                    ),
+                  )),
+                  IconButton(
+                    padding: const EdgeInsets.all(0),
+                    constraints: BoxConstraints(maxHeight: 30),
+                    icon: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                    ),
+                    onPressed: null,
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 
   Widget _buildCover() {
@@ -160,6 +214,7 @@ class ProductDetail extends StatelessWidget {
       return const SizedBox();
     }
     return MCard(
+      margin: const EdgeInsets.all(16).copyWith(bottom: 0),
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -220,7 +275,7 @@ class ProductDetail extends StatelessWidget {
 
   Widget _buildCoolapkRatingDetail(final BuildContext context) {
     return MCard(
-      padding: const EdgeInsets.all(16).copyWith(bottom: 0),
+      margin: const EdgeInsets.all(16).copyWith(bottom: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -323,6 +378,7 @@ class ProductDetail extends StatelessWidget {
   Widget _buildCoolapkRating(final BuildContext context) {
     return MCard(
       padding: const EdgeInsets.all(16).copyWith(bottom: 8),
+      margin: const EdgeInsets.all(16).copyWith(bottom: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
