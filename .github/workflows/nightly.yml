@@ -30,26 +30,29 @@ jobs:
       - name: 执行flutter pub get
         run: flutter pub get
 
-      - name: 启用macos,windows,linux,android-embeding-v2
-        run: flutter config --enable-macos-desktop --enable-windows-desktop --enable-android-embedding-v2 --enable-linux-desktop
+      - name: 启用macos,windows,linux
+        run: flutter config --enable-macos-desktop --enable-windows-desktop --enable-linux-desktop
 
-      - name: 编译macos
+      - name: 编译macos版
         run: flutter build macos --release
       # - name: 编译windows
         # run: flutter build windows
-      - name: 编译android
+      - name: 编译android版
         run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --split-per-abi --shrink
 
       - name: 获取当前时间
-        uses: gerred/actions/current-time@master
+        uses: srfrnk/current-time@master
         id: current-time
+        with:
+          format: YYYY/MM/DD
 
       - name: 上传至release
         uses: ncipollo/release-action@v1
         with:
           prerelease: true
-          name: "Nightly_${{steps.current-time.outputs.time}}"
-          tag: "Nightly_${{steps.current-time.outputs.time}}"
+          name: "每夜编译_${{steps.current-time.outputs.formattedTime}}"
+          tag: "Nightly_${{steps.current-time.outputs.formattedTime}}"
+          body: "每天编译一次的版本。\napk结尾为android版。\napp结尾为mac os版。"
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "build/macos/Build/Products/Release/*.app,build/app/outputs/apk/release/*.apk"
     # build:
