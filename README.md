@@ -9,6 +9,14 @@
 
 手机使用时(或是软件宽度<740时)，导航功能移动至侧滑
 
+下载地址：（适合国内，但注意不要在这个网站上登录）
+  http://github-mirror.bugkiller.org/Cyenoch/Flutter-Coolapk/releases/
+  根据你所用设备的版本进行下载
+  安卓版：（不懂就下载armeabi-v7a的）
+    app-armeabi-v7a-release.apk
+    app-arm64-v8a-release.apk
+    app-x86_64-release.apk
+
 目录结构说明->
 
 ```emm

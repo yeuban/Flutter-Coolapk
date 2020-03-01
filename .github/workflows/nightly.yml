@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-windows:
-    name: build and upload nightly for windows version
+    name: build windows version
     runs-on: windows-latest
     steps:
       - name: 检查
@@ -52,21 +52,12 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "Windows_Nightly_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
-          title: "Windows 每夜编译_${{steps.current-time.outputs.formattedTime}}"
+          title: "Windows版每夜编译_${{steps.current-time.outputs.formattedTime}}"
           files: |
             build/windows/x64/Release/windows-x64.7z
-      # - name: 上传至release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     prerelease: true
-      #     name: "Windows 每夜编译_${{steps.current-time.outputs.formattedTime}}"
-      #     tag: "Windows_Nightly_${{steps.current-time.outputs.formattedTime}}"
-      #     body: "每天编译一次的版本。\nzip结尾为windows版，解压后即可使用"
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     artifacts: "build/windows/x64/Release/windows-x64.zip"
 
-  build-macos-android:
-    name: build and upload nightly for mac and android version
+  build-macos:
+    name: build mac version
     runs-on: macos-latest
     steps:
       - name: 检查
@@ -83,11 +74,6 @@ jobs:
         with:
           channel: "dev"
 
-      - name: 安装Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: "12.x"
-
       - name: 切换至master分支
         run: flutter channel master
 
@@ -99,6 +85,45 @@ jobs:
      
       - name: 编译MacOS版
         run: flutter build macos --release
+
+      - name: 获取当前时间
+        uses: srfrnk/current-time@master
+        id: current-time
+        with:
+          format: YYYY/MM/DD
+      
+      - name: 上传
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "MacOS_Nightly_${{steps.current-time.outputs.formattedTime}}"
+          prerelease: true
+          title: "Mac版每夜编译_${{steps.current-time.outputs.formattedTime}}"
+          files: build/macos/Build/Products/Release/*.app
+            
+  build-android:
+    name: build android version
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检查
+        uses: actions/checkout@v1
+
+      - name: 读取缓存
+        uses: actions/cache@v1
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-master
+
+      - name: 安装Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: "dev"
+
+      - name: 切换至master分支
+        run: flutter channel master
+
+      - name: 执行flutter pub get
+        run: flutter pub get
       
       - name: 编译Android版
         run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --split-per-abi --shrink
@@ -113,22 +138,10 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "MacOS_Android_Nightly_${{steps.current-time.outputs.formattedTime}}"
+          automatic_release_tag: "Android_Nightly_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
-          title: "Mac and Android 每夜编译_${{steps.current-time.outputs.formattedTime}}"
-          files: |
-            build/macos/Build/Products/Release/*.app
-            build/app/outputs/apk/release/*.apk
-
-      # - name: 上传至release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     prerelease: true
-      #     name: "Mac and Android 每夜编译_${{steps.current-time.outputs.formattedTime}}"
-      #     tag: "MacOS_Android_Nightly_${{steps.current-time.outputs.formattedTime}}"
-      #     body: "每天编译一次的版本。\napk结尾为android版。\napp结尾为mac os版。"
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     artifacts: "build/macos/Build/Products/Release/*.app,build/app/outputs/apk/release/*.apk"
+          title: "Android版每夜编译_${{steps.current-time.outputs.formattedTime}}"
+          files: build/app/outputs/apk/release/*.apk
   
   # build-linux:
   #   name: build and upload nightly
