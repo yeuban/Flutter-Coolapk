@@ -1,16 +1,13 @@
 name: Nightly Build
 
 on:
-  [push]
-  # schedule:
-  #   - cron: "0 4 * * *"
-env:
-  flutter_channel: "dev"
-  java_version: "12.x"
+  # [push]
+  schedule:
+    - cron: "0 4 * * *"
 
 jobs:
   build-windows:
-    name: build and upload nightly
+    name: build and upload nightly for windows version
     runs-on: windows-latest
     steps:
       - name: 检查
@@ -20,7 +17,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: /opt/hostedtoolcache/flutter
-          key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
+          key: ${{ runner.OS }}-flutter-install-cache-master
 
       - name: 安装Flutter
         uses: subosito/flutter-action@v1
@@ -39,28 +36,37 @@ jobs:
       - name: 编译Windows版
         run: flutter build windows --release
       - name: 打包windows版到zip
-        uses: montudor/action-zip@v0.1.0
+        uses: DuckSoft/create-7z-action@master
         with:
-          args: zip -qq -r build/windows/x64/Release/windows-x64.zip build/windows/x64/Release/Runner/
+          pathSource: "build/windows/x64/Release/Runner/"
+          pathTarget: "build/windows/x64/Release/windows-x64.7z"
 
       - name: 获取当前时间
         uses: srfrnk/current-time@master
         id: current-time
         with:
           format: YYYY/MM/DD
-
-      - name: 上传至release
-        uses: ncipollo/release-action@v1
+      - name: 上传
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "Windows_Nightly_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
-          name: "Windows 每夜编译_${{steps.current-time.outputs.formattedTime}}"
-          tag: "Windows_Nightly_${{steps.current-time.outputs.formattedTime}}"
-          body: "每天编译一次的版本。\nzip结尾为windows版，解压后即可使用"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "build/windows/x64/Release/windows-x64.zip"
+          title: "Windows 每夜编译_${{steps.current-time.outputs.formattedTime}}"
+          files: |
+            build/windows/x64/Release/windows-x64.7z
+      # - name: 上传至release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     prerelease: true
+      #     name: "Windows 每夜编译_${{steps.current-time.outputs.formattedTime}}"
+      #     tag: "Windows_Nightly_${{steps.current-time.outputs.formattedTime}}"
+      #     body: "每天编译一次的版本。\nzip结尾为windows版，解压后即可使用"
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     artifacts: "build/windows/x64/Release/windows-x64.zip"
 
   build-macos-android:
-    name: build and upload nightly
+    name: build and upload nightly for mac and android version
     runs-on: macos-latest
     steps:
       - name: 检查
@@ -70,7 +76,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: /opt/hostedtoolcache/flutter
-          key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
+          key: ${{ runner.OS }}-flutter-install-cache-master
 
       - name: 安装Flutter
         uses: subosito/flutter-action@v1
@@ -102,16 +108,27 @@ jobs:
         id: current-time
         with:
           format: YYYY/MM/DD
-
-      - name: 上传至release
-        uses: ncipollo/release-action@v1
+      
+      - name: 上传
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "MacOS_Android_Nightly_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
-          name: "Mac and Android 每夜编译_${{steps.current-time.outputs.formattedTime}}"
-          tag: "MacOS_Android_Nightly_${{steps.current-time.outputs.formattedTime}}"
-          body: "每天编译一次的版本。\napk结尾为android版。\napp结尾为mac os版。"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "build/macos/Build/Products/Release/*.app,build/app/outputs/apk/release/*.apk"
+          title: "Mac and Android 每夜编译_${{steps.current-time.outputs.formattedTime}}"
+          files: |
+            build/macos/Build/Products/Release/*.app
+            build/app/outputs/apk/release/*.apk
+
+      # - name: 上传至release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     prerelease: true
+      #     name: "Mac and Android 每夜编译_${{steps.current-time.outputs.formattedTime}}"
+      #     tag: "MacOS_Android_Nightly_${{steps.current-time.outputs.formattedTime}}"
+      #     body: "每天编译一次的版本。\napk结尾为android版。\napp结尾为mac os版。"
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     artifacts: "build/macos/Build/Products/Release/*.app,build/app/outputs/apk/release/*.apk"
   
   # build-linux:
   #   name: build and upload nightly
@@ -124,7 +141,7 @@ jobs:
   #       uses: actions/cache@v1
   #       with:
   #         path: /opt/hostedtoolcache/flutter
-  #         key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
+  #         key: ${{ runner.OS }}-flutter-install-cache-master
 
   #     - name: 安装Flutter
   #       uses: subosito/flutter-action@v1
@@ -152,13 +169,3 @@ jobs:
   #       id: current-time
   #       with:
   #         format: YYYY/MM/DD
-
-  #     - name: 上传至release
-  #       uses: ncipollo/release-action@v1
-  #       with:
-  #         prerelease: true
-  #         name: "每夜编译_${{steps.current-time.outputs.formattedTime}}"
-  #         tag: "Nightly_${{steps.current-time.outputs.formattedTime}}"
-  #         body: "每天编译一次的版本。\napk结尾为android版。\napp结尾为mac os版。\nzip结尾为windows版，解压后即可使用(当前dev channel的flutter不支持build windows)，故等我手动上传，只在有较大更新/改动的时候上传"
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         artifacts: "build/windows/x64/Release/windows-x64.zip"
