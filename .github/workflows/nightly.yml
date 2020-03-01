@@ -33,18 +33,18 @@ jobs:
     - name: install dependencies
       run: flutter pub get
     - name: build android
-      run: flutter build apk --release
-    - name: Get current date
+      run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64,android-x86 --split-per-abi
+    - name: get current date
       id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')"
+      run: echo "::set-output name=date::$(date +'%Y/%m/%d-%H:%M')"
     - name: upload to release
-      uses: softprops/action-gh-release@v1
+      uses: ncipollo/release-action@v1
       with:
         prerelease: true
-        name: Android Nightly
-        tag_name: "android-nightly_${{steps.date.outputs.date}}"
-        files: build/app/outputs/apk/release/app-release.apk
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        draft: true
+        name: "Android Nightly ${{steps.date.outputs.date}}"
+        tag: "android-nightly_${{steps.date.outputs.date}}"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: "build/app/outputs/apk/release/*.apk"
 
 
