@@ -34,11 +34,11 @@ jobs:
         run: flutter config --enable-macos-desktop --enable-windows-desktop --enable-android-embedding-v2 --enable-linux-desktop
 
       - name: 编译macos
-        run: flutter build macos
+        run: flutter build macos --release
       # - name: 编译windows
         # run: flutter build windows
       - name: 编译android
-        run: flutter build macos
+        run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --split-per-abi --shrink
 
       - name: 获取当前时间
         uses: gerred/actions/current-time@master
