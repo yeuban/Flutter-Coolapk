@@ -16,7 +16,7 @@ jobs:
       - name: 读取缓存
         uses: actions/cache@v1
         with:
-          path: /opt/hostedtoolcache/flutter
+          path: C:\hostedtoolcache\windows\flutter
           key: ${{ runner.OS }}-flutter-install-cache-master
 
       - name: 安装Flutter
@@ -66,7 +66,7 @@ jobs:
       - name: 读取缓存
         uses: actions/cache@v1
         with:
-          path: /opt/hostedtoolcache/flutter
+          path: /Users/runner/hostedtoolcache/flutter
           key: ${{ runner.OS }}-flutter-install-cache-master
 
       - name: 安装Flutter
@@ -99,7 +99,7 @@ jobs:
           automatic_release_tag: "MacOS_Nightly_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
           title: "Mac版每夜编译_${{steps.current-time.outputs.formattedTime}}"
-          files: build/macos/Build/Products/Release/*.app
+          files: build/macos/Build/Products/Release/Coolapk.app
             
   build-android:
     name: build android version
@@ -153,7 +153,7 @@ jobs:
   #     - name: 读取缓存
   #       uses: actions/cache@v1
   #       with:
-  #         path: /opt/hostedtoolcache/flutter
+  #         path: flutter
   #         key: ${{ runner.OS }}-flutter-install-cache-master
 
   #     - name: 安装Flutter
