@@ -1,20 +1,56 @@
 name: Nightly Build
 
 on:
-  [push]
-  # schedule:
-  #   - cron: "0 4 * * *"
+  # [push]
+  schedule:
+    - cron: "0 4 * * *"
 env:
   flutter_channel: "dev"
-  # java_version: "12.x"
+  java_version: "12.x"
 
 jobs:
   build:
+    # name: build and upload nightly
+    # runs-on: macos-latest
+    # steps:
+    #   - name: checkout
+    #     uses: actions/checkout@v1
+    #   - name: cache flutter dependencies
+    #     uses: actions/cache@v1
+    #     with:
+    #       path: /opt/hostedtoolcache/flutter
+    #       key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
+    #   - name: flutter env
+    #     uses: subosito/flutter-action@v1
+    #     with:
+    #       channel: "dev"
+    #   - name: install dependencies
+    #     run: flutter pub get
+    #   - name: build
+    #     run: flutter build macos
+    #   - name: get current date
+    #     id: date
+    #     run: echo "::set-output name=date::$(date +'%Y/%m/%d-%H:%M')"
+    #   - name: upload to release
+    #     uses: ncipollo/release-action@v1
+    #     with:
+    #       prerelease: true
+    #       body: "每夜编译版${{steps.date.outputs.date}}\n虚拟机运行请用app-x86_64-release.apk\n暂不进行Linux|Windows|iOS每夜编译"
+    #       name: "每夜构建 ${{steps.date.outputs.date}}"
+    #       tag: "nightly_${{steps.date.outputs.date}}"
+    #       token: ${{ secrets.GITHUB_TOKEN }}
+    #       artifacts: "build/macos/Build/Products/Release/*.app"
+    # build:
     name: build and upload nightly
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: checkout
         uses: actions/checkout@v1
+      - name: java env
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
       - name: cache flutter dependencies
         uses: actions/cache@v1
         with:
@@ -26,8 +62,8 @@ jobs:
           channel: "dev"
       - name: install dependencies
         run: flutter pub get
-      - name: build
-        run: flutter build macos
+      - name: build android
+        run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --split-per-abi --shrink
       - name: get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y/%m/%d-%H:%M')"
@@ -35,45 +71,9 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           prerelease: true
-          body: "每夜编译版${{steps.date.outputs.date}}\n虚拟机运行请用app-x86_64-release.apk\n暂不进行Linux|Windows|iOS每夜编译"
-          name: "每夜构建 ${{steps.date.outputs.date}}"
-          tag: "nightly_${{steps.date.outputs.date}}"
+          # draft: true
+          body: "Android每夜编译版${{steps.date.outputs.date}}\n虚拟机运行请用app-x86_64-release.apk\n暂不进行Linux|Windows|Mac os|iOS每夜编译"
+          name: "Android 每夜构建 ${{steps.date.outputs.date}}"
+          tag: "android-nightly_${{steps.date.outputs.date}}"
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "build/macos/Build/Products/Release/*.app"
-  # build:
-  #   name: build and upload nightly
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 25
-  #   steps:
-  #   - name: checkout
-  #     uses: actions/checkout@v1
-  #   - name: java env
-  #     uses: actions/setup-java@v1
-  #     with:
-  #       java-version: '12.x'
-  #   - name: cache flutter dependencies
-  #     uses: actions/cache@v1
-  #     with:
-  #       path: /opt/hostedtoolcache/flutter
-  #       key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_channel }}
-  #   - name: flutter env
-  #     uses: subosito/flutter-action@v1
-  #     with:
-  #       channel: 'dev'
-  #   - name: install dependencies
-  #     run: flutter pub get
-  #   - name: build android
-  #     run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --split-per-abi --shrink
-  #   - name: get current date
-  #     id: date
-  #     run: echo "::set-output name=date::$(date +'%Y/%m/%d-%H:%M')"
-  #   - name: upload to release
-  #     uses: ncipollo/release-action@v1
-  #     with:
-  #       prerelease: true
-  #       # draft: true
-  #       body: "Android每夜编译版${{steps.date.outputs.date}}\n虚拟机运行请用app-x86_64-release.apk\n暂不进行Linux|Windows|Mac os|iOS每夜编译"
-  #       name: "Android 每夜构建 ${{steps.date.outputs.date}}"
-  #       tag: "android-nightly_${{steps.date.outputs.date}}"
-  #       token: ${{ secrets.GITHUB_TOKEN }}
-  #       artifacts: "build/app/outputs/apk/release/*.apk"
+          artifacts: "build/app/outputs/apk/release/*.apk"
