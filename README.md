@@ -1,6 +1,6 @@
 # Coolapk Flutter
 
-![Build](https://github.com/Cyenoch/Flutter-Coolapk/workflows/CI/badge.svg?branch=master)
+![Nightly Build](https://github.com/Cyenoch/Flutter-Coolapk/workflows/Nightly%20Build/badge.svg)
 
 兴趣使然
 
