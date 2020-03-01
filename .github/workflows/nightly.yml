@@ -35,17 +35,22 @@ jobs:
       - name: 执行flutter pub get
         run: flutter pub get
 
-      - name: 启用macos,windows,linux
-        run: flutter config --enable-macos-desktop --enable-windows-desktop --enable-linux-desktop
+      - name: 切换至master分支
+        run: flutter channel master
 
-      - name: 编译macos版
-        run: flutter build macos --release
+      - name: flutter config 启用 macos,windows,linux
+        run: flutter config --enable-macos-desktop --enable-windows-desktop --enable-linux-desktop
+     
+      # - name: 编译macos版
+      #   run: flutter build macos --release
+
       - name: 编译windows版
         run: flutter build windows --release
       - name: 打包windows版到zip
         uses: montudor/action-zip@v0.1.0
         with:
           args: zip -qq -r build/windows/x64/Release/windows-x64.zip build/windows/x64/Release/Runner/
+      
       - name: 编译android版
         run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --split-per-abi --shrink
 
@@ -61,9 +66,10 @@ jobs:
           prerelease: true
           name: "每夜编译_${{steps.current-time.outputs.formattedTime}}"
           tag: "Nightly_${{steps.current-time.outputs.formattedTime}}"
-          body: "每天编译一次的版本。\napk结尾为android版。\napp结尾为mac os版。\nzip结尾为windows版，解压后即可使用"
+          body: "每天编译一次的版本。\napk结尾为android版。\napp结尾为mac os版。\nzip结尾为windows版，解压后即可使用(当前dev channel的flutter不支持build windows)，故等我手动上传，只在有较大更新/改动的时候上传"
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "build/macos/Build/Products/Release/*.app,build/app/outputs/apk/release/*.apk,build/windows/x64/Release/windows-x64.zip"
+          artifacts: "build/macos/Build/Products/Release/*.app,build/app/outputs/apk/release/*.apk"
+          # artifacts: "build/macos/Build/Products/Release/*.app,build/app/outputs/apk/release/*.apk,build/windows/x64/Release/windows-x64.zip"
     # build:
     # name: build and upload nightly
     # runs-on: ubuntu-latest
