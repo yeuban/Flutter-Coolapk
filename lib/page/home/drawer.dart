@@ -147,14 +147,29 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
   @override
   Widget build(BuildContext context) {
     if (UserStore.of(context).loginInfo == null)
-      return PrimaryButton(
-        text: "登录",
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            ScaleInRoute(widget: LoginPage()),
-          );
-        },
+      return Container(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FlatButton(
+            child: Text(
+              "登录",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            textColor: Theme.of(context).primaryColor,
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                ScaleInRoute(widget: LoginPage()),
+              );
+            },
+          ),
+        ),
       );
+    final iconColor =
+        Theme.of(context).textTheme.bodyText1.color.withAlpha(120);
     return InkWell(
       onTap: () {
         // TODO:
@@ -192,7 +207,9 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  Divider(height: 4,),
+                  Divider(
+                    height: 4,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -200,11 +217,7 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
                         padding: const EdgeInsets.all(0),
                         constraints:
                             const BoxConstraints(maxWidth: 20, maxHeight: 20),
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            .color
-                            .withAlpha(120),
+                        color: iconColor,
                         icon: Icon(
                           Icons.settings,
                           size: 18,
@@ -215,16 +228,31 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
                         padding: const EdgeInsets.all(0),
                         constraints:
                             const BoxConstraints(maxWidth: 24, maxHeight: 24),
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            .color
-                            .withAlpha(120),
+                        color: iconColor,
                         icon: Icon(
                           Icons.mail_outline,
                           size: 18,
                         ),
                         onPressed: () {},
+                      ),
+                      IconButton(
+                        padding: const EdgeInsets.all(0),
+                        constraints:
+                            const BoxConstraints(maxWidth: 24, maxHeight: 24),
+                        color: iconColor,
+                        icon: Icon(
+                          Icons.exit_to_app,
+                          size: 18,
+                        ),
+                        onPressed: () {
+                          Provider.of<UserStore>(context, listen: false)
+                              .logout();
+                          Navigator.of(context).pushReplacement(
+                            ScaleInRoute(
+                              widget: LoginPage(),
+                            ),
+                          );
+                        },
                       )
                     ],
                   )

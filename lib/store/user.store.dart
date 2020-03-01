@@ -1,4 +1,5 @@
 import 'package:coolapk_flutter/network/api/user.api.dart';
+import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/network/model/login_info.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,11 @@ class UserStore extends ChangeNotifier {
       loginInfo = loginInfoModel.data;
     }
     return loginInfo;
+  }
+
+  void logout() {
+    Network.cookieJar.deleteAll();
+    _loginInfoData = null;
   }
 
   static UserStore of(final BuildContext context,
