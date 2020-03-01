@@ -6,55 +6,55 @@ on:
   #   - cron: "0 4 * * *"
 
 jobs:
-  build-windows:
-    name: build windows version
-    runs-on: windows-latest
-    steps:
-      - name: 检查
-        uses: actions/checkout@v1
+  # build-windows:
+  #   name: build windows version
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: 检查
+  #       uses: actions/checkout@v1
 
-      - name: 读取缓存
-        uses: actions/cache@v1
-        with:
-          path: C:\hostedtoolcache\windows\flutter
-          key: ${{ runner.OS }}-flutter-install-cache-master
+  #     - name: 读取缓存
+  #       uses: actions/cache@v1
+  #       with:
+  #         path: C:\hostedtoolcache\windows\flutter
+  #         key: ${{ runner.OS }}-flutter-install-cache-master
 
-      - name: 安装Flutter
-        uses: subosito/flutter-action@v1
-        with:
-          channel: "dev"
+  #     - name: 安装Flutter
+  #       uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: "dev"
       
-      - name: 切换至master分支
-        run: flutter channel master
+  #     - name: 切换至master分支
+  #       run: flutter channel master
 
-      - name: 执行flutter pub get
-        run: flutter pub get
+  #     - name: 执行flutter pub get
+  #       run: flutter pub get
 
-      - name: flutter config 启用 windows
-        run: flutter config --enable-windows-desktop
+  #     - name: flutter config 启用 windows
+  #       run: flutter config --enable-windows-desktop
 
-      - name: 编译Windows版
-        run: flutter build windows --release
-      - name: 打包windows版到zip
-        uses: DuckSoft/create-7z-action@master
-        with:
-          pathSource: "build/windows/x64/Release/Runner/"
-          pathTarget: "build/windows/x64/Release/windows-x64.7z"
+  #     - name: 编译Windows版
+  #       run: flutter build windows --release
+  #     - name: 打包windows版到zip
+  #       uses: DuckSoft/create-7z-action@master
+  #       with:
+  #         pathSource: "build/windows/x64/Release/Runner/"
+  #         pathTarget: "build/windows/x64/Release/windows-x64.7z"
 
-      - name: 获取当前时间
-        uses: srfrnk/current-time@master
-        id: current-time
-        with:
-          format: YYYY/MM/DD
-      - name: 上传
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "Windows_Nightly_${{steps.current-time.outputs.formattedTime}}"
-          prerelease: true
-          title: "Windows版每夜编译_${{steps.current-time.outputs.formattedTime}}"
-          files: |
-            build/windows/x64/Release/windows-x64.7z
+  #     - name: 获取当前时间
+  #       uses: srfrnk/current-time@master
+  #       id: current-time
+  #       with:
+  #         format: YYYY/MM/DD
+  #     - name: 上传
+  #       uses: "marvinpinto/action-automatic-releases@latest"
+  #       with:
+  #         repo_token: "${{ secrets.GITHUB_TOKEN }}"
+  #         automatic_release_tag: "Windows_Nightly_${{steps.current-time.outputs.formattedTime}}"
+  #         prerelease: true
+  #         title: "Windows版每夜编译_${{steps.current-time.outputs.formattedTime}}"
+  #         files: |
+  #           build/windows/x64/Release/windows-x64.7z
 
   build-macos:
     name: build mac version
@@ -99,49 +99,49 @@ jobs:
           automatic_release_tag: "MacOS_Nightly_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
           title: "Mac版每夜编译_${{steps.current-time.outputs.formattedTime}}"
-          files: build/macos/Build/Products/Release/Coolapk.app
+          files: build/macos/Build/Products/Release/*
             
-  build-android:
-    name: build android version
-    runs-on: ubuntu-latest
-    steps:
-      - name: 检查
-        uses: actions/checkout@v1
+  # build-android:
+  #   name: build android version
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: 检查
+  #       uses: actions/checkout@v1
 
-      - name: 读取缓存
-        uses: actions/cache@v1
-        with:
-          path: /opt/hostedtoolcache/flutter
-          key: ${{ runner.OS }}-flutter-install-cache-master
+  #     - name: 读取缓存
+  #       uses: actions/cache@v1
+  #       with:
+  #         path: /opt/hostedtoolcache/flutter
+  #         key: ${{ runner.OS }}-flutter-install-cache-master
 
-      - name: 安装Flutter
-        uses: subosito/flutter-action@v1
-        with:
-          channel: "dev"
+  #     - name: 安装Flutter
+  #       uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: "dev"
 
-      - name: 切换至master分支
-        run: flutter channel master
+  #     - name: 切换至master分支
+  #       run: flutter channel master
 
-      - name: 执行flutter pub get
-        run: flutter pub get
+  #     - name: 执行flutter pub get
+  #       run: flutter pub get
       
-      - name: 编译Android版
-        run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --split-per-abi --shrink
+  #     - name: 编译Android版
+  #       run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --split-per-abi --shrink
 
-      - name: 获取当前时间
-        uses: srfrnk/current-time@master
-        id: current-time
-        with:
-          format: YYYY/MM/DD
+  #     - name: 获取当前时间
+  #       uses: srfrnk/current-time@master
+  #       id: current-time
+  #       with:
+  #         format: YYYY/MM/DD
       
-      - name: 上传
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "Android_Nightly_${{steps.current-time.outputs.formattedTime}}"
-          prerelease: true
-          title: "Android版每夜编译_${{steps.current-time.outputs.formattedTime}}"
-          files: build/app/outputs/apk/release/*.apk
+  #     - name: 上传
+  #       uses: "marvinpinto/action-automatic-releases@latest"
+  #       with:
+  #         repo_token: "${{ secrets.GITHUB_TOKEN }}"
+  #         automatic_release_tag: "Android_Nightly_${{steps.current-time.outputs.formattedTime}}"
+  #         prerelease: true
+  #         title: "Android版每夜编译_${{steps.current-time.outputs.formattedTime}}"
+  #         files: build/app/outputs/apk/release/*.apk
   
   # build-linux:
   #   name: build and upload nightly
