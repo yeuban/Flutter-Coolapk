@@ -10,6 +10,7 @@
 手机使用时(或是软件宽度<740时)，导航功能移动至侧滑
 
 下载地址：（适合国内，但注意不要在这个网站上登录）
+  注意，版本的时间是错误的，要＋一天才是实际编译时间!!!
   http://github-mirror.bugkiller.org/Cyenoch/Flutter-Coolapk/releases/
   根据你所用设备的版本进行下载
   安卓版：（不懂就下载armeabi-v7a的）
