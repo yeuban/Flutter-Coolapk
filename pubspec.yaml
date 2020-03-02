@@ -39,9 +39,9 @@ flutter:
       fonts:
         - asset: assets/fonts/sarasa-ui-sc-light.ttf
           weight: 200
-        - asset: assets/fonts/sarasa-ui-sc-regular.ttf
-        - asset: assets/fonts/sarasa-ui-sc-bold.ttf
-          weight: 600
+        # - asset: assets/fonts/sarasa-ui-sc-regular.ttf
+        # - asset: assets/fonts/sarasa-ui-sc-bold.ttf
+        #   weight: 600
   assets:
     - assets/images/
     - assets/images/emoji/
