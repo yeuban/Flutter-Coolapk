@@ -1,4 +1,4 @@
-package com.example.coolapk_flutter
+package com.cyenoch.coolapk_flutter
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

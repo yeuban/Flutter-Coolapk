@@ -74,6 +74,7 @@ class _ProductPageState extends State<ProductPage> {
     final tabList = _detail["tabList"];
     return DefaultTabController(
       length: _detail["tabList"].length,
+      initialIndex: 1,
       child: Builder(
         builder: (context) {
           return SolidBottomSheet(

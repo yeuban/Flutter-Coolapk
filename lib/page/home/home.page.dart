@@ -89,7 +89,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // 窗口框架
   Widget _buildFrame() {
     final width = MediaQuery.of(context).size.width;
-    final tight = MediaQuery.of(context).size.width < 740; // 是否收起drawer
+    // final tight = MediaQuery.of(context).size.width < 740; // 是否收起drawer
+    final tight =
+        MediaQuery.of(context).size.width / MediaQuery.of(context).size.height <
+            1.0;
     final drawer = HomePageDrawer(
       // 先new一个
       key: _homePageDrawerStateKey,
@@ -99,7 +102,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // 不收起drawer时用上
     final innerDrawer = <Widget>[
       Container(
-        width: width < 1000 ? 223 : 334,
+        // width: width < 1000 ? 223 : 334,
+        width: 233,
         child: drawer,
       ),
       const VerticalDivider(

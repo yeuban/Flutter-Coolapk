@@ -23,6 +23,12 @@ class AutoItemAdapter extends StatelessWidget {
     switch (type) {
       case "card":
         switch (template) {
+          case "sortSelectCard":
+            item = const SizedBox();// TODO: 
+            break;
+          case "productConfigList":
+            item = const SizedBox();
+            break;
           case "configCard":
             item = const SizedBox();
             break;
@@ -65,6 +71,7 @@ class AutoItemAdapter extends StatelessWidget {
         break;
       case "product":
         item = ProductItem(source: entity);
+        break;
     }
     item = item ??
         Container(
@@ -106,4 +113,3 @@ class AutoItemAdapter extends StatelessWidget {
     return sliverMode ? SliverToBoxAdapter(child: item) : item;
   }
 }
-

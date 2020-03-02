@@ -14,8 +14,8 @@
 
 #include "window_configuration.h"
 
-const wchar_t *kFlutterWindowTitle = L"Flutter Desktop Example";
-const unsigned int kFlutterWindowOriginX = 10;
-const unsigned int kFlutterWindowOriginY = 10;
-const unsigned int kFlutterWindowWidth = 800;
+const wchar_t *kFlutterWindowTitle = L"Coolapk Flutter";
+const unsigned int kFlutterWindowOriginX = 100;
+const unsigned int kFlutterWindowOriginY = 100;
+const unsigned int kFlutterWindowWidth = 900;
 const unsigned int kFlutterWindowHeight = 600;

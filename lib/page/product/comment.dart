@@ -51,6 +51,7 @@ class ProductComment extends StatelessWidget {
     );
     return DefaultTabController(
       length: tabList.length,
+      initialIndex: 1,
       child: ChangeNotifierProvider(
         create: (context) => ProductCommentState(),
         child: splitMode

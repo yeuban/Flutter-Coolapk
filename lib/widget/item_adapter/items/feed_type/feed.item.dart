@@ -22,10 +22,13 @@ part './feed_item_imagebox.dart';
 /// 最难搞的东西
 /// source["type"] 有很多
 ///   0: 普通动态
+///   5: 点评
 ///   9: 评论 某应用的
 ///   11: 回答
 ///   12: 图文
 ///   13: 视频
+///   15: 交易
+///   20: 出自 数码->交易列表，看起来能用0来代替
 class FeedItem extends StatelessWidget {
   final dynamic source;
   const FeedItem({Key key, this.source}) : super(key: key);
@@ -51,6 +54,9 @@ class FeedItem extends StatelessWidget {
           content = FeedTypeCover12Content(source);
         else
           content = FeedType12Content(source);
+        break;
+      case "20":
+        content = FeedType0Content(source);
         break;
       default:
         content = Text("不支持的content type " + source["type"].toString());

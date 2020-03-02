@@ -30,6 +30,7 @@ void main() {
               primarySwatch: theme.swatch,
               brightness: theme.brightness,
               fontFamily: "Sarasa-UI-SC-Regular",
+              scaffoldBackgroundColor: Color.fromRGBO(242, 242, 246, 1),
             ),
             home: child,
             debugShowCheckedModeBanner: false,

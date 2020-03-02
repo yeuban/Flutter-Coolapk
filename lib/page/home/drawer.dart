@@ -6,7 +6,6 @@ import 'package:coolapk_flutter/network/model/main_init.model.dart'
 import 'package:coolapk_flutter/page/login/login.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
-import 'package:coolapk_flutter/widget/primary_button.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +20,7 @@ class HomePageDrawer extends StatefulWidget {
 }
 
 class HomePageDrawerState extends State<HomePageDrawer>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   int _homePageSelected = 1;
   int _digitalPageSelected = 0;
 
@@ -39,16 +38,20 @@ class HomePageDrawerState extends State<HomePageDrawer>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Drawer(
       elevation: 0,
-      child: Stack(
-        children: <Widget>[
-          _buildTabControllPanel(),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _buildUserCard(),
-          ),
-        ],
+      child: Material(
+        color: Theme.of(context).cardColor,
+        child: Stack(
+          children: <Widget>[
+            _buildTabControllPanel(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _buildUserCard(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -60,6 +63,7 @@ class HomePageDrawerState extends State<HomePageDrawer>
     return Padding(
       padding: EdgeInsets.all(16),
       child: Material(
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(8),
         elevation: 4,
         child: Container(
@@ -134,6 +138,9 @@ class HomePageDrawerState extends State<HomePageDrawer>
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class DrawerUserCard extends StatefulWidget {
@@ -218,6 +225,7 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
                         constraints:
                             const BoxConstraints(maxWidth: 20, maxHeight: 20),
                         color: iconColor,
+                        tooltip: "设置",
                         icon: Icon(
                           Icons.settings,
                           size: 18,
@@ -229,6 +237,7 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
                         constraints:
                             const BoxConstraints(maxWidth: 24, maxHeight: 24),
                         color: iconColor,
+                        tooltip: "消息",
                         icon: Icon(
                           Icons.mail_outline,
                           size: 18,
@@ -240,6 +249,7 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
                         constraints:
                             const BoxConstraints(maxWidth: 24, maxHeight: 24),
                         color: iconColor,
+                        tooltip: "退出登录",
                         icon: Icon(
                           Icons.exit_to_app,
                           size: 18,

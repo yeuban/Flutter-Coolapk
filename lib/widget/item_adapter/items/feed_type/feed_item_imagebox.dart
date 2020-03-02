@@ -45,7 +45,10 @@ Widget buildImageBox1x2(List<dynamic> picArr) {
 
 Widget buildImageBox1x3(List<dynamic> picArr) {
   picArr.removeRange(3, picArr.length);
-  return ClipOval(
+  return PhysicalModel(
+    borderRadius: BorderRadius.circular(8),
+    clipBehavior: Clip.antiAlias,
+    color: Colors.transparent,
     child: GridView.count(
       physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 3,
