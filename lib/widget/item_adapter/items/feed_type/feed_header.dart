@@ -1,13 +1,6 @@
 //  | 头像 | 用户名             | 按钮 |
 //  |     | 来自xx 机型               |
-import 'dart:convert';
-
-import 'package:coolapk_flutter/util/anim_page_route.dart';
-import 'package:coolapk_flutter/util/html_text.dart';
-import 'package:coolapk_flutter/util/level_label.dart';
-import 'package:coolapk_flutter/util/show_qr_code.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
+part of './feed.item.dart';
 
 class FeedItemHeader extends StatelessWidget {
   final String headImgUrl;
@@ -34,12 +27,13 @@ class FeedItemHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ExtendedImage.network(
             headImgUrl,
             cache: false, // TODO:
-            width: 43,
-            height: 43,
+            width: 41,
+            height: 41,
             shape: BoxShape.circle,
           ),
           VerticalDivider(
@@ -62,25 +56,30 @@ class FeedItemHeader extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    const VerticalDivider(color: Colors.transparent,width: 8,),
+                    const VerticalDivider(
+                      color: Colors.transparent,
+                      width: 8,
+                    ),
                     LevelLabel(source["userInfo"]["level"]),
                   ],
                 ),
                 Row(
                   children: <Widget>[
-                    HtmlText(
-                      html:
-                          " ${t.year == DateTime.now().year ? "" : "${t.year}年"}${t.month}月${t.day}日${t.hour}:${t.minute} " +
-                              subTitle1 +
-                              " $phoneName ",
-                      shrinkToFit: true,
-                      defaultTextStyle: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            .color
-                            .withAlpha(100),
+                    Expanded(
+                      child: HtmlText(
+                        html:
+                            " ${t.year == DateTime.now().year ? "" : "${t.year}年"}${t.month}月${t.day}日${t.hour}:${t.minute} " +
+                                subTitle1 +
+                                " $phoneName ",
+                        shrinkToFit: true,
+                        defaultTextStyle: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context)
+                              .textTheme
+                              .subtitle1
+                              .color
+                              .withAlpha(100),
+                        ),
                       ),
                     ),
                   ],

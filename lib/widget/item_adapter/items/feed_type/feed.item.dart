@@ -1,9 +1,23 @@
-import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed_footer.dart';
-import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed_header.dart';
-import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed_type_11_content.dart';
+import 'dart:convert';
+
+import 'package:coolapk_flutter/util/anim_page_route.dart';
+import 'package:coolapk_flutter/util/html_text.dart';
+import 'package:coolapk_flutter/util/level_label.dart';
+import 'package:coolapk_flutter/util/show_qr_code.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+
+part './feed_type_cover_12_content.dart';
+part './feed_type_12_content.dart';
+part './feed_type_11_content.dart';
+part './feed_type_9_content.dart';
+part './feed_type_4_content.dart';
+part './feed_type_0_content.dart';
+part './feed_footer.dart';
+part './feed_header.dart';
+part './feed_item_replyrows.dart';
+part './feed_item_imagebox.dart';
 
 /// 最难搞的东西
 /// source["type"] 有很多
@@ -20,8 +34,23 @@ class FeedItem extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget content;
     switch (source["type"].toString()) {
+      case "0":
+        content = FeedType0Content(source);
+        break;
+      case "9":
+        content = FeedType0Content(source);
+        break;
+      case "4":
+        content = FeedType4Content(source);
+        break;
       case "11":
         content = FeedType11Content(source);
+        break;
+      case "12":
+        if (source["entityTemplate"] == "feedCover")
+          content = FeedTypeCover12Content(source);
+        else
+          content = FeedType12Content(source);
         break;
       default:
         content = Text("不支持的content type " + source["type"].toString());
@@ -31,6 +60,7 @@ class FeedItem extends StatelessWidget {
       margin: const EdgeInsets.all(16).copyWith(top: 8, bottom: 8),
       onTap: () {},
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           FeedItemHeader(
@@ -41,6 +71,13 @@ class FeedItem extends StatelessWidget {
             source: source,
           ),
           content,
+          const Divider(
+            color: Colors.transparent,
+            height: 8,
+          ),
+          buildForwardSourceFeed(source, context),
+          buildRelationRow(source, context),
+          FeedItemReplyRows(source),
           FeedItemFooter(source),
         ],
       ),
@@ -48,56 +85,84 @@ class FeedItem extends StatelessWidget {
   }
 }
 
-Widget buildImageBox2x2(List<dynamic> picArr) {
-  picArr.removeRange(4, picArr.length);
-  return GridView.extent(
-    maxCrossAxisExtent: 2,
-    crossAxisSpacing: 4,
-    mainAxisSpacing: 4,
-    shrinkWrap: true,
-    childAspectRatio: 1,
-    children: picArr.map((pic) {
-      return ExtendedImage.network(
-        pic,
-        cache: false, // TODO:
-        fit: BoxFit.cover,
-      );
-    }).toList(),
-  );
+Widget buildForwardSourceFeed(
+    final dynamic source, final BuildContext context) {
+  final sfeed = source["forwardSourceFeed"];
+  return sfeed == null
+      ? const SizedBox()
+      : Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: () {},
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(8),
+                shape: BoxShape.rectangle,
+              ),
+              child: HtmlText(
+                shrinkToFit: true,
+                html: "<a>${sfeed["username"]}: </a>${sfeed["message"]}",
+              ),
+            ),
+          ),
+        );
 }
 
-Widget buildImageBox1x2(List<dynamic> picArr) {
-  picArr.removeRange(2, picArr.length);
-  return GridView.extent(
-    maxCrossAxisExtent: 2,
-    crossAxisSpacing: 4,
-    mainAxisSpacing: 4,
-    shrinkWrap: true,
-    childAspectRatio: 2,
-    children: picArr.map((pic) {
-      return ExtendedImage.network(
-        pic,
-        cache: false, // TODO:
-        fit: BoxFit.cover,
-      );
-    }).toList(),
-  );
-}
+Widget buildRelationRow(final dynamic source, final BuildContext context) {
+  final List<dynamic> rr = source["relationRows"] ?? [];
+  final tr = source["targetRow"];
+  if ((rr == null && tr == null) || (tr != null && rr.length == 0)) {
+    return const SizedBox(width: 0, height: 0);
+  }
 
-Widget buildImageBox1x3(List<dynamic> picArr) {
-  picArr.removeRange(3, picArr.length);
-  return GridView.extent(
-    maxCrossAxisExtent: 3,
-    crossAxisSpacing: 4,
-    mainAxisSpacing: 4,
-    shrinkWrap: true,
-    childAspectRatio: 3,
-    children: picArr.map((pic) {
-      return ExtendedImage.network(
-        pic,
-        cache: false, // TODO:
-        fit: BoxFit.cover,
-      );
-    }).toList(),
+  if (tr != null && tr["title"] != null) {
+    rr.add(source["targetRow"]);
+  }
+  return Container(
+    padding: const EdgeInsets.only(top: 8, left: 16, right: 8),
+    child: Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: rr.map<Widget>((entity) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(4)),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(4),
+            onTap: () {
+              // TODO: handle this, target -> entity["url"] 可能是/apk/xxx
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  (entity["logo"] != null && entity["logo"].length > 0)
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 4.0),
+                          child: ExtendedImage.network(
+                            entity["logo"],
+                            cache: false, // TODO:
+                            width: 22,
+                            height: 22,
+                            filterQuality: FilterQuality.low,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : const SizedBox(),
+                  Text(entity["title"]),
+                ],
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    ),
   );
 }

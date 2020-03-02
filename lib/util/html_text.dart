@@ -18,7 +18,7 @@ class HtmlText extends StatelessWidget {
       showImages: true,
       shrinkToFit: shrinkToFit,
       linkStyle: TextStyle(color: Theme.of(context).accentColor),
-      defaultTextStyle: defaultTextStyle ?? const TextStyle(fontSize: 16),
+      defaultTextStyle: defaultTextStyle ?? const TextStyle(fontSize: 15),
       customRender: (node, child) {
         if (node is dom.Element) {
           switch (node.localName) {

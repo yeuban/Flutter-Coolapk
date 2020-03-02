@@ -52,6 +52,9 @@ class AutoItemAdapter extends StatelessWidget {
           case "feed":
             item = FeedItem(source: entity);
             break;
+          case "feedCover":
+            item = FeedItem(source: entity);
+            break;
         }
         break;
       case "liveTopic":

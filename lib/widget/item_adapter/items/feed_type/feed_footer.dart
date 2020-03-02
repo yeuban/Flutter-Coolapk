@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of './feed.item.dart';
 
 /// source["replynum"]
 /// source["likenum"]
