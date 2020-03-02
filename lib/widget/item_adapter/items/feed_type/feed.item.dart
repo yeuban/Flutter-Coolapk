@@ -48,7 +48,7 @@ class FeedItem extends StatelessWidget {
   }
 }
 
-Widget buildImageBox2x2(List<String> picArr) {
+Widget buildImageBox2x2(List<dynamic> picArr) {
   picArr.removeRange(4, picArr.length);
   return GridView.extent(
     maxCrossAxisExtent: 2,
@@ -66,7 +66,7 @@ Widget buildImageBox2x2(List<String> picArr) {
   );
 }
 
-Widget buildImageBox1x2(List<String> picArr) {
+Widget buildImageBox1x2(List<dynamic> picArr) {
   picArr.removeRange(2, picArr.length);
   return GridView.extent(
     maxCrossAxisExtent: 2,
@@ -84,7 +84,7 @@ Widget buildImageBox1x2(List<String> picArr) {
   );
 }
 
-Widget buildImageBox1x3(List<String> picArr) {
+Widget buildImageBox1x3(List<dynamic> picArr) {
   picArr.removeRange(3, picArr.length);
   return GridView.extent(
     maxCrossAxisExtent: 3,
