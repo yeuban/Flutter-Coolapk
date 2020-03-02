@@ -10,13 +10,13 @@
 手机使用时(或是软件宽度<740时)，导航功能移动至侧滑
 
 下载地址：（适合国内，但注意不要在这个网站上登录）
-  注意，版本的时间是错误的，要＋一天才是实际编译时间!!!
-  http://github-mirror.bugkiller.org/Cyenoch/Flutter-Coolapk/releases/
-  根据你所用设备的版本进行下载
-  安卓版：（不懂就下载armeabi-v7a的）
-    app-armeabi-v7a-release.apk
-    app-arm64-v8a-release.apk
-    app-x86_64-release.apk
+ - 注意，版本的时间是错误的，要＋一天才是实际编译时间!!!
+ - http://github-mirror.bugkiller.org/Cyenoch/Flutter-Coolapk/releases/
+ - 根据你所用设备的版本进行下载
+ - 安卓版：（不懂就下载armeabi-v7a的）
+   - app-armeabi-v7a-release.apk
+   - app-arm64-v8a-release.apk
+   - app-x86_64-release.apk
 
 目录结构说明->
 
@@ -67,12 +67,8 @@ test/ 测试(基本不用)
   - [ ] 数码
 - [ ] item适配
   - [x] emoji显示
-  - [ ] 问答item适配
-    - [x] 显示
-    - [ ] 功能
-  - [ ] 首页轮播item适配
-    - [x] 显示
-    - [ ] 功能
+  - [x] 大部分item的显示
+  - [ ] 大部分item的功能
 - [ ] 各种子页面适配
   - [x] 数码详情页数据显示
     - [ ] 相关操作
@@ -156,3 +152,18 @@ item_adapter目录下的auto_item_adapter进行item的适配
 	<img src="https://s2.ax1x.com/2020/03/01/365mqJ.jpg" alt="Sample" emm="220 330" width="0" height="0">
 	<img src="https://s2.ax1x.com/2020/03/01/365uZ9.md.png" alt="Sample" emm="220 300" width="0" height="0">
 </p>
+
+以下是预览图(2020/3/2)
+
+![t-1.png](https://i.loli.net/2020/03/02/D9ZJdzhjAqQ74XB.png)
+
+![t0.png](https://i.loli.net/2020/03/02/TSq5PFzanofbtGR.png)
+
+![t1.png](https://i.loli.net/2020/03/02/tYE1VaL3K4OxkXC.png)
+
+![t2.png](https://i.loli.net/2020/03/02/hTHY2XEmuLDqztS.png)
+
+![t3.png](https://i.loli.net/2020/03/02/JoIvknHV7muTAdC.png)
+
+![t4.png](https://i.loli.net/2020/03/02/8kLC3ySgwDroiMT.png)
+
