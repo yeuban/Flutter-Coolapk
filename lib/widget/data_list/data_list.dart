@@ -73,3 +73,13 @@ class _DataListState extends State<DataList> {
     // return DataListTypeNormal();
   }
 }
+
+class DataListN extends StatelessWidget {
+  final DataListConfig dataListConfig;
+  const DataListN(this.dataListConfig, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}

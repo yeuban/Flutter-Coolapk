@@ -92,6 +92,7 @@ class HomePageDrawerState extends State<HomePageDrawer>
         ),
         Expanded(
           child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             controller: Provider.of<TabController>(context, listen: false),
             children: widget.tabConfigs.map<Widget>((tabConfig) {
               return ListView(

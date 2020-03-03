@@ -18,17 +18,18 @@ class ThemeStore extends ChangeNotifier {
   String _color;
 
   MaterialColor get swatch => ThemeMap[_color];
-  bool get dark => _dark ?? false;
+  bool get dark => _dark;
   Brightness get brightness => dark ? Brightness.dark : Brightness.light;
+
+  ThemeStore() {
+    this._dark =
+        WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
+  }
 
   setTheme(String newTheme, bool dark) {
     if (_color != newTheme || _dark != dark) {
-      if (_color != newTheme) {
-        _color = newTheme;
-      }
-      if (_dark != dark) {
-        _dark = dark;
-      }
+      if (_color != newTheme) _color = newTheme;
+      if (_dark != dark) _dark = dark;
       notifyListeners();
     }
   }
