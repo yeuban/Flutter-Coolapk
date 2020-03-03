@@ -28,7 +28,7 @@ class ImageSquareScrollCardItem extends StatelessWidget {
                     children: <Widget>[
                       ExtendedImage.network(
                         entity["logo"] ?? entity["pic"] ?? "",
-                        cache: false, // TODO:
+                        cache: Platform.isAndroid || Platform.isIOS,
                         fit: BoxFit.cover,
                         borderRadius: BorderRadius.circular(8),
                         shape: BoxShape.rectangle,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/html_text.dart';
@@ -154,7 +155,7 @@ Widget buildRelationRow(final dynamic source, final BuildContext context) {
                           padding: const EdgeInsets.only(right: 4.0),
                           child: ExtendedImage.network(
                             entity["logo"],
-                            cache: false, // TODO:
+                            cache: Platform.isAndroid || Platform.isIOS,
                             width: 22,
                             height: 22,
                             filterQuality: FilterQuality.low,

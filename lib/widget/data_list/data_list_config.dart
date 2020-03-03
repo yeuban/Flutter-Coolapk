@@ -1,162 +1,141 @@
 part of './data_list.dart';
 
-enum DataListType {
+enum DataListTemplate {
+  Tab,
   Normal,
-  Tab, // entityTemplate=iconTabLinkGridCard
-  SelectorLinkCard, // entityTemplate=selectorLinkCard 话题页
-  Coolpic, // 酷图页...
+  Grid,
 }
 
-class DataListSourceConfig {
-  final String url;
-  final String title;
-  DataListSourceConfig({this.url, this.title = ""});
+enum DataListConfigState {
+  Loading, // 加载中
+  Idle, //
+  Firstime, // 代表第一次
+  NoMore, // 代表没有更多
 }
 
 class DataListConfig with ChangeNotifier {
-  bool inited = false;
+  DataListTemplate _template = DataListTemplate.Normal;
+  DataListTemplate get template => _template;
 
-  dynamic sourceConfig;
+  bool _canRefresh = true;
+  bool get canRefresh => _canRefresh;
 
-  dynamic err;
+  bool _inited = false;
+  bool get inited => _inited;
 
-  DataListType type = DataListType.Normal;
+  int _page = 1;
+  int get page => _page;
 
-  bool needFirstItem;
-  bool needLastItem;
-  String get path { // 细品
-    final url = sourceConfig?.url?.toString();
-    this.title = sourceConfig?.title ?? "";
+  String _errMsg;
+  String get errMsg => _errMsg ?? "";
+  bool get hasErr => errMsg != null;
+
+  List _dataList = [];
+  List get dataList => _dataList;
+
+  bool _needFirstItem = true;
+  bool _needLastItem = true;
+
+  Future<void> init() async {
+    if (_inited || state == DataListConfigState.Loading) return;
+    _inited = true;
+    return await refresh;
+  }
+
+  String get firstItem {
+    if (dataList.length == 0) return null;
+    return dataList
+        .firstWhere((entity) =>
+            (entity["entityId"]?.toString()?.length ?? 0) >= 4 &&
+            entity["entityTemplate"] != "imageCarouselCard_1" &&
+            entity["entityTemplate"] != "iconLinkGridCard")["entityId"]
+        ?.toString();
+  }
+
+  String get lastItem {
+    if (dataList.length == 0) return null;
+    return dataList
+        .lastWhere((entity) =>
+            (entity["entityId"]?.toString()?.length ?? 0) >= 4)["entityId"]
+        ?.toString();
+  }
+
+  String _requestPath;
+  Map<String, String> _requestExtParam = {};
+
+  DataListConfigState state = DataListConfigState.Firstime;
+
+  DataListConfig({String title = "", @required String url}) {
+    this._requestExtParam = {
+      "title": title,
+    };
     if (url.startsWith("#/") || url.startsWith("/feed/")) {
-      return "/page/dataList?url=${Uri.encodeComponent(url)}";
+      this._requestPath = "/page/dataList?url=${Uri.encodeComponent(url)}";
+    } else {
+      this._requestPath = url
+          ?.replaceAll("/page?", "/page/dataList?")
+          ?.replaceAll("/main/headline", "/main/indexV8");
     }
-    return url
-        ?.replaceAll("/page?", "/page/dataList?")
-        ?.replaceAll("/main/headline", "/main/indexV8");
+    if (this._requestPath.startsWith(r'/user/dyhSubscribe'))
+      _needFirstItem = false;
   }
 
-  String title = "";
-  Map<String, dynamic> headerBase = {};
-  Map<String, dynamic> paramBase = {};
+  Future<void> get nextPage => _fetchData(nextPage: true);
+  Future<void> get refresh => _fetchData(refresh: true);
 
-  List<dynamic> data = [];
-  int page = 1;
-  bool loading = false;
-  bool loadingMore = false;
-  bool hasMore = true;
-
-  // 有的entityId是不能用作firstItem的
-  String get firstItem => data.length > 0
-      ? data
-          .firstWhere((element) =>
-              (element["entityId"]?.toString()?.length ?? 0) >= 4 &&
-              element["entityTemplate"] != "imageCarouselCard_1" &&
-              element["entityTemplate"] != "iconLinkGridCard")["entityId"]
-          ?.toString()
-      : null;
-  String get lastItem => data.length > 0
-      ? data
-          ?.lastWhere((element) =>
-              (element["entityId"]?.toString()?.length ?? 0) >= 4)["entityId"]
-          ?.toString()
-      : null;
-
-  DataListConfig(
-      {this.sourceConfig, this.needFirstItem = true, this.needLastItem = true});
-
-  Future<dynamic> _fetchData() async {
-    final response = (await Network.apiDio.get(path,
-        queryParameters: {} // 组合参数
-          ..addAll(paramBase)
-          ..addAll(
-            {"page": page, "title": title}
-              ..addAll(
-                needFirstItem && data.length > 0
-                    ? {"firstItem": firstItem}
-                    : {},
-              )
-              ..addAll(
-                needLastItem && data.length > 0 ? {"lastItem": lastItem} : {},
-              ),
-          ),
-        options: Options(
-          headers: headerBase,
-        )));
-//    debugPrint("""\n
-//      DATA:    ${response.data["data"].length}
-//      PATH:    ${response.request.path}
-//      PARAM:   ${response.request.queryParameters}\n
-//    """);
-    final List<dynamic> d = _process(response.data["data"] as List<dynamic>);
-    if (d.length <= 0) {
-      hasMore = false;
+  Future<void> _fetchData({nextPage = true, final refresh = false}) async {
+    if (refresh) {
+      _page = 1;
+      _dataList.clear();
+      nextPage = false;
+    } else if (nextPage) {
+      _page++;
     }
-    data.addAll(d);
-  }
-
-  // 细品
-  List<dynamic> _process(final tempData) {
-    if (page == 1) {
-      tempData.forEach((entity) {
-        switch (entity["entityTemplate"]) {
-          case "iconTabLinkGridCard":
-            type = DataListType.Tab;
-            hasMore = false;
-            return;
-          case "selectorLinkCard":
-            type = DataListType.SelectorLinkCard;
-            hasMore = false;
-            return;
+    state = DataListConfigState.Loading;
+    notifyListeners();
+    try {
+      final resp = await Network.apiDio.get(
+        _requestPath,
+        queryParameters: {
+          "page": page,
         }
-      });
-      if (title == "酷图") {
-        type = DataListType.Coolpic;
+          ..addAll(_requestExtParam)
+          ..addAll(_needFirstItem && dataList.length > 0
+              ? {
+                  "firstItem": firstItem,
+                }
+              : {})
+          ..addAll(_needLastItem
+              ? {
+                  "lastItem": lastItem,
+                }
+              : {}),
+      );
+      final _data = resp.data["data"] as List<dynamic>;
+      if (_data.length <= 0)
+        state = DataListConfigState.NoMore; // 如果没有数据了，设置NoMore
+      if (page == 1) {
+        _data.every((entity) {
+          // 如果包含以下item,则设置NoMore
+          final _entityTemplate = entity["entityTemplate"];
+          if (_entityTemplate == "iconTabLinkGridCard" ||
+              _entityTemplate == "selectorLinkCard") {
+            state = DataListConfigState.NoMore;
+            _template = DataListTemplate.Tab;
+            _canRefresh = false;
+            _data.removeRange(_data.indexOf(entity) + 1, _data.length);
+            return false;
+          }
+          return true;
+        });
       }
-    }
-    if (path.startsWith(r'/user/dyhSubscribe')) needFirstItem = false;
-    return tempData;
-  }
-
-  // 令人窒息但有用的写法
-  Future<bool> nextPage() async {
-    if (loading || loadingMore) return false;
-    loading = true;
-    loadingMore = true;
-    page++;
-    notifyListeners();
-    try {
-      await _fetchData();
+      _dataList.addAll(_data);
     } catch (err, stack) {
-      this.err = err;
       debugPrintStack(stackTrace: stack);
+      _errMsg = err.toString();
+    } finally {
+      if (state != DataListConfigState.NoMore) state = DataListConfigState.Idle;
+      notifyListeners();
     }
-    loading = false;
-    loadingMore = false;
-    notifyListeners();
-    return true;
-  }
-
-  Future<bool> refresh() async {
-    if (loading) return false;
-    this.err = null;
-    loading = true;
-    loadingMore = false;
-    page = 1;
-    data.clear();
-    inited = true;
-    bool tempNeedLastItem = needLastItem;
-    needLastItem = false;
-    notifyListeners();
-    try {
-      await _fetchData();
-    } catch (err, stack) {
-      this.err = err;
-      debugPrintStack(stackTrace: stack);
-    }
-    loading = false;
-    hasMore = true;
-    needLastItem = tempNeedLastItem;
-    notifyListeners();
-    return true;
   }
 }

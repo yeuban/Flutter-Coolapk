@@ -24,7 +24,7 @@ class ImageCarouselCard extends StatelessWidget {
             source["entities"][index]["pic"],
             fit: BoxFit.cover,
             shape: BoxShape.rectangle,
-            cache: false, // TODO:
+            cache: Platform.isAndroid || Platform.isIOS,
             borderRadius: BorderRadius.circular(8),
           ),
         ),

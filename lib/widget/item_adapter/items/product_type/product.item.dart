@@ -35,7 +35,7 @@ class ProductItem extends StatelessWidget {
           filterQuality: FilterQuality.low,
           width: 54,
           height: 54,
-          cache: false, // TODO:
+          cache: Platform.isAndroid || Platform.isIOS,
         ),
       ),
       trailing: Container(

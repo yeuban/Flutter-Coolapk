@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'dart:io';
 import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/page/home/home.page.dart';
 import 'package:coolapk_flutter/page/login/password_login.dart';
@@ -65,12 +65,13 @@ class _LoginPageState extends State<LoginPage> {
                 String picUrl = picMap[picPick]["pic"];
                 if (picUrl == null || picUrl.length <= 5)
                   return const SizedBox();
+
                 return Padding(
                   padding: const EdgeInsets.only(right: 330.0),
                   child: Stack(fit: StackFit.expand, children: [
                     ExtendedImage.network(
                       picUrl,
-                      cache: false, //  TODO:
+                      cache: Platform.isAndroid || Platform.isMacOS, //  TODO:
                       fit: BoxFit.cover,
                     ),
                     Align(

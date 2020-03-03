@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:coolapk_flutter/util/image_url_size_parse.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
@@ -28,7 +30,7 @@ class ProductDetail extends StatelessWidget {
               children: <Widget>[
                 ExtendedImage.network(
                   _detail["logo"],
-                  cache: false, // TODO:
+                  cache: Platform.isAndroid || Platform.isIOS,
                   width: 58,
                   height: 58,
                   shape: BoxShape.rectangle,
@@ -67,7 +69,7 @@ class ProductDetail extends StatelessWidget {
                 .map<Widget>((user) {
               return ExtendedImage.network(
                 user["userAvatar"],
-                cache: false, // TODO:
+                cache: Platform.isAndroid || Platform.isIOS,
                 shape: BoxShape.circle,
                 width: 24, height: 24,
               );
@@ -179,7 +181,7 @@ class ProductDetail extends StatelessWidget {
             covers[index],
             fit: BoxFit.cover,
             width: double.infinity,
-            cache: false, // TODO:
+            cache: Platform.isAndroid || Platform.isIOS,
           ),
         );
       },

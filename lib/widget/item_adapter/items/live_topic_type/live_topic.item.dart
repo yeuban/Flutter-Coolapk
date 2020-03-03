@@ -21,7 +21,7 @@ class LiveTopicItem extends StatelessWidget {
               child: ExtendedImage.network(
                 source["pic_url"],
                 shape: BoxShape.rectangle,
-                cache: false, // TODO:
+                cache: Platform.isAndroid || Platform.isIOS,
                 borderRadius:
                     BorderRadius.only(topLeft: radius4, topRight: radius4),
                 fit: BoxFit.cover,

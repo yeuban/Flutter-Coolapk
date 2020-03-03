@@ -14,7 +14,7 @@ Widget buildImageBox2x3(List<dynamic> picArr) {
       children: picArr.map((pic) {
         return ExtendedImage.network(
           pic,
-          cache: false, // TODO:
+          cache: Platform.isAndroid || Platform.isIOS,
           fit: BoxFit.cover,
           filterQuality: FilterQuality.low,
         );
@@ -35,7 +35,7 @@ Widget buildImageBox1x2(List<dynamic> picArr) {
     children: picArr.map((pic) {
       return ExtendedImage.network(
         pic,
-        cache: false, // TODO:
+        cache: Platform.isAndroid || Platform.isIOS,
         fit: BoxFit.cover,
         filterQuality: FilterQuality.low,
       );
@@ -59,7 +59,7 @@ Widget buildImageBox1x3(List<dynamic> picArr) {
       children: picArr.map((pic) {
         return ExtendedImage.network(
           pic,
-          cache: false, // TODO:
+          cache: Platform.isAndroid || Platform.isIOS,
           fit: BoxFit.cover,
           filterQuality: FilterQuality.low,
         );
@@ -87,7 +87,7 @@ Widget buildIfImageBox(final dynamic source, final BuildContext context) {
         if (picArr[0] == "") break;
         picWidget = ExtendedImage.network(
           picArr[0],
-          cache: false, // TODO:
+          cache: Platform.isAndroid || Platform.isIOS,
           fit: BoxFit.cover,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(8),

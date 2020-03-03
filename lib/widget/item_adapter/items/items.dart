@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:coolapk_flutter/page/product/product.page.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';

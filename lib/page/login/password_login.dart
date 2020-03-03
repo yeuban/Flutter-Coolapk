@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:coolapk_flutter/network/api/auth.api.dart';
 import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/page/home/home.page.dart';
@@ -134,7 +134,7 @@ class _PasswordLoginState extends State<PasswordLogin>
       child: ExtendedImage.network(
         _captchaUrl,
         width: 130,
-        cache: false, // TODO:
+        cache: Platform.isAndroid || Platform.isIOS,
         headers: {
           "cookie": Network.cookieJar
               .loadForRequest(Uri.parse("https://account.coolapk.com"))

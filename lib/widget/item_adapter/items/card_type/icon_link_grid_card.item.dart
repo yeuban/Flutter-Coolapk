@@ -36,7 +36,7 @@ class IconLinkGridCard extends StatelessWidget {
                             padding: const EdgeInsets.all(4.0),
                             child: ExtendedImage.network(
                               entity["pic"] ?? entity["logo"],
-                              cache: false, // TODO:
+                              cache: Platform.isAndroid || Platform.isIOS,
                               shape: BoxShape.rectangle,
                               filterQuality: FilterQuality.low,
                               borderRadius: BorderRadius.circular(8),

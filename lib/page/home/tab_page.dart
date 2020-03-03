@@ -19,7 +19,10 @@ class _TabPageState extends State<TabPage> with AutomaticKeepAliveClientMixin {
     super.build(context);
     return SafeArea(
       top: true,
-      child: DataList(data: widget.data),
+      child: DataList(DataListConfig(
+        title: widget.data.title,
+        url: widget.data.url,
+      )),
     );
     // return DataListPageFrameWidget();
   }

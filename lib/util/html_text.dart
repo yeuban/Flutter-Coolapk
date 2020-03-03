@@ -1,4 +1,5 @@
 import 'package:coolapk_flutter/util/emoji.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
@@ -25,12 +26,10 @@ class HtmlText extends StatelessWidget {
             case "emoji":
               final img = node.attributes["path"];
               try {
-                return Image.asset(
+                return ExtendedImage.asset(
                   img,
                   width: 22,
                   height: 22,
-                  cacheWidth: 22,
-                  cacheHeight: 22,
                   filterQuality: FilterQuality.medium,
                 );
               } catch (err) {}

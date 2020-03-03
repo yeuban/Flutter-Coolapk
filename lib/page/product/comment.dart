@@ -95,13 +95,9 @@ class ProductCommentDataList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DataListInner(
-      paddingTop: paddingTop,
-      enableRefresh: enableRefresh,
-      data: DataListSourceConfig(
-        url: url,
-        title: title,
-      ),
-    );
+    return DataList(DataListConfig(
+      url: url,
+      title: title,
+    ));
   }
 }
