@@ -1,9 +1,12 @@
 part of './data_list.dart';
 
 enum DataListTemplate {
+  Loading,
   Tab,
   Normal,
   Grid,
+  Coolpic,
+  WaterfallFlow,
 }
 
 enum DataListConfigState {
@@ -14,7 +17,7 @@ enum DataListConfigState {
 }
 
 class DataListConfig with ChangeNotifier {
-  DataListTemplate _template = DataListTemplate.Normal;
+  DataListTemplate _template = DataListTemplate.Loading;
   DataListTemplate get template => _template;
 
   bool _canRefresh = true;
@@ -37,7 +40,8 @@ class DataListConfig with ChangeNotifier {
   bool _needLastItem = true;
 
   Future<void> init() async {
-    if ( state != DataListConfigState.Firstime) return;
+    if (state != DataListConfigState.Firstime) return;
+    state = DataListConfigState.Idle;
     return await refresh;
   }
 
@@ -83,6 +87,7 @@ class DataListConfig with ChangeNotifier {
   Future<void> get refresh => _fetchData(refresh: true);
 
   Future<void> _fetchData({nextPage = true, final refresh = false}) async {
+    if (state == DataListConfigState.Loading) return;
     if (refresh) {
       _page = 1;
       _dataList.clear();
@@ -114,7 +119,7 @@ class DataListConfig with ChangeNotifier {
       if (_data.length <= 0)
         state = DataListConfigState.NoMore; // 如果没有数据了，设置NoMore
       if (page == 1) {
-        _data.every((entity) {
+        if (_data.every((entity) {
           // 如果包含以下item,则设置NoMore
           final _entityTemplate = entity["entityTemplate"];
           if (_entityTemplate == "iconTabLinkGridCard" ||
@@ -125,8 +130,17 @@ class DataListConfig with ChangeNotifier {
             _data.removeRange(_data.indexOf(entity) + 1, _data.length);
             return false;
           }
+          if (_entityTemplate == "configCard" &&
+              jsonDecode(entity["extraData"])["pageTitle"] == "酷图") {
+            _template = DataListTemplate.Coolpic;
+            state = DataListConfigState.NoMore;
+            _canRefresh = false;
+            return false;
+          }
           return true;
-        });
+        })) {
+          _template = DataListTemplate.Normal;
+        }
       }
       _dataList.addAll(_data);
     } catch (err, stack) {

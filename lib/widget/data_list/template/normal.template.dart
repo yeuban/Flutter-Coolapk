@@ -24,7 +24,7 @@ class _NormalTemplateState extends State<NormalTemplate>
         return EasyRefresh.custom(
           controller: _controller,
           scrollController: _scrollController,
-          firstRefresh: true,
+          firstRefresh: config.state == DataListConfigState.Firstime,
           onRefresh: () async {
             await config.refresh;
             _controller.finishRefresh(success: true);

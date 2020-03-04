@@ -3,6 +3,7 @@ import 'package:coolapk_flutter/widget/data_list/template/template.dart';
 import 'package:coolapk_flutter/widget/item_adapter/auto_item_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 part './data_list_config.dart';
 part './sliver_persistent_header_delegate_impl.dart';
@@ -21,6 +22,12 @@ class _DataListPageState extends State<DataListPage> {
   final controller = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    widget.dataListConfig.init();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: widget.dataListConfig,
@@ -29,7 +36,14 @@ class _DataListPageState extends State<DataListPage> {
           return Selector<DataListConfig, DataListTemplate>(
             selector: (_, listConfig) => listConfig.template,
             builder: (context, template, child) {
+              if (widget.dataListConfig.state == DataListConfigState.Firstime) {
+                Future.delayed(Duration(milliseconds: 1))
+                    .then((value) => widget.dataListConfig.init());
+              }
               switch (template) {
+                case DataListTemplate.Loading:
+                  return Center(child: CircularProgressIndicator());
+                  break;
                 case DataListTemplate.Tab:
                   return TabTemplate();
                   break;
@@ -39,6 +53,8 @@ class _DataListPageState extends State<DataListPage> {
                 case DataListTemplate.Grid:
                   return GridTemplate();
                   break;
+                case DataListTemplate.Coolpic:
+                  return CoolpicTemplate();
                 default:
                   return NormalTemplate();
               }

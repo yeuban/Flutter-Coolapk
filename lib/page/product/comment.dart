@@ -35,9 +35,12 @@ class ProductComment extends StatelessWidget {
           // );
           return TabBarView(
             children: tabList.map<Widget>((tab) {
-              return ProductCommentDataList(
-                url: tab["url"],
-                title: tab["title"],
+              return Padding(
+                padding: const EdgeInsets.only(top: 50.0),
+                child: ProductCommentDataList(
+                  url: tab["url"],
+                  title: tab["title"],
+                ),
               );
             }).toList(),
           );
