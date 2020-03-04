@@ -1,26 +1,23 @@
 import 'package:coolapk_flutter/network/dio_setup.dart';
+import 'package:coolapk_flutter/widget/data_list/template/template.dart';
 import 'package:coolapk_flutter/widget/item_adapter/auto_item_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 part './data_list_config.dart';
 part './sliver_persistent_header_delegate_impl.dart';
 
-/// 默认顶级是一个CustomScrollView
-/// 然后 在AutoItemAdapter可能也会是一个列表(SliverList)
-class DataList extends StatefulWidget {
+class DataListPage extends StatefulWidget {
   final DataListConfig dataListConfig;
   final bool shrinkWrap;
-  const DataList(this.dataListConfig, {Key key, this.shrinkWrap = false})
+  const DataListPage(this.dataListConfig, {Key key, this.shrinkWrap = false})
       : super(key: key);
 
   @override
-  _DataListState createState() => _DataListState();
+  _DataListPageState createState() => _DataListPageState();
 }
 
-class _DataListState extends State<DataList> {
-  final refreshCtr = RefreshController(initialRefresh: true);
+class _DataListPageState extends State<DataListPage> {
   final controller = ScrollController();
 
   @override
@@ -29,33 +26,22 @@ class _DataListState extends State<DataList> {
       value: widget.dataListConfig,
       child: Builder(
         builder: (context) {
-          return Consumer<DataListConfig>(
-            builder: (final BuildContext context, final DataListConfig config,
-                final Widget child) {
-              return SmartRefresher(
-                enablePullUp: config.state != DataListConfigState.NoMore,
-                controller: refreshCtr,
-                footer: ClassicFooter(),
-                onRefresh: () {
-                  config.refresh
-                      .whenComplete(() => refreshCtr.refreshCompleted());
-                },
-                onLoading: () {
-                  if (refreshCtr.isLoading) refreshCtr.loadComplete();
-                  if (config.state == DataListConfigState.NoMore)
-                    refreshCtr.loadComplete();
-                  config.nextPage.whenComplete(() => refreshCtr.loadComplete());
-                },
-                child: CustomScrollView(
-                  shrinkWrap: widget.shrinkWrap,
-                  slivers: config.dataList.map<Widget>((entity) {
-                    return AutoItemAdapter(
-                      entity: entity,
-                      sliverMode: true,
-                    );
-                  }).toList(),
-                ),
-              );
+          return Selector<DataListConfig, DataListTemplate>(
+            selector: (_, listConfig) => listConfig.template,
+            builder: (context, template, child) {
+              switch (template) {
+                case DataListTemplate.Tab:
+                  return TabTemplate();
+                  break;
+                case DataListTemplate.Normal:
+                  return NormalTemplate();
+                  break;
+                case DataListTemplate.Grid:
+                  return GridTemplate();
+                  break;
+                default:
+                  return NormalTemplate();
+              }
             },
           );
         },
@@ -64,6 +50,7 @@ class _DataListState extends State<DataList> {
   }
 }
 
+//  一般是嵌套用的
 class SliverDataList extends StatelessWidget {
   final DataListConfig dataListConfig;
   final EdgeInsets margin;

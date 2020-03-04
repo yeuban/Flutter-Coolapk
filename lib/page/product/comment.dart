@@ -95,7 +95,7 @@ class ProductCommentDataList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DataList(DataListConfig(
+    return DataListPage(DataListConfig(
       url: url,
       title: title,
     ));

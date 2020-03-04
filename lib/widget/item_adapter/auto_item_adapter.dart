@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:coolapk_flutter/util/anim_page_route.dart';
-import 'package:coolapk_flutter/widget/data_list/template/selector_link.template.dart';
-import 'package:coolapk_flutter/widget/item_adapter/items/card_type/text_title_scroll_card.item.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed.item.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:coolapk_flutter/widget/primary_button.dart';
@@ -18,7 +16,6 @@ class AutoItemAdapter extends StatelessWidget {
   Widget build(BuildContext context) {
     final template = entity["entityTemplate"];
     final type = entity["entityType"];
-    bool itemNeedSliver = false;
 
     Widget item;
 
@@ -53,8 +50,7 @@ class AutoItemAdapter extends StatelessWidget {
           //   item = TextTitleScrollCardItem(source: entity);
           //   break;
           case "selectorLinkCard":
-            item = SelectorLinkTemplate(entity);
-            itemNeedSliver = true;
+            item = const SizedBox();
             break;
         }
         break;
@@ -115,6 +111,6 @@ class AutoItemAdapter extends StatelessWidget {
           ),
         );
 
-    return (sliverMode && !itemNeedSliver) ? SliverToBoxAdapter(child: item) : item;
+    return (sliverMode) ? SliverToBoxAdapter(child: item) : item;
   }
 }

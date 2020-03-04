@@ -6,18 +6,19 @@
 
 ## 本项目主要适配桌面端（宽屏）
 
-### 由于path_provider目前没有足够好的windows实现，所有ExtendedImage都关闭了cache
+### 由于path_provider目前没有足够好的windows实现，所有ExtendedImage对windows,mac os都关闭了cache
 
-### 手机使用时(或是软件宽度<740时)，导航功能移动至侧滑
+### 手机使用时(或是宽度小于高度)，导航功能移动至侧滑
 
 ## 下载地址：（适合国内，但注意不要在这个网站上登录）
- - 注意，版本的时间是错误的，要＋一天才是实际编译时间!!!
- - http://github-mirror.bugkiller.org/Cyenoch/Flutter-Coolapk/releases/
- - 根据你所用设备的版本进行下载
- - 安卓版：（不懂就下载armeabi-v7a的）
-   - app-armeabi-v7a-release.apk
-   - app-arm64-v8a-release.apk
-   - app-x86_64-release.apk
+
+- 注意，版本的时间是错误的，要＋一天才是实际编译时间!!!
+- <http://github-mirror.bugkiller.org/Cyenoch/Flutter-Coolapk/releases/>
+- 根据你所用设备的版本进行下载
+- 安卓版：（不懂就下载armeabi-v7a的）
+  - app-armeabi-v7a-release.apk
+  - app-arm64-v8a-release.apk
+  - app-x86_64-release.apk
 
 ## 目录结构说明->
 
@@ -46,7 +47,7 @@ lib/
 test/ 测试(基本不用)
 ```
 
-## 功能完成情况:
+## 功能完成情况
 
 - [x] 登录
 - [ ] 注册
@@ -142,24 +143,27 @@ test/ 测试(基本不用)
 看起来还挺多的。。。
 
 ### 项目使用Provider进行全局状态管理,主要由两个全局状态,Theme和User
+
 ### item_adapter目录下的auto_item_adapter进行item的适配
 
 ## 欢迎提交pr
+
 ## 欢迎进群py讨论
+
 - [751659171](https://jq.qq.com/?_wv=1027&k=5iu6dt5)
 
 ### 欢迎给我点赞(star) 投币(捐赠) 转发(fork)三连支持=,=你的每亿点帮助都会转化成我的动力
+
 <p align="center" hidden>
-	<img src="https://s2.ax1x.com/2020/03/01/365mqJ.jpg" alt="Sample" emm="220 330" width="0" height="0">
+ <img src="https://s2.ax1x.com/2020/03/01/365mqJ.jpg" alt="Sample" emm="220 330" width="0" height="0">
 	<img src="https://s2.ax1x.com/2020/03/01/365uZ9.md.png" alt="Sample" emm="220 300" width="0" height="0">
 </p>
 
 ## 以下是预览图(2020/3/2)
 
-https://i.loli.net/2020/03/02/D9ZJdzhjAqQ74XB.png
-https://i.loli.net/2020/03/02/TSq5PFzanofbtGR.png
-https://i.loli.net/2020/03/02/tYE1VaL3K4OxkXC.png
-https://i.loli.net/2020/03/02/hTHY2XEmuLDqztS.png
-https://i.loli.net/2020/03/02/JoIvknHV7muTAdC.png
-https://i.loli.net/2020/03/02/8kLC3ySgwDroiMT.png
-
+<https://i.loli.net/2020/03/02/D9ZJdzhjAqQ74XB.png>
+<https://i.loli.net/2020/03/02/TSq5PFzanofbtGR.png>
+<https://i.loli.net/2020/03/02/tYE1VaL3K4OxkXC.png>
+<https://i.loli.net/2020/03/02/hTHY2XEmuLDqztS.png>
+<https://i.loli.net/2020/03/02/JoIvknHV7muTAdC.png>
+<https://i.loli.net/2020/03/02/8kLC3ySgwDroiMT.png>

@@ -4,7 +4,6 @@ import 'package:coolapk_flutter/page/product/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
-import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class ProductPage extends StatefulWidget {
   final String productId;

@@ -20,9 +20,6 @@ class DataListConfig with ChangeNotifier {
   bool _canRefresh = true;
   bool get canRefresh => _canRefresh;
 
-  bool _inited = false;
-  bool get inited => _inited;
-
   int _page = 1;
   int get page => _page;
 
@@ -33,12 +30,14 @@ class DataListConfig with ChangeNotifier {
   List _dataList = [];
   List get dataList => _dataList;
 
+  dynamic get lastOne =>
+      dataList.length > 0 ? dataList[dataList.length - 1] : null;
+
   bool _needFirstItem = true;
   bool _needLastItem = true;
 
   Future<void> init() async {
-    if (_inited || state == DataListConfigState.Loading) return;
-    _inited = true;
+    if ( state != DataListConfigState.Firstime) return;
     return await refresh;
   }
 
@@ -137,5 +136,12 @@ class DataListConfig with ChangeNotifier {
       if (state != DataListConfigState.NoMore) state = DataListConfigState.Idle;
       notifyListeners();
     }
+  }
+
+  Widget buildItems({@required int index, sliverMode: false}) {
+    return AutoItemAdapter(
+      entity: dataList[index],
+      sliverMode: sliverMode,
+    );
   }
 }
