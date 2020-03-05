@@ -30,12 +30,16 @@ class _NormalTemplateState extends State<NormalTemplate>
             _controller.finishRefresh(success: true);
           },
           enableControlFinishLoad: false,
-          slivers: config.dataList
-              .map<Widget>((entity) => AutoItemAdapter(
-                    entity: entity,
-                    sliverMode: true,
-                  ))
-              .toList(),
+          slivers: <Widget>[
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => AutoItemAdapter(
+                  entity: config.dataList[index],
+                  sliverMode: false,
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
