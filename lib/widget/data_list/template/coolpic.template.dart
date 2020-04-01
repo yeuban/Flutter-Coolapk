@@ -77,7 +77,8 @@ class CoolpicList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final axisCount = (MediaQuery.of(context).size.width / 280).floor() ?? 1;
+    final width = MediaQuery.of(context).size.width;
+    final axisCount = ((width > 860 ? 860 : width) / 280).floor() ?? 1;
     return Consumer<DataListConfig>(
       builder: (context, config, final _) {
         final dataList = config.dataList;

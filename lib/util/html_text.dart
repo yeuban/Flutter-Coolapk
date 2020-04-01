@@ -8,7 +8,13 @@ class HtmlText extends StatelessWidget {
   final String html;
   final TextStyle defaultTextStyle;
   final bool shrinkToFit;
-  const HtmlText({Key key, this.html, this.defaultTextStyle, this.shrinkToFit})
+  final bool renderNewlines;
+  const HtmlText(
+      {Key key,
+      this.html,
+      this.defaultTextStyle,
+      this.shrinkToFit,
+      this.renderNewlines})
       : super(key: key);
 
   @override
@@ -17,6 +23,7 @@ class HtmlText extends StatelessWidget {
       useRichText: false,
       data: parseEmoji(html),
       showImages: true,
+      renderNewlines: renderNewlines ?? true,
       shrinkToFit: shrinkToFit,
       linkStyle: TextStyle(color: Theme.of(context).accentColor),
       defaultTextStyle: defaultTextStyle ?? const TextStyle(fontSize: 15),

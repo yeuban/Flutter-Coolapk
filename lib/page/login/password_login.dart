@@ -164,6 +164,7 @@ class _PasswordLoginState extends State<PasswordLogin>
               decoration: InputDecoration(labelText: "密码"),
               maxLines: 1,
               onSaved: (newV) => _password = newV,
+              obscureText: true,
               validator: (value) {
                 if (value.length == 0) return "请输入密码";
                 return null;

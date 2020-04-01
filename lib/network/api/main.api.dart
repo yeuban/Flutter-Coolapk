@@ -65,7 +65,7 @@ class MainApi {
    * star_total_count // 点评总人数
    * star_average_score=9.3
    */
-  static Future<dynamic> getProductDetail(String id) async {
+  static Future<dynamic> getProductDetail(final String id) async {
     final resp = await Network.apiDio.get("/product/detail", queryParameters: {
       "id": id,
     });
@@ -74,4 +74,17 @@ class MainApi {
 
   // 获取设备某个规格的详细数据
   static Future<dynamic> getProductConfig() async {}
+
+  static Future<dynamic> getFeedDetail(final String feedId) async {
+    final resp = await Network.apiDio
+        .get("/feed/detail", queryParameters: {"id": feedId});
+    return resp.data["data"];
+  }
+
+  static Future<dynamic> setFollowUser(
+      final dynamic uid, final bool follow) async {
+    final url = follow ? "/user/follow" : "/user/unfollow";
+    final resp = await Network.apiDio.get(url, queryParameters: {"uid": uid});
+    return resp.data;
+  }
 }

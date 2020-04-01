@@ -86,7 +86,12 @@ class _LoginPageState extends State<LoginPage> {
                                   .bodyText1
                                   .color,
                               color: Theme.of(context).cardColor.withAlpha(20),
-                              child: Text("下一张"),
+                              child: Text(
+                                "下一张",
+                                style: TextStyle(shadows: [
+                                  BoxShadow(color: Colors.black, blurRadius: 8)
+                                ]),
+                              ),
                               onPressed: () {
                                 setState(() {
                                   picPick++;
@@ -143,9 +148,13 @@ class _LoginFormState extends State<LoginForm> {
                   child: Text("跳过登录"),
                   textColor: Theme.of(context).primaryTextTheme.bodyText1.color,
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      ScaleInRoute(widget: HomePage()),
-                    );
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.of(context).pushReplacement(
+                        ScaleInRoute(widget: HomePage()),
+                      );
+                    }
                   },
                 ),
               ],

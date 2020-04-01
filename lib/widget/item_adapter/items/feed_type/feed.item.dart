@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:coolapk_flutter/page/detail/feed_detail.page.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/html_text.dart';
 import 'package:coolapk_flutter/util/level_label.dart';
@@ -65,7 +66,12 @@ class FeedItem extends StatelessWidget {
     return MCard(
       padding: const EdgeInsets.all(0),
       margin: const EdgeInsets.all(16).copyWith(top: 8, bottom: 8),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(ScaleInRoute(
+            widget: FeedDetailPage(
+              url: source["url"],
+            )));
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
