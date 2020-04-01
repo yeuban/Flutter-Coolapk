@@ -98,10 +98,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // 窗口框架
   Widget _buildFrame() {
     final width = MediaQuery.of(context).size.width;
-    // final tight = MediaQuery.of(context).size.width < 740; // 是否收起drawer
-    final tight =
-        MediaQuery.of(context).size.width / MediaQuery.of(context).size.height <
-            1.0;
+    final height = MediaQuery.of(context).size.width;
+    final tight = width / height < 1.0;
     final drawer = HomePageDrawer(
       // 先new一个
       key: _homePageDrawerStateKey,
@@ -145,24 +143,59 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: Container(
         constraints: BoxConstraints(maxWidth: 860),
         child: TabBarView(
-            controller: Provider.of<TabController>(context, listen: false),
-            // 顶层controller
-            children: _pageConfigs.map<Widget>((pageConfig) {
-              return Container(
-                child: PageView(
-                  onPageChanged: (newPage) {
-                    _homePageDrawerStateKey?.currentState?.onGotoTab(
-                        _pageConfigs.indexOf(pageConfig), (newPage).floor());
-                  },
-                  physics: BouncingScrollPhysics(),
-                  controller: _controllerMap[pageConfig.entityId],
-                  children: pageConfig.entities.map<Widget>((pageTab) {
-                    // 这里是子tab
-                    return TabPage(data: pageTab);
-                  }).toList(),
-                ),
-              );
-            }).toList()),
+          controller: Provider.of<TabController>(context, listen: false),
+          // 顶层controller
+          children: _pageConfigs.map<Widget>((pageConfig) {
+            return _Tab(
+              configs: pageConfig.entities,
+              controller: _controllerMap[pageConfig.entityId],
+              onPageChanged: (newPage) {
+                _homePageDrawerStateKey?.currentState?.onGotoTab(
+                    _pageConfigs.indexOf(pageConfig), (newPage).floor());
+              },
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+class _Tab extends StatefulWidget {
+  final Function(dynamic) onPageChanged;
+  final PageController controller;
+  final List<MainInitModel.Entity> configs;
+  _Tab({Key key, this.onPageChanged, this.controller, this.configs})
+      : super(key: key);
+
+  @override
+  __TabState createState() => __TabState();
+}
+
+class __TabState extends State<_Tab> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  List<Widget> pages;
+
+  @override
+  void initState() {
+    super.initState();
+    pages = widget.configs.map<Widget>((pageTab) {
+      // 这里是子tab
+      return TabPage(data: pageTab);
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Container(
+      child: PageView(
+        onPageChanged: widget.onPageChanged,
+        physics: BouncingScrollPhysics(),
+        controller: widget.controller,
+        children: pages,
       ),
     );
   }
