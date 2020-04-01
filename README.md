@@ -6,9 +6,11 @@
 
 ## 本项目主要适配桌面端（宽屏）
 
-### 由于path_provider目前没有足够好的windows实现，所有ExtendedImage对windows,mac os都关闭了cache
+### ~~由于path_provider目前没有足够好的windows实现，所有ExtendedImage对windows,mac os都关闭了cache~~
 
-### 手机使用时(或是宽度小于高度)，导航功能移动至侧滑
+### 手机使用时(或是宽度小于高度)，导航功能移动至侧滑，而且体验并不是很好
+
+### 窗口大小变更时会导致重新获取信息，请尽量避免
 
 ## 下载地址：（适合国内，但注意不要在这个网站上登录）
 
