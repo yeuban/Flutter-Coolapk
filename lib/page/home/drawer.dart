@@ -121,7 +121,7 @@ class HomePageDrawerState extends State<HomePageDrawer>
                             tabItem.logo,
                             width: 24,
                             height: 24,
-                            cache: Platform.isAndroid || Platform.isIOS, // ExtendedImage写死了用path_provider获取路径，不过windows的flutter插件api可能会有所改变 故暂且不用
+                            cache: true,
                           )
                         : null,
                   );
@@ -187,7 +187,7 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
           children: <Widget>[
             ExtendedImage.network(
               UserStore.of(context).loginInfo.userAvatar,
-              cache: Platform.isAndroid || Platform.isIOS,
+              cache: true,
               filterQuality: FilterQuality.low,
               width: 40,
               height: 40,

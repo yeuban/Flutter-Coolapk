@@ -1,27 +1,27 @@
 part of './feed.item.dart';
 
-Widget buildImageBox2x3(List<dynamic> picArr) {
-  picArr.removeRange(4, picArr.length);
-  return AspectRatio(
-    aspectRatio: 2 / 3,
-    child: GridView.count(
-      physics: NeverScrollableScrollPhysics(),
-      crossAxisCount: 3,
-      crossAxisSpacing: 4,
-      mainAxisSpacing: 4,
-      shrinkWrap: true,
-      childAspectRatio: 2 / 3,
-      children: picArr.map((pic) {
-        return ExtendedImage.network(
-          pic,
-          cache: Platform.isAndroid || Platform.isIOS,
-          fit: BoxFit.cover,
-          filterQuality: FilterQuality.low,
-        );
-      }).toList(),
-    ),
-  );
-}
+// Widget buildImageBox2x3(List<dynamic> picArr) {
+//   picArr.removeRange(4, picArr.length);
+//   return AspectRatio(
+//     aspectRatio: 2 / 3,
+//     child: GridView.count(
+//       physics: NeverScrollableScrollPhysics(),
+//       crossAxisCount: 3,
+//       crossAxisSpacing: 4,
+//       mainAxisSpacing: 4,
+//       shrinkWrap: true,
+//       childAspectRatio: 2 / 3,
+//       children: picArr.map((pic) {
+//         return ExtendedImage.network(
+//           pic,
+//           cache: true,
+//           fit: BoxFit.cover,
+//           filterQuality: FilterQuality.low,
+//         );
+//       }).toList(),
+//     ),
+//   );
+// }
 
 Widget buildImageBox1x2(List<dynamic> picArr) {
   picArr.removeRange(2, picArr.length);
@@ -35,7 +35,7 @@ Widget buildImageBox1x2(List<dynamic> picArr) {
     children: picArr.map((pic) {
       return ExtendedImage.network(
         pic,
-        cache: Platform.isAndroid || Platform.isIOS,
+        cache: true,
         fit: BoxFit.cover,
         filterQuality: FilterQuality.low,
       );
@@ -59,7 +59,7 @@ Widget buildImageBox1x3(List<dynamic> picArr) {
       children: picArr.map((pic) {
         return ExtendedImage.network(
           pic,
-          cache: Platform.isAndroid || Platform.isIOS,
+          cache: true,
           fit: BoxFit.cover,
           filterQuality: FilterQuality.low,
         );
@@ -75,7 +75,7 @@ Widget buildIfImageBox(final dynamic source, final BuildContext context) {
   if (picArr != null) {
     switch (picArr.length) {
       case 6:
-        picWidget = buildImageBox2x3(picArr);
+        picWidget = buildImageBox1x3(picArr);
         break;
       case 2:
         picWidget = buildImageBox1x2(picArr);
@@ -87,7 +87,7 @@ Widget buildIfImageBox(final dynamic source, final BuildContext context) {
         if (picArr[0] == "") break;
         picWidget = ExtendedImage.network(
           picArr[0],
-          cache: Platform.isAndroid || Platform.isIOS,
+          cache: true,
           fit: BoxFit.cover,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(8),

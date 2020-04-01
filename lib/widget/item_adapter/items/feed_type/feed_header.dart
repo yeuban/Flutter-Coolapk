@@ -31,7 +31,7 @@ class FeedItemHeader extends StatelessWidget {
         children: <Widget>[
           ExtendedImage.network(
             headImgUrl,
-            cache: Platform.isAndroid || Platform.isIOS,
+            cache: true,
             width: 41,
             height: 41,
             shape: BoxShape.circle,

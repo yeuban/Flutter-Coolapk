@@ -228,6 +228,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.6.1"
+  path_provider_fde:
+    dependency: "direct main"
+    description:
+      path: path_provider_fde
+      relative: true
+    source: path
+    version: "0.0.1"
   pedantic:
     dependency: transitive
     description:

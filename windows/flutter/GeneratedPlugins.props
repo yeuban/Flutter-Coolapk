@@ -3,6 +3,13 @@
   <ImportGroup Label="PropertySheets"/>
   <PropertyGroup Label="UserMacros"/>
   <PropertyGroup/>
-  <ItemDefinitionGroup/>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>flutter\ephemeral\.plugin_symlinks\path_provider_fde\windows;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>path_provider_fde_plugin.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup/>
 </Project>

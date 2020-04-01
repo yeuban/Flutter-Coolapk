@@ -30,7 +30,7 @@ class ProductDetail extends StatelessWidget {
               children: <Widget>[
                 ExtendedImage.network(
                   _detail["logo"],
-                  cache: Platform.isAndroid || Platform.isIOS,
+                  cache: true,
                   width: 58,
                   height: 58,
                   shape: BoxShape.rectangle,
@@ -69,9 +69,10 @@ class ProductDetail extends StatelessWidget {
                 .map<Widget>((user) {
               return ExtendedImage.network(
                 user["userAvatar"],
-                cache: Platform.isAndroid || Platform.isIOS,
+                cache: true,
                 shape: BoxShape.circle,
-                width: 24, height: 24,
+                width: 24,
+                height: 24,
               );
             }).toList())
               ..addAll([
@@ -181,7 +182,7 @@ class ProductDetail extends StatelessWidget {
             covers[index],
             fit: BoxFit.cover,
             width: double.infinity,
-            cache: Platform.isAndroid || Platform.isIOS,
+            cache: true,
           ),
         );
       },

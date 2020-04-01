@@ -10,7 +10,7 @@ class TopicCardItem extends StatelessWidget {
       child: ListTile(
         leading: ExtendedImage.network(
           source["logo"],
-          cache: Platform.isAndroid || Platform.isIOS,
+          cache: true,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(8),
           width: 44,

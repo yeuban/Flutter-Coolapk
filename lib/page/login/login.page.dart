@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Stack(fit: StackFit.expand, children: [
                     ExtendedImage.network(
                       picUrl,
-                      cache: Platform.isAndroid || Platform.isMacOS, //  TODO:
+                      cache: true,
                       fit: BoxFit.cover,
                     ),
                     Align(

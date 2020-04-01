@@ -14,7 +14,7 @@ class ImageScaleCardItem extends StatelessWidget {
           source["pic"],
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(8),
-          cache: Platform.isAndroid || Platform.isIOS,
+          cache: true,
         ),
       ),
     );

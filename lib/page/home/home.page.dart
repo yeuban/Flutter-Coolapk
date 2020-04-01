@@ -76,11 +76,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // animateToPage 会导致经过的页面都会拉取数据...
   }
 
+  TabController _tabController; //
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: 2);
+  }
+
   @override
   void dispose() {
     _controllerMap.forEach((key, value) {
       value.dispose();
     });
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -111,7 +120,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     ];
     return Provider.value(
-      value: TabController(vsync: this, length: 2),
+      value: _tabController,
       child: Builder(
         builder: (context) => Scaffold(
           drawer: tight ? drawer : null, //
@@ -132,24 +141,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   // 主要内容
   Widget _buildContent(final BuildContext context) {
-    return TabBarView(
-        controller: Provider.of<TabController>(context, listen: false),
-        // 顶层controller
-        children: _pageConfigs.map<Widget>((pageConfig) {
-          return Container(
-            child: PageView(
-              onPageChanged: (newPage) {
-                _homePageDrawerStateKey?.currentState?.onGotoTab(
-                    _pageConfigs.indexOf(pageConfig), (newPage).floor());
-              },
-              physics: BouncingScrollPhysics(),
-              controller: _controllerMap[pageConfig.entityId],
-              children: pageConfig.entities.map<Widget>((pageTab) {
-                // 这里是子tab
-                return TabPage(data: pageTab);
-              }).toList(),
-            ),
-          );
-        }).toList());
+    return Center(
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 860),
+        child: TabBarView(
+            controller: Provider.of<TabController>(context, listen: false),
+            // 顶层controller
+            children: _pageConfigs.map<Widget>((pageConfig) {
+              return Container(
+                child: PageView(
+                  onPageChanged: (newPage) {
+                    _homePageDrawerStateKey?.currentState?.onGotoTab(
+                        _pageConfigs.indexOf(pageConfig), (newPage).floor());
+                  },
+                  physics: BouncingScrollPhysics(),
+                  controller: _controllerMap[pageConfig.entityId],
+                  children: pageConfig.entities.map<Widget>((pageTab) {
+                    // 这里是子tab
+                    return TabPage(data: pageTab);
+                  }).toList(),
+                ),
+              );
+            }).toList()),
+      ),
+    );
   }
 }

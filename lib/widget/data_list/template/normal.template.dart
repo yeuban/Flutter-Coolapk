@@ -37,6 +37,7 @@ class _NormalTemplateState extends State<NormalTemplate>
                   entity: config.dataList[index],
                   sliverMode: false,
                 ),
+                childCount: config.dataList.length,
               ),
             ),
           ],

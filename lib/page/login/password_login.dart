@@ -134,7 +134,7 @@ class _PasswordLoginState extends State<PasswordLogin>
       child: ExtendedImage.network(
         _captchaUrl,
         width: 130,
-        cache: Platform.isAndroid || Platform.isIOS,
+        cache: true,
         headers: {
           "cookie": Network.cookieJar
               .loadForRequest(Uri.parse("https://account.coolapk.com"))

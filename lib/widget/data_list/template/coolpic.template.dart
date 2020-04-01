@@ -97,7 +97,7 @@ class CoolpicList extends StatelessWidget {
                   picUrl,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  cache: Platform.isAndroid || Platform.isIOS,
+                  cache: true,
                   filterQuality: FilterQuality.medium,
                 ),
               );

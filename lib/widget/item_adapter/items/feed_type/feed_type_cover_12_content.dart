@@ -13,7 +13,7 @@ class FeedTypeCover12Content extends StatelessWidget {
       padding: const EdgeInsets.all(0).copyWith(top: 8, bottom: 8),
       child: ExtendedImage.network(
         source["message_cover"],
-        cache: Platform.isAndroid || Platform.isIOS,
+        cache: true,
         fit: BoxFit.cover,
         width: double.infinity,
         filterQuality: FilterQuality.low,

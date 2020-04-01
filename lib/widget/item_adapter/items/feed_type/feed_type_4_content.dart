@@ -35,7 +35,7 @@ class FeedType4Content extends StatelessWidget {
                       )
                     : ExtendedImage.network(
                         source["extra_pic"],
-                        cache: Platform.isAndroid || Platform.isIOS,
+                        cache: true,
                         width: 45,
                         height: 45,
                         filterQuality: FilterQuality.low,

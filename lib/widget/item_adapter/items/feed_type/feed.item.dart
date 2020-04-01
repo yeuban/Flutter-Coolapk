@@ -155,7 +155,7 @@ Widget buildRelationRow(final dynamic source, final BuildContext context) {
                           padding: const EdgeInsets.only(right: 4.0),
                           child: ExtendedImage.network(
                             entity["logo"],
-                            cache: Platform.isAndroid || Platform.isIOS,
+                            cache: true,
                             width: 22,
                             height: 22,
                             filterQuality: FilterQuality.low,
