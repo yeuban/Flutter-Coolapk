@@ -1,9 +1,11 @@
-name: Nightly Build
+name: Build Action
 
 on:
-  # [push]
-  schedule:
-    - cron: "0 22 * * *"
+  push:
+    branches:
+      - master
+    tags:
+      - "v*"
 
 jobs:
   build-windows:
@@ -50,9 +52,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "Windows_Nightly_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
-          title: "Windows版每夜编译_${{steps.current-time.outputs.formattedTime}}"
           files: |
             build/windows/x64/Release/windows-x64.7z
 
@@ -102,9 +102,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "MacOS_Nightly_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
-          title: "Mac版每夜编译_${{steps.current-time.outputs.formattedTime}}"
           files: build/macos/Build/Products/macos.7z
 
   build-android:
@@ -137,9 +135,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "Android_Nightly_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
-          title: "Android版每夜编译_${{steps.current-time.outputs.formattedTime}}"
           files: build/app/outputs/apk/release/*.apk
   # build-linux:
   #   name: build and upload nightly
