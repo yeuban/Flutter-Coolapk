@@ -4,6 +4,7 @@ import 'package:coolapk_flutter/network/model/main_init.model.dart'
 import 'package:coolapk_flutter/page/home/tab_page.dart';
 import 'package:coolapk_flutter/widget/common_error_widget.dart';
 import 'package:coolapk_flutter/page/home/drawer.dart';
+import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -139,23 +140,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   // 主要内容
   Widget _buildContent(final BuildContext context) {
-    return Center(
-      child: Container(
-        constraints: BoxConstraints(maxWidth: 860),
-        child: TabBarView(
-          controller: Provider.of<TabController>(context, listen: false),
-          // 顶层controller
-          children: _pageConfigs.map<Widget>((pageConfig) {
-            return _Tab(
-              configs: pageConfig.entities,
-              controller: _controllerMap[pageConfig.entityId],
-              onPageChanged: (newPage) {
-                _homePageDrawerStateKey?.currentState?.onGotoTab(
-                    _pageConfigs.indexOf(pageConfig), (newPage).floor());
-              },
-            );
-          }).toList(),
-        ),
+    return LimitedContainer(
+      limiteType: LimiteType.SingleColumn,
+      child: TabBarView(
+        controller: Provider.of<TabController>(context, listen: false),
+        // 顶层controller
+        children: _pageConfigs.map<Widget>((pageConfig) {
+          return _Tab(
+            configs: pageConfig.entities,
+            controller: _controllerMap[pageConfig.entityId],
+            onPageChanged: (newPage) {
+              _homePageDrawerStateKey?.currentState?.onGotoTab(
+                  _pageConfigs.indexOf(pageConfig), (newPage).floor());
+            },
+          );
+        }).toList(),
       ),
     );
   }

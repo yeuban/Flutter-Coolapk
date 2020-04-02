@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:coolapk_flutter/network/dio_setup.dart';
+import 'package:coolapk_flutter/network/model/collection.model.dart';
 import 'package:coolapk_flutter/network/model/main_init.model.dart';
+import 'package:coolapk_flutter/network/model/reply_data_list.model.dart';
+import 'package:dio/dio.dart';
 
 class MainApi {
   static Future<MainInitModel> getInitConfig() async {
@@ -87,4 +90,84 @@ class MainApi {
     final resp = await Network.apiDio.get(url, queryParameters: {"uid": uid});
     return resp.data;
   }
+
+  static Future<CollectionModel> getCollections({
+    final dynamic uid,
+    final dynamic targetId,
+    final CollectionType type = CollectionType.feed,
+    final int page = 1,
+  }) async {
+    // /v6/collection/list?uid=&id=17752651&type=feed&showDefault=1&page=1
+    final resp = await Network.apiDio.get("/collection/list", queryParameters: {
+      "uid": uid,
+      "id": targetId,
+      "type": type.toString().split(".")[1],
+      "showDefault": 1,
+      "page": page,
+    });
+    return CollectionModel.fromJson(resp.data);
+  }
+
+  static Future<dynamic> addCollectionItem(dynamic uid, List<int> ids,
+      {List<int> cancelIds, CollectionType type = CollectionType.feed}) async {
+    // /v6/collection/addItem POST
+    final resp = await Network.apiDio.post("/collection/addItem",
+        data: FormData.fromMap({
+          "id": ids.toString().replaceAll(RegExp(r'\[|\]'), ""),
+          "targetId": uid,
+          "cancelId":
+              (cancelIds ?? []).toString().replaceAll(RegExp(r'\[|\]'), ""),
+          "type": type.toString().split(".")[1],
+        }));
+    return resp.data;
+  }
+
+  static Future<ReplyDataListModel> getFeedReplyList(
+    dynamic feedId, {
+    final int page = 1,
+    final int lastItem,
+    final int firstItem,
+    final FeedType feedType = FeedType.feed,
+    final int blockStatus = 0,
+    final int fromFeedAuthor = 0, // 只看楼主
+    final int discussMode = 1,
+    final ReplyDataListType sortType = ReplyDataListType.lastupdate_desc,
+  }) async {
+    final param = {
+      "id": feedId,
+      "listType": sortType.toString().split(".")[1],
+      "page": page,
+      "discussMode": discussMode,
+      "feedType": feedType.toString().split(".")[1],
+      "blockStatus": blockStatus,
+      "fromFeedAuthor": fromFeedAuthor,
+    };
+    if (lastItem != null) {
+      param.addAll({
+        "lastItem": lastItem,
+      });
+    }
+    if (firstItem != null) {
+      param.addAll({
+        "firstItem": firstItem,
+      });
+    }
+    final resp =
+        await Network.apiDio.get("/feed/replyList", queryParameters: param);
+    return ReplyDataListModel.fromJson(resp.data);
+  }
+}
+
+enum FeedType {
+  feed,
+}
+
+enum ReplyDataListType {
+  lastupdate_desc, // 最近回复
+  dateline_desc, // 时间排序
+  popular, // 热度排序
+}
+
+enum CollectionType {
+  feed,
 }

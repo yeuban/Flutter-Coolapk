@@ -28,6 +28,7 @@ dependencies:
   waterfall_flow: ^0.1.3
   solid_bottom_sheet: ^0.1.9
   flutter_easyrefresh: ^2.0.9
+  toast: ^0.1.5
   # fluro: ^1.5.2 # Flutter SDK version >=1.5.0 <1.13.0
 
 dev_dependencies:

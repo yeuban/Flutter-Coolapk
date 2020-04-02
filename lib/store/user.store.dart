@@ -36,6 +36,9 @@ class UserStore extends ChangeNotifier {
     _loginInfoData = null;
   }
 
+  static String getUserUid(final BuildContext context) =>
+      (UserStore.of(context)?.loginInfo?.uid);
+
   static UserStore of(final BuildContext context,
           {final bool listen = false}) =>
       Provider.of<UserStore>(context, listen: listen);

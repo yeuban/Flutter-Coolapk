@@ -64,14 +64,14 @@ class DataListConfig with ChangeNotifier {
   }
 
   String _requestPath;
-  Map<String, String> _requestExtParam = {};
+  final Map<String, String> _requestExtParam = {};
 
   DataListConfigState state = DataListConfigState.Firstime;
 
   DataListConfig({String title = "", @required String url}) {
-    this._requestExtParam = {
+    this._requestExtParam.addAll({
       "title": title,
-    };
+    });
     if (url.startsWith("#/") || url.startsWith("/feed/")) {
       this._requestPath = "/page/dataList?url=${Uri.encodeComponent(url)}";
     } else {
