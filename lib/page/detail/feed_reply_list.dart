@@ -1,7 +1,10 @@
 import 'package:coolapk_flutter/network/api/main.api.dart';
 import 'package:coolapk_flutter/network/model/reply_data_list.model.dart';
 import 'package:coolapk_flutter/page/detail/feed_author_tag.dart';
+import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
+import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/html_text.dart';
+import 'package:coolapk_flutter/util/image_url_size_parse.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
@@ -125,82 +128,111 @@ class ReplyItem extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0, top: 8, bottom: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          data.username,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            // fontWeight: FontWeight.bold,
-                            fontSize:
-                                Theme.of(context).textTheme.button.fontSize + 2,
-                          ),
-                        ),
-                        data.isFeedAuthor == 1
-                            ? FeedAuthorTag()
-                            : const SizedBox(),
-                      ],
-                    ),
-                    Divider(color: Colors.transparent, height: 4),
-                    HtmlText(
-                      html: data.message,
-                      shrinkToFit: true,
-                      defaultTextStyle: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    Divider(color: Colors.transparent, height: 4),
-                    Row(
-                      children: <Widget>[
-                        // TODO: time and thumbup
-                      ],
-                    ),
-                    data.replynum == 0
-                        ? const SizedBox()
-                        : Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              shape: BoxShape.rectangle,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                            margin: const EdgeInsets.only(top: 8, bottom: 16),
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: data.replyRows
-                                  .map<Widget>((row) => InReplyItem(row))
-                                  .toList()
-                                    ..addAll(
-                                      data.replyRowsMore > data.replyRowsCount
-                                          ? [
-                                              InkWell(
-                                                child: Text(
-                                                  "显示更多",
-                                                  style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .primaryColor,
-                                                  ),
-                                                ),
-                                              )
-                                            ]
-                                          : [],
-                                    ),
-                            ),
-                          ),
-                  ],
-                ),
+                child: _buildContent(context),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildContent(final BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              data.username,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                // fontWeight: FontWeight.bold,
+                fontSize: Theme.of(context).textTheme.button.fontSize + 2,
+              ),
+            ),
+            data.isFeedAuthor == 1 ? FeedAuthorTag() : const SizedBox(),
+          ],
+        ),
+        Divider(color: Colors.transparent, height: 4),
+        HtmlText(
+          html: data.message,
+          shrinkToFit: true,
+          defaultTextStyle: Theme.of(context).textTheme.bodyText1,
+        ),
+        (data.pic?.length ?? 0) > 3 ? _buildPic(context) : const SizedBox(),
+        Divider(color: Colors.transparent, height: 4),
+        Row(
+          children: <Widget>[
+            // TODO: time and thumbup
+          ],
+        ),
+        data.replynum == 0 ? const SizedBox() : _buildInReplyColumn(context),
+      ],
+    );
+  }
+
+  Widget _buildPic(final BuildContext context) {
+    return InkWell(
+      onTap: () {
+        // TODO:
+        Navigator.of(context).push(ScaleInRoute(
+            widget: ImageBox(
+          url: data.pic,
+          heroTag: data.pic,
+        )));
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 8),
+        constraints: BoxConstraints(maxHeight: 300),
+        child: AspectRatio(
+          aspectRatio: getImageRatio(data.pic),
+          child: Hero(
+            tag: data.pic,
+            child: ExtendedImage.network(data.pic),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInReplyColumn(final BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        shape: BoxShape.rectangle,
+        color: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      margin: const EdgeInsets.only(top: 8, bottom: 16),
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: data.replyRows.map<Widget>((row) => InReplyItem(row)).toList()
+          ..addAll(
+            _buildShowMore(context),
+          ),
+      ),
+    );
+  }
+
+  List<Widget> _buildShowMore(final BuildContext context) {
+    return data.replyRowsMore > data.replyRowsCount
+        ? [
+            InkWell(
+              child: Text(
+                "显示更多",
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            )
+          ]
+        : [];
   }
 }
 
