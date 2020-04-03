@@ -50,6 +50,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "build_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
           files: |
             build/windows/x64/Release/windows-x64.7z
@@ -100,6 +101,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "build_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
           files: build/macos/Build/Products/macos.7z
 
@@ -133,6 +135,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "build_${{steps.current-time.outputs.formattedTime}}"
           prerelease: true
           files: build/app/outputs/apk/release/*.apk
   # build-linux:
