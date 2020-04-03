@@ -2,8 +2,6 @@ name: Build Action
 
 on:
   push:
-    branches:
-      - master
     tags:
       - "v*"
 
