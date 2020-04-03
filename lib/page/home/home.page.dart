@@ -140,22 +140,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   // 主要内容
   Widget _buildContent(final BuildContext context) {
-    return LimitedContainer(
-      limiteType: LimiteType.SingleColumn,
-      child: TabBarView(
-        controller: Provider.of<TabController>(context, listen: false),
-        // 顶层controller
-        children: _pageConfigs.map<Widget>((pageConfig) {
-          return _Tab(
-            configs: pageConfig.entities,
-            controller: _controllerMap[pageConfig.entityId],
-            onPageChanged: (newPage) {
-              _homePageDrawerStateKey?.currentState?.onGotoTab(
-                  _pageConfigs.indexOf(pageConfig), (newPage).floor());
-            },
-          );
-        }).toList(),
-      ),
+    return TabBarView(
+      controller: Provider.of<TabController>(context, listen: false),
+      // 顶层controller
+      children: _pageConfigs.map<Widget>((pageConfig) {
+        return _Tab(
+          configs: pageConfig.entities,
+          controller: _controllerMap[pageConfig.entityId],
+          onPageChanged: (newPage) {
+            _homePageDrawerStateKey?.currentState?.onGotoTab(
+                _pageConfigs.indexOf(pageConfig), (newPage).floor());
+          },
+        );
+      }).toList(),
     );
   }
 }
@@ -189,13 +186,11 @@ class __TabState extends State<_Tab> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Container(
-      child: PageView(
-        onPageChanged: widget.onPageChanged,
-        physics: BouncingScrollPhysics(),
-        controller: widget.controller,
-        children: pages,
-      ),
+    return PageView(
+      onPageChanged: widget.onPageChanged,
+      physics: BouncingScrollPhysics(),
+      controller: widget.controller,
+      children: pages,
     );
   }
 }

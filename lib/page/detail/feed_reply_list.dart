@@ -1,19 +1,12 @@
-import 'package:coolapk_flutter/network/api/main.api.dart';
-import 'package:coolapk_flutter/network/model/reply_data_list.model.dart';
-import 'package:coolapk_flutter/page/detail/feed_author_tag.dart';
-import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
-import 'package:coolapk_flutter/util/anim_page_route.dart';
-import 'package:coolapk_flutter/util/html_text.dart';
-import 'package:coolapk_flutter/util/image_url_size_parse.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_easyrefresh/phoenix_header.dart';
+part of 'feed_detail.page.dart';
 
 class FeedReplyList extends StatefulWidget {
   final dynamic feedId;
-  const FeedReplyList(this.feedId, {Key key}) : super(key: key);
+  final bool discussMode;
+  final FeedType feedType;
+  const FeedReplyList(this.feedId,
+      {Key key, this.feedType = FeedType.feed, this.discussMode = true})
+      : super(key: key);
 
   @override
   _FeedReplyListState createState() => _FeedReplyListState();
@@ -24,6 +17,8 @@ class _FeedReplyListState extends State<FeedReplyList> {
   EasyRefreshController _easyRefreshController;
   int _page = 1;
   bool _nomore = false;
+
+  ReplyDataListType sortType = ReplyDataListType.lastupdate_desc;
 
   int get firstItem {
     if (_data == null) return null;
@@ -42,8 +37,15 @@ class _FeedReplyListState extends State<FeedReplyList> {
   }
 
   Future<bool> fetchData() async {
-    final resp = await MainApi.getFeedReplyList(widget.feedId,
-        page: _page, firstItem: firstItem, lastItem: lastItem);
+    final resp = await MainApi.getFeedReplyList(
+      widget.feedId,
+      page: _page,
+      firstItem: firstItem,
+      lastItem: lastItem,
+      feedType: widget.feedType,
+      discussMode: widget.discussMode ? 1 : 0,
+      sortType: widget.discussMode ? sortType : null,
+    );
     if (_data == null) {
       _data = resp.data;
     } else {
@@ -60,6 +62,9 @@ class _FeedReplyListState extends State<FeedReplyList> {
   void initState() {
     _easyRefreshController = EasyRefreshController();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _easyRefreshController.callRefresh();
+    });
   }
 
   @override
@@ -67,7 +72,6 @@ class _FeedReplyListState extends State<FeedReplyList> {
     return EasyRefresh(
       header: PhoenixHeader(),
       controller: _easyRefreshController,
-      firstRefresh: true,
       footer: BallPulseFooter(),
       onLoad: () async {
         if (_nomore) {
@@ -95,160 +99,6 @@ class _FeedReplyListState extends State<FeedReplyList> {
         },
         shrinkWrap: true,
         itemCount: _data?.length ?? 0,
-      ),
-    );
-  }
-}
-
-class ReplyItem extends StatelessWidget {
-  final Function(int uid, int cid) onClick;
-  final ReplyDataEntity data;
-  const ReplyItem({Key key, @required this.data, this.onClick})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: InkWell(
-        onTap: () {
-          // TODO:
-        },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ExtendedImage.network(
-                data.userInfo.userSmallAvatar,
-                width: 42,
-                height: 42,
-                shape: BoxShape.circle,
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16.0, top: 8, bottom: 8),
-                child: _buildContent(context),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildContent(final BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              data.username,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                // fontWeight: FontWeight.bold,
-                fontSize: Theme.of(context).textTheme.button.fontSize + 2,
-              ),
-            ),
-            data.isFeedAuthor == 1 ? FeedAuthorTag() : const SizedBox(),
-          ],
-        ),
-        Divider(color: Colors.transparent, height: 4),
-        HtmlText(
-          html: data.message,
-          shrinkToFit: true,
-          defaultTextStyle: Theme.of(context).textTheme.bodyText1,
-        ),
-        (data.pic?.length ?? 0) > 3 ? _buildPic(context) : const SizedBox(),
-        Divider(color: Colors.transparent, height: 4),
-        Row(
-          children: <Widget>[
-            // TODO: time and thumbup
-          ],
-        ),
-        data.replynum == 0 ? const SizedBox() : _buildInReplyColumn(context),
-      ],
-    );
-  }
-
-  Widget _buildPic(final BuildContext context) {
-    return InkWell(
-      onTap: () {
-        // TODO:
-        Navigator.of(context).push(ScaleInRoute(
-            widget: ImageBox(
-          url: data.pic,
-          heroTag: data.pic,
-        )));
-      },
-      child: Container(
-        margin: const EdgeInsets.only(top: 8),
-        constraints: BoxConstraints(maxHeight: 300),
-        child: AspectRatio(
-          aspectRatio: getImageRatio(data.pic),
-          child: Hero(
-            tag: data.pic,
-            child: ExtendedImage.network(data.pic),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInReplyColumn(final BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        shape: BoxShape.rectangle,
-        color: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      margin: const EdgeInsets.only(top: 8, bottom: 16),
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: data.replyRows.map<Widget>((row) => InReplyItem(row)).toList()
-          ..addAll(
-            _buildShowMore(context),
-          ),
-      ),
-    );
-  }
-
-  List<Widget> _buildShowMore(final BuildContext context) {
-    return data.replyRowsMore > data.replyRowsCount
-        ? [
-            InkWell(
-              child: Text(
-                "显示更多",
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            )
-          ]
-        : [];
-  }
-}
-
-class InReplyItem extends StatelessWidget {
-  final InReplyRowEntity data;
-  final Function(int uid, int cid) onClick;
-  const InReplyItem(this.data, {Key key, this.onClick}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 2.0, bottom: 2),
-      child: HtmlText(
-        html:
-            "<a style='color: #${Theme.of(context).primaryColor.value.toRadixString(16)}'>${data.username}${data.isFeedAuthor == 1 ? " [楼主]" : ""}: </a>${data.message}",
-        shrinkToFit: true,
       ),
     );
   }

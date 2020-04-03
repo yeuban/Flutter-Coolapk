@@ -28,6 +28,9 @@ class Network {
     final Dio dio = Dio(BaseOptions(
       baseUrl: "https://api.coolapk.com/v6",
       contentType: Headers.formUrlEncodedContentType,
+      connectTimeout: 10000,
+      receiveTimeout: 10000,
+      sendTimeout: 10000,
     ));
     dio.interceptors.add(_tokenInterceptors);
     dio.interceptors.add(_cookieManager);

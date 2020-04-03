@@ -9,13 +9,15 @@ class HtmlText extends StatelessWidget {
   final TextStyle defaultTextStyle;
   final bool shrinkToFit;
   final bool renderNewlines;
-  const HtmlText(
-      {Key key,
-      this.html,
-      this.defaultTextStyle,
-      this.shrinkToFit,
-      this.renderNewlines})
-      : super(key: key);
+  final Function(String url) onLinkTap;
+  const HtmlText({
+    Key key,
+    this.html,
+    this.defaultTextStyle,
+    this.shrinkToFit,
+    this.onLinkTap,
+    this.renderNewlines,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class HtmlText extends StatelessWidget {
       useRichText: false,
       data: parseEmoji(html),
       showImages: true,
+      onLinkTap: onLinkTap,
       renderNewlines: renderNewlines ?? true,
       shrinkToFit: shrinkToFit,
       linkStyle: TextStyle(color: Theme.of(context).accentColor),

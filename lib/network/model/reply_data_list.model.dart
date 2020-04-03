@@ -71,7 +71,7 @@ class ReplyDataEntity {
   final int isFeedAuthor;
   final _UserAction userAction;
   final _UserInfo userInfo;
-  final List<InReplyRowEntity> replyRows;
+  List<InReplyRowEntity> replyRows;
   final int replyRowsCount;
   final int replyRowsMore;
 

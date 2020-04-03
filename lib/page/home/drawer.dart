@@ -45,12 +45,34 @@ class HomePageDrawerState extends State<HomePageDrawer>
         color: Theme.of(context).cardColor,
         child: Stack(
           children: <Widget>[
-            _buildTabControllPanel(),
+            _buildTabControllPanel(context),
             Align(
               alignment: Alignment.bottomCenter,
               child: _buildUserCard(),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(final BuildContext context) {
+    return AppBar(
+      elevation: 2,
+      backgroundColor: Theme.of(context).cardColor,
+      primary: false,
+      title: Container(
+        constraints: BoxConstraints(maxHeight: 36),
+        child: TextField(
+          style: TextStyle(fontSize: 14),
+          decoration: InputDecoration(
+            hintText: "搜索",
+            fillColor: Theme.of(context).primaryColor.withAlpha(30),
+            contentPadding: const EdgeInsets.all(8),
+            filled: true,
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(100)),
+          ),
         ),
       ),
     );
@@ -74,10 +96,11 @@ class HomePageDrawerState extends State<HomePageDrawer>
     );
   }
 
-  Widget _buildTabControllPanel() {
+  Widget _buildTabControllPanel(final BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
+        _buildHeader(context),
         TabBar(
           controller: Provider.of<TabController>(context, listen: false),
           labelColor: Theme.of(context).textTheme.bodyText1.color,

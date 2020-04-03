@@ -135,7 +135,7 @@ class MainApi {
   }) async {
     final param = {
       "id": feedId,
-      "listType": sortType.toString().split(".")[1],
+      "listType": sortType == null ? "" : sortType.toString().split(".")[1],
       "page": page,
       "discussMode": discussMode,
       "feedType": feedType.toString().split(".")[1],
@@ -156,10 +156,31 @@ class MainApi {
         await Network.apiDio.get("/feed/replyList", queryParameters: param);
     return ReplyDataListModel.fromJson(resp.data);
   }
+
+  static Future<dynamic> reply(final dynamic targetId, final String message,
+      {final ReplyType type = ReplyType.reply}) async {
+    final resp = await Network.apiDio.post(
+      "/feed/reply",
+      queryParameters: {
+        "id": targetId,
+        "type": type.toString().split(".")[1],
+      },
+      data: FormData.fromMap({
+        "message": message,
+      }),
+    );
+    return resp.data;
+  }
+}
+
+enum ReplyType {
+  feed,
+  reply, // 回复某回复
 }
 
 enum FeedType {
   feed,
+  feed_reply, // 动态内的回复
 }
 
 enum ReplyDataListType {
