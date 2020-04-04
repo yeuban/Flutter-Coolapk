@@ -98,8 +98,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // 窗口框架
   Widget _buildFrame() {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.width;
-    final tight = width / height < 1.0;
+    final tight = width < 550;
     final drawer = HomePageDrawer(
       // 先new一个
       key: _homePageDrawerStateKey,

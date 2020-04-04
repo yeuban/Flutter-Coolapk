@@ -10,6 +10,7 @@ import 'package:coolapk_flutter/util/html_text.dart';
 import 'package:coolapk_flutter/util/image_url_size_parse.dart';
 import 'package:coolapk_flutter/widget/common_error_widget.dart';
 import 'package:coolapk_flutter/widget/future_switch.dart';
+import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed.item.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:coolapk_flutter/widget/to_login_snackbar.dart';
 import 'package:extended_image/extended_image.dart';
@@ -38,12 +39,20 @@ class _FeedDetailPageState extends State<FeedDetailPage> {
   String get feedId =>
       url.startsWith("/feed/") ? url.replaceAll("/feed/", "") : null;
 
+  GlobalKey<_FeedReplyListState> _feedReplyListKey;
+
   Future<bool> fetchData() async {
     if (data != null) return true;
     if (feedId == null) throw Exception("FeedID获取失败");
     final resp = await MainApi.getFeedDetail(feedId);
     data = resp;
     return true;
+  }
+
+  @override
+  void initState() {
+    _feedReplyListKey = GlobalKey();
+    super.initState();
   }
 
   @override
@@ -79,17 +88,27 @@ class _FeedDetailPageState extends State<FeedDetailPage> {
 
   Widget _buildDesktop(final BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context, data),
+      appBar: _buildAppBar(
+        context,
+        data,
+        onReplyDone: (data) {
+          _feedReplyListKey.currentState.addReplyRow(data);
+        },
+      ),
       body: LimitedContainer(
         limiteType: LimiteType.TwoColumn,
         child: Row(
           children: <Widget>[
             Expanded(
-                child: ListView(
-              children: _buildDetail(context, data),
-            )),
+              child: ListView(
+                children: _buildDetail(context, data),
+              ),
+            ),
             Expanded(
-              child: FeedReplyList(feedId),
+              child: FeedReplyList(
+                feedId,
+                key: _feedReplyListKey,
+              ),
             )
           ],
         ),
@@ -121,8 +140,12 @@ class FeedDetailMobile extends StatelessWidget {
   }
 }
 
-Widget _buildAppBar(final BuildContext context, final Map<String, dynamic> data,
-    {Key key, sliver = false}) {
+Widget _buildAppBar(
+  final BuildContext context,
+  final Map<String, dynamic> data, {
+  final Function(ReplyDataEntity) onReplyDone,
+  final sliver = false,
+}) {
   final t = DateTime.fromMillisecondsSinceEpoch(
           int.tryParse((data["lastupdate"]).toString()) * 1000)
       .toUtc();
@@ -155,6 +178,24 @@ Widget _buildAppBar(final BuildContext context, final Map<String, dynamic> data,
     trailing: Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        FlatButton(
+          child: Text(
+            "写评论",
+            style: TextStyle(
+              color: Theme.of(context).primaryTextTheme.bodyText1.color,
+            ),
+          ),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) => ReplyInputBottomSheet(
+                targetId: data["entityId"],
+                hintText: "楼主",
+                onReplyDone: onReplyDone,
+              ),
+            );
+          },
+        ),
         FlatButton.icon(
           label: Text(collected ? "取消收藏" : "收藏动态"),
           textColor: Theme.of(context).primaryTextTheme.bodyText1.color,
@@ -210,18 +251,36 @@ Widget _buildAppBar(final BuildContext context, final Map<String, dynamic> data,
 List<Widget> _buildDetail(
     final BuildContext context, final Map<String, dynamic> data) {
   final pjson = jsonDecode(data["message_raw_output"]);
+  final hasImage =
+      data["picArr"].length > 0 && data["picArr"][0].toString().isNotEmpty;
   return <Widget>[
-    pjson == null
-        ? HtmlText(
-            html: data["message"],
-            shrinkToFit: true,
-          )
-        : Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+    Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: pjson == null
+          ? HtmlText(
+              html: data["message"],
+              shrinkToFit: true,
+            )
+          : Column(
               mainAxisSize: MainAxisSize.min,
               children: parseContent(context, pjson),
-            )),
+            ),
+    ),
+    Divider(indent: 16, endIndent: 16),
+    hasImage
+        ? FlatButton(
+            child: Text(
+              pjson != null ? "点我查看所有图片" : "点我查看更多图片",
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+            onPressed: () => ImageBox.push(context, urls: data["picArr"]),
+          )
+        : const SizedBox(),
+    pjson != null
+        ? const SizedBox()
+        : Center(child: buildIfImageBox(data, context)),
+    Divider(indent: 16, endIndent: 16),
+    
   ];
 }
 
@@ -229,28 +288,29 @@ List<Widget> parseContent(final BuildContext context, dynamic json) {
   return json.map<Widget>((node) {
     switch (node["type"]) {
       case "text":
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Container(
-            width: double.infinity,
-            child: HtmlText(
-              html: node["message"].toString(),
-              shrinkToFit: true,
-              defaultTextStyle: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  .copyWith(fontWeight: FontWeight.w600),
-            ),
+        return Container(
+          width: double.infinity,
+          child: HtmlText(
+            html: node["message"].toString(),
+            shrinkToFit: true,
+            defaultTextStyle: Theme.of(context)
+                .textTheme
+                .bodyText1
+                .copyWith(fontWeight: FontWeight.w600),
           ),
         );
       case "image":
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            Divider(
+              color: Colors.transparent,
+              height: 8,
+            ),
             Material(
               child: InkWell(
                 onTap: () {
-                  // TODO:
+                  ImageBox.push(context, urls: [node["url"]]);
                 },
                 child: Container(
                   constraints: BoxConstraints(
@@ -267,16 +327,17 @@ List<Widget> parseContent(final BuildContext context, dynamic json) {
                 ),
               ),
             ),
-            Divider(
-              color: Colors.transparent,
-              height: 6,
-            ),
-            Center(
-              child: Text(
-                node["description"] ?? "",
-                style: Theme.of(context).textTheme.caption,
-              ),
-            ),
+            node["description"].toString().isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 6, bottom: 16),
+                    child: Center(
+                      child: Text(
+                        node["description"],
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
           ],
         );
       default:

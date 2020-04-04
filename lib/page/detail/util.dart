@@ -3,7 +3,8 @@ part of 'feed_detail.page.dart';
 void handleOnLinkTap(final String url, final BuildContext context) {
   if (url.startsWith("pic=")) {
     ImageBox.push(context, urls: [url.split("=")[1]]);
-  } else if ((url.startsWith("user="))) {
+  } else if (url.startsWith(RegExp(r'user=|/u/'))) {
+    // TODO: handle to user space
   } else if (url.startsWith("https://www.coolapk.com/feed/")) {
     Navigator.push(
         context,

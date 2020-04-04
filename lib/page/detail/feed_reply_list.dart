@@ -36,6 +36,12 @@ class _FeedReplyListState extends State<FeedReplyList> {
         ?.entityId;
   }
 
+  addReplyRow(ReplyDataEntity entity) {
+    if (_data == null) _data = [];
+    _data.insert(0, entity);
+    setState(() {});
+  }
+
   Future<bool> fetchData() async {
     final resp = await MainApi.getFeedReplyList(
       widget.feedId,
@@ -92,13 +98,24 @@ class _FeedReplyListState extends State<FeedReplyList> {
       child: ListView.builder(
         padding: const EdgeInsets.all(8),
         itemBuilder: (context, index) {
+          if (index == _data.length) {
+            return FlatButton(
+              child: Text(
+                "没有更多了，点击刷新",
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              onPressed: () {
+                _easyRefreshController.callRefresh();
+              },
+            );
+          }
           return ReplyItem(
             data: _data[index],
             onClick: (uid, cid) {},
           );
         },
         shrinkWrap: true,
-        itemCount: _data?.length ?? 0,
+        itemCount: (_data?.length ?? 0) + (_nomore ? 1 : 0),
       ),
     );
   }

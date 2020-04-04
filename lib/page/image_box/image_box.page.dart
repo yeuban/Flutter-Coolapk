@@ -28,7 +28,7 @@ class ImageBox extends StatelessWidget {
         onPageChanged: (value) {},
         physics: BouncingScrollPhysics(),
         itemBuilder: (context, index) {
-          return _SubImage(urls[index].toString());
+          return _SubImage(urls[index].toString(), urls.length, index);
         },
       ),
     );
@@ -37,7 +37,10 @@ class ImageBox extends StatelessWidget {
 
 class _SubImage extends StatefulWidget {
   final String url;
-  _SubImage(this.url, {Key key}) : super(key: key);
+  final int totalImageCount;
+  final int myIndex;
+  _SubImage(this.url, this.totalImageCount, this.myIndex, {Key key})
+      : super(key: key);
 
   @override
   __SubImageState createState() => __SubImageState();
@@ -45,6 +48,9 @@ class _SubImage extends StatefulWidget {
 
 class __SubImageState extends State<_SubImage> {
   double _scale = 1;
+
+  String get myIndex => (widget.myIndex + 1).toString();
+  String get totalImageCount => widget.totalImageCount.toString();
 
   @override
   void initState() {
@@ -66,7 +72,7 @@ class __SubImageState extends State<_SubImage> {
                   label: "缩放",
                   max: 3,
                   value: _scale,
-                  min: 0.1,
+                  min: 0.2,
                   onChanged: (value) {
                     context
                         .findRootAncestorStateOfType<
@@ -78,6 +84,10 @@ class __SubImageState extends State<_SubImage> {
                   },
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Text("$myIndex/$totalImageCount"),
             ),
           ],
         ),

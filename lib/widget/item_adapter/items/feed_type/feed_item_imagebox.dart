@@ -71,6 +71,9 @@ Widget buildImageBox1x3(List<dynamic> picArr) {
 Widget buildIfImageBox(final dynamic source, final BuildContext context) {
   final List<dynamic> picArr = source["picArr"];
   final maxHeight = MediaQuery.of(context).size.height / 2.5;
+  if (picArr.length == 1 && picArr[0].toString().isEmpty) {
+    return const SizedBox();
+  }
   Widget picWidget;
   if (picArr != null) {
     switch (picArr.length) {
