@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:coolapk_flutter/util/image_url_size_parse.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';

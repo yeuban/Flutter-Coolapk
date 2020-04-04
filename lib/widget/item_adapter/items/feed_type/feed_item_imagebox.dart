@@ -103,6 +103,12 @@ Widget buildIfImageBox(final dynamic source, final BuildContext context) {
   return Container(
     constraints: BoxConstraints(maxHeight: fmh.toDouble()),
     padding: const EdgeInsets.all(0).copyWith(top: 8, bottom: 8),
-    child: picWidget ?? const SizedBox(),
+    child: InkWell(
+          onTap: () {
+            ImageBox.push(context, urls: picArr);
+          },
+          child: picWidget,
+        ) ??
+        const SizedBox(),
   );
 }

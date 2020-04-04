@@ -1,0 +1,8 @@
+analyzer:
+  enable-experiment:
+    - extension-methods
+  errors:
+    invalid_use_of_protected_member: error
+    always_declare_return_types: error 
+    unused_import: error
+    dead_code: error

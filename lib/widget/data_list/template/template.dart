@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:coolapk_flutter/util/image_url_size_parse.dart';
 import 'package:coolapk_flutter/widget/data_list/data_list.dart';
 import 'package:coolapk_flutter/widget/item_adapter/auto_item_adapter.dart';

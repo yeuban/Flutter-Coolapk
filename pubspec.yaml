@@ -4,7 +4,7 @@ description: Coolapk Flutter version.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -32,6 +32,7 @@ dependencies:
   solid_bottom_sheet: ^0.1.9
   flutter_easyrefresh: ^2.0.9
   toast: ^0.1.5
+  dartx: ^0.3.0
   # fluro: ^1.5.2 # Flutter SDK version >=1.5.0 <1.13.0
 
 dev_dependencies:

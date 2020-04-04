@@ -4,7 +4,6 @@ import 'package:coolapk_flutter/network/model/main_init.model.dart'
 import 'package:coolapk_flutter/page/home/tab_page.dart';
 import 'package:coolapk_flutter/widget/common_error_widget.dart';
 import 'package:coolapk_flutter/page/home/drawer.dart';
-import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

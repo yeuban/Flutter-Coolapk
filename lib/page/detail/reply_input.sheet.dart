@@ -1,8 +1,4 @@
-import 'package:coolapk_flutter/network/api/main.api.dart';
-import 'package:coolapk_flutter/network/model/reply_data_list.model.dart';
-import 'package:coolapk_flutter/widget/limited_container.dart';
-import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
+part of 'feed_detail.page.dart';
 
 enum ReplyInputType {
   feed,
@@ -43,6 +39,7 @@ class _ReplyInputBottomSheetState extends State<ReplyInputBottomSheet> {
       padding: const EdgeInsets.all(8),
       child: LimitedContainer(
         child: TextField(
+          autofocus: false,
           controller: _textEditingController,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(6),

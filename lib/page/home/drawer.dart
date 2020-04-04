@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:coolapk_flutter/network/model/main_init.model.dart'
@@ -64,6 +63,7 @@ class HomePageDrawerState extends State<HomePageDrawer>
       title: Container(
         constraints: BoxConstraints(maxHeight: 36),
         child: TextField(
+          autofocus: false,
           style: TextStyle(fontSize: 14),
           decoration: InputDecoration(
             hintText: "搜索",

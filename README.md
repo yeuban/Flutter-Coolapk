@@ -1,23 +1,22 @@
 # Coolapk Flutter
 
-![Nightly Build](https://github.com/Cyenoch/Flutter-Coolapk/workflows/Nightly%20Build/badge.svg)
+![Build Action](https://github.com/Cyenoch/Flutter-Coolapk/workflows/Build%20Action/badge.svg)
 
 ## 兴趣使然
 
 ## 本项目主要适配桌面端（宽屏）
 
-### ~~由于path_provider目前没有足够好的windows实现，所有ExtendedImage对windows,mac os都关闭了cache (找到了)~~
-
-### 手机使用时(或是宽度小于高度)，导航功能移动至侧滑，而且体验并不是很好
-
-### ~~窗口大小变更时会导致重新获取信息，请尽量避免 (解决了)~~
+- 本项目使用 flutter master channel
+- ~~由于 path_provider 目前没有足够好的 windows 实现，所有 ExtendedImage 对 windows,mac os 都关闭了 cache (找到了)~~
+- 手机使用时(或是宽度小于高度)，导航功能移动至侧滑，而且体验并不是很好
+- ~~窗口大小变更时会导致重新获取信息，请尽量避免 (解决了)~~
 
 ## 下载地址：（适合国内，但注意不要在这个网站上登录）
 
 - 注意，版本的时间是错误的，要＋一天才是实际编译时间!!!
 - <http://github-mirror.bugkiller.org/Cyenoch/Flutter-Coolapk/releases/>
 - 根据你所用设备的版本进行下载
-- 安卓版：（不懂就下载armeabi-v7a的）
+- 安卓版：（不懂就下载 armeabi-v7a 的）
   - app-armeabi-v7a-release.apk
   - app-arm64-v8a-release.apk
   - app-x86_64-release.apk
@@ -36,12 +35,15 @@ lib/
     /api/ 存放基本的api
     /model/ 存放常用的Model
   /page/
+    /collection_list/ 与收藏有关的
+    /detail/ 动态详情
+    /image_box/ 显示图片的页面
     /auto_page/ 暂无
     /home/ 主页
     /launcher/ 启动页
     /login/ 登录页
     /product/ 数码详情页
-  /store/
+  /store/ 全局状态
   /util/ 通用工具
   /widget/ 存放控件
     /data_list/ 数据列表控件(准备转成auto_page)
@@ -69,10 +71,10 @@ test/ 测试(基本不用)
   - [x] 排行榜
   - [ ] 手机
   - [ ] 数码
-- [ ] item适配
-  - [x] emoji显示
-  - [x] 大部分item的显示
-  - [ ] 大部分item的功能
+- [ ] item 适配
+  - [x] emoji 显示
+  - [x] 大部分 item 的显示
+  - [ ] 大部分 item 的功能
 - [ ] 各种子页面适配
   - [x] 数码详情页数据显示
     - [ ] 相关操作
@@ -136,6 +138,7 @@ test/ 测试(基本不用)
   - [ ] 显示动态/关注的应用/应用集/发现/评分/酷图/我开发的软件
   - [ ] 分享/加关注/私信
 - [ ] 通知页
+
   - [ ] @我的动态
   - [ ] @我的评论
   - [ ] 我收到的赞
@@ -143,16 +146,16 @@ test/ 测试(基本不用)
   - [ ] 私信
   - [ ] 显示通知
   - [ ] 清除通知
-  
+
 看起来还挺多的。。。
 
-### 项目使用Provider进行全局状态管理,主要由两个全局状态,Theme和User
+### 项目使用 Provider 进行全局状态管理,主要由两个全局状态,Theme 和 User
 
-### item_adapter目录下的auto_item_adapter进行item的适配
+### item_adapter 目录下的 auto_item_adapter 进行 item 的适配
 
-## 欢迎提交pr
+## 欢迎提交 pr
 
-## 欢迎进群py讨论
+## 欢迎进群 py 讨论
 
 - [751659171](https://jq.qq.com/?_wv=1027&k=5iu6dt5)
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:coolapk_flutter/network/api/auth.api.dart';
 import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/page/home/home.page.dart';

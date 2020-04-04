@@ -49,6 +49,6 @@ class AuthApi {
         },
       ),
     );
-    return jsonDecode(resp.data);
+    return jsonDecode(resp.data.toString());
   }
 }

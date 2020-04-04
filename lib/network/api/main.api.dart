@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/network/model/collection.model.dart';
 import 'package:coolapk_flutter/network/model/main_init.model.dart';

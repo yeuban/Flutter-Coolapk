@@ -113,6 +113,7 @@ class _ReplyItemState extends State<ReplyItem> {
         HtmlText(
           html: widget.data.message,
           shrinkToFit: true,
+          onLinkTap: (url) => handleOnLinkTap(url, context),
           defaultTextStyle: Theme.of(context).textTheme.bodyText1,
         ),
         (widget.data.pic?.length ?? 0) > 3
@@ -134,12 +135,7 @@ class _ReplyItemState extends State<ReplyItem> {
   Widget _buildPic(final BuildContext context) {
     return InkWell(
       onTap: () {
-        // TODO:
-        Navigator.of(context).push(ScaleInRoute(
-            widget: ImageBox(
-          url: widget.data.pic,
-          heroTag: widget.data.pic,
-        )));
+        ImageBox.push(context, urls: [widget.data.pic]);
       },
       child: Container(
         margin: const EdgeInsets.only(top: 8),
@@ -220,17 +216,33 @@ class InReplyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor16 =
+        Theme.of(context).primaryColor.value.toRadixString(16);
+    final textColor16 =
+        Theme.of(context).textTheme.bodyText1.color.value.toRadixString(16);
+    final _picTag = (data.pic.isNotEmpty
+        ? "<a href='pic=${data.pic}'" +
+            " style='color: #${Theme.of(context).primaryColor.value.toRadixString(16)}'>" +
+            "[查看图片]</a" ">" // 是否有图片
+        : "");
     return InkWell(
       onTap: () => showReplyInput(context),
       child: Padding(
         padding: const EdgeInsets.only(top: 2.0, bottom: 2),
-        child: HtmlText(
-          onLinkTap: (url) {
-            // TODO: handle to user space
-          },
-          html:
-              "<a href='${data.uid}' style='color: #${Theme.of(context).primaryColor.value.toRadixString(16)}'>${data.username}${data.isFeedAuthor == 1 ? " [楼主]" : ""}: </a>${data.message}",
-          shrinkToFit: true,
+        child: Container(
+          width: double.infinity,
+          child: HtmlText(
+            onLinkTap: (url) {
+              // TODO: handle to user space
+              handleOnLinkTap(url, context);
+            },
+            html: "<a href='user=${data.uid}' style='color: #$primaryColor16'>" +
+                "${data.isFeedAuthor == 1 ? "[楼主]${data.username}" : data.username}</a>" + // 谁
+                (data.rusername.isNotEmpty ? " 回复 " : "") + // 回复
+                "<a href='user=${data.ruid}' style='color: #$primaryColor16'>${data.rusername}</a>" // 谁
+                    ": ${data.message == "[图片]" ? _picTag : data.message + _picTag}",
+            shrinkToFit: true,
+          ),
         ),
       ),
     );

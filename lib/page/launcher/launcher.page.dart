@@ -124,6 +124,4 @@ class _LauncherPageState extends State<LauncherPage>
       ),
     );
   }
-
-  Widget _buildContent() {}
 }
