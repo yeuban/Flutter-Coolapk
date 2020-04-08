@@ -33,6 +33,7 @@ dependencies:
   flutter_easyrefresh: ^2.0.9
   toast: ^0.1.5
   dartx: ^0.3.0
+  demoji: ^1.0.1
   # fluro: ^1.5.2 # Flutter SDK version >=1.5.0 <1.13.0
 
 dev_dependencies:

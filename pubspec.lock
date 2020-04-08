@@ -99,6 +99,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.0"
+  demoji:
+    dependency: "direct main"
+    description:
+      name: demoji
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
   dio:
     dependency: "direct main"
     description:
