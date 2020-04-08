@@ -1,7 +1,9 @@
 import 'package:coolapk_flutter/network/api/main.api.dart';
 import 'package:coolapk_flutter/network/model/main_init.model.dart'
     as MainInitModel;
+import 'package:coolapk_flutter/page/create_feed/create_feed.page.dart';
 import 'package:coolapk_flutter/page/home/tab_page.dart';
+import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/widget/common_error_widget.dart';
 import 'package:coolapk_flutter/page/home/drawer.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context)
+              .push(ScaleInRoute(widget: CreateHtmlArticleFeedPage()));
+        },
+        child: Icon(Icons.add),
+      ),
       body: FutureBuilder(
         future: getMainInitModelData(),
         builder: (context, snap) {

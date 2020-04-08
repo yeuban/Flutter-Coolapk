@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 
 class ImageBox extends StatelessWidget {
   final List<dynamic> urls;
-  const ImageBox({Key key, @required this.urls}) : super(key: key);
+  final int initIndex;
+  const ImageBox({Key key, @required this.urls, this.initIndex = 0})
+      : super(key: key);
 
-  static push(final BuildContext context, {@required List<dynamic> urls}) {
+  static push(final BuildContext context,
+      {@required List<dynamic> urls, int initIndex = 0}) {
     Navigator.push(
       context,
       TransparentMaterialPageRoute(
         builder: (_) => ImageBox(
           urls: urls,
+          initIndex: initIndex,
         ),
       ),
     );
@@ -24,6 +28,7 @@ class ImageBox extends StatelessWidget {
       slideAxis: SlideAxis.both,
       resetPageDuration: Duration(milliseconds: 200),
       child: ExtendedImageGesturePageView.builder(
+        controller: PageController(initialPage: initIndex),
         itemCount: urls.length,
         onPageChanged: (value) {},
         physics: BouncingScrollPhysics(),
@@ -64,7 +69,7 @@ class __SubImageState extends State<_SubImage> {
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: <Widget>[
-            BackButton(),
+            // BackButton(),
             Expanded(
               child: Container(
                 height: kBottomNavigationBarHeight,
@@ -91,6 +96,14 @@ class __SubImageState extends State<_SubImage> {
             ),
           ],
         ),
+      ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).cardColor,
+        textTheme: Theme.of(context).textTheme,
+        iconTheme: Theme.of(context).iconTheme,
+        leading: CloseButton(),
+        elevation: 1,
+        title: Text("蜜汁原因，pc端需要先点击一下图片，才能正常缩放"),
       ),
       body: ExtendedImage.network(
         widget.url,

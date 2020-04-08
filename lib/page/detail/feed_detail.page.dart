@@ -278,9 +278,11 @@ List<Widget> _buildDetail(
         : const SizedBox(),
     pjson != null
         ? const SizedBox()
-        : Center(child: buildIfImageBox(data, context)),
+        : Padding(
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+            child: Center(child: buildIfImageBox(data, context, tapToImageBox: true)),
+          ),
     Divider(indent: 16, endIndent: 16),
-    
   ];
 }
 

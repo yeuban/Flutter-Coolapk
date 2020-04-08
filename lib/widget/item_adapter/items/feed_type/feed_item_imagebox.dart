@@ -68,7 +68,8 @@ Widget buildImageBox1x3(List<dynamic> picArr) {
   );
 }
 
-Widget buildIfImageBox(final dynamic source, final BuildContext context) {
+Widget buildIfImageBox(final dynamic source, final BuildContext context,
+    {bool tapToImageBox = false}) {
   final List<dynamic> picArr = source["picArr"];
   final maxHeight = MediaQuery.of(context).size.height / 2.5;
   if (picArr.length == 1 && picArr[0].toString().isEmpty) {
@@ -107,9 +108,11 @@ Widget buildIfImageBox(final dynamic source, final BuildContext context) {
     constraints: BoxConstraints(maxHeight: fmh.toDouble()),
     padding: const EdgeInsets.all(0).copyWith(top: 8, bottom: 8),
     child: InkWell(
-          onTap: () {
-            ImageBox.push(context, urls: picArr);
-          },
+          onTap: tapToImageBox
+              ? () {
+                  ImageBox.push(context, urls: picArr); // 其实还是关闭了好
+                }
+              : null,
           child: picWidget,
         ) ??
         const SizedBox(),
