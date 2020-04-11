@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 
 enum CreateFeedType { feed }
 
-class MainApi {
+class FeedApi {
   /**
    * 创建图文动态
    */
@@ -14,13 +14,20 @@ class MainApi {
     List<HtmlArticleFragment> message,
     String title,
     XFile cover,
-  }) {
+  }) async {
     // TODO:
     // cover需要上传
     var coverUrl;
-    final resp = Network.apiDio.post("/feed/createFeed",
-        data: FormData.fromMap(FeedCreateModel(
-          message: HtmlArticleModel(data: message).toJson().toString(),
+  
+    final emm = HtmlArticleModel(data: message)
+        .toJson()
+        .toString()
+        .replaceAll(RegExp(r'^{data: '), "");
+    final resp = await Network.apiDio.post(
+      "/feed/createFeed",
+      data: FormData.fromMap(
+        FeedCreateModel(
+          message: emm.substring(0, emm.length - 1),
           type: CreateFeedType.feed.toString().split(".")[1],
           isHtmlArticle: 1,
           pic: "",
@@ -58,7 +65,10 @@ class MainApi {
           replyWithForward: 0,
           mediaInfo: "",
           insertProductMedia: 0,
-        ).toJson()));
-    return resp;
+        ).toJson(),
+      ),
+    );
+
+    return resp.data;
   }
 }

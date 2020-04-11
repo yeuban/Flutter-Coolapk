@@ -12,11 +12,30 @@ class _CreateHtmlArticleFeedPageState extends State<CreateHtmlArticleFeedPage> {
   FeedPublicType _feedPublicType = FeedPublicType.anyone;
   FocusNode _focusNode;
   GlobalKey<PictextEditorState> _pictextEditorKey = GlobalKey();
+  TextEditingController _titleEditingCtr = TextEditingController();
+
+  XFile _cover;
 
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode();
+  }
+
+  createFeed() async {
+    if (_cover == null) {
+      Toast.show("请先设置头图", context, duration: 2);
+      return;
+    }
+    final List<HtmlArticleFragment> content =
+        this._pictextEditorKey.currentState.generate();
+    final resp = await FeedApi.createHtmlArticleFeed(
+        message: content, title: _titleEditingCtr.text, cover: this._cover);
+    if (resp["message"] != null) {
+      Toast.show(resp["message"], context, duration: 3);
+      return;
+    }
+    print(resp);
   }
 
   @override
@@ -25,9 +44,7 @@ class _CreateHtmlArticleFeedPageState extends State<CreateHtmlArticleFeedPage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.send),
-        onPressed: () {
-          //TODO:
-        },
+        onPressed: createFeed,
       ),
       bottomNavigationBar: _buildToolBar(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -43,17 +60,31 @@ class _CreateHtmlArticleFeedPageState extends State<CreateHtmlArticleFeedPage> {
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.parallax,
               background: InkWell(
-                onTap: () {
+                onTap: () async {
                   //TODO:
+                  final List<XFile> imgs = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FileChooser(
+                          chooseFilterRegExp: FileChooser.FilterImages,
+                          max: 1,
+                        ),
+                      ));
+                  if (imgs != null && imgs.length > 0)
+                    setState(() {
+                      _cover = imgs[0];
+                    });
                 },
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.add),
-                    Text("设置头图"),
-                  ],
-                ),
+                child: _cover == null
+                    ? Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.add),
+                          Text("设置头图"),
+                        ],
+                      )
+                    : ExtendedImage.file(_cover.file),
               ),
               stretchModes: [
                 StretchMode.fadeTitle,
@@ -70,6 +101,7 @@ class _CreateHtmlArticleFeedPageState extends State<CreateHtmlArticleFeedPage> {
                   style: Theme.of(context).textTheme.headline5.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
+                  controller: _titleEditingCtr,
                   decoration:
                       InputDecoration(hintText: "标题", border: InputBorder.none),
                 ),
@@ -131,8 +163,13 @@ class _CreateHtmlArticleFeedPageState extends State<CreateHtmlArticleFeedPage> {
                 resp.every((element) {
                   _pictextEditorKey.currentState.addNode(PicNode(
                     imageFile: element,
+                    key: GlobalKey<_PicNodeState>(),
+                    onFocus: _pictextEditorKey.currentState.onFocus,
                   ));
-                  _pictextEditorKey.currentState.addNode(TextNode());
+                  _pictextEditorKey.currentState.addNode(TextNode(
+                    key: GlobalKey<_TextNodeState>(),
+                    onFocus: _pictextEditorKey.currentState.onFocus,
+                  ));
                   return true;
                 });
               }
@@ -196,7 +233,7 @@ class PictextEditor extends StatefulWidget {
 }
 
 class PictextEditorState extends State<PictextEditor> {
-  List<Widget> _nodes;
+  Map<Key, Widget> _nodes;
 
   TextEditingController _focusTextEditingController;
 
@@ -205,9 +242,38 @@ class PictextEditorState extends State<PictextEditor> {
   @override
   void initState() {
     super.initState();
-    _nodes = [
-      TextNode(),
-    ];
+    _nodes = {};
+    this.addNode(TextNode(
+      key: GlobalKey<_TextNodeState>(),
+    ));
+  }
+
+  List<HtmlArticleFragment> generate() {
+    final List<HtmlArticleFragment> _fragments = [];
+    this._nodes.keys.every((ele) {
+      if (ele is GlobalKey<_TextNodeState>) {
+        final GlobalKey<_TextNodeState> e = ele;
+        final text = e.currentState.text;
+        _fragments.add(HtmlArticleFragment(
+          type: "text",
+          message: text,
+          url: "",
+          description: "",
+        ));
+      } else if (ele is GlobalKey<_PicNodeState>) {
+        final GlobalKey<_PicNodeState> e = ele;
+        final img = e.currentState.image;
+        final text = e.currentState.text;
+        _fragments.add(HtmlArticleFragment(
+          type: "image",
+          description: text,
+          url: img.path,
+          message: "",
+        ));
+      }
+      return true;
+    });
+    return _fragments;
   }
 
   onFocus(TextEditingController textEditingController, {bool hasFocus = true}) {
@@ -217,8 +283,9 @@ class PictextEditorState extends State<PictextEditor> {
     // setState(() {});
   }
 
+  // Widget key不能为null
   addNode(Widget value) {
-    this._nodes.add(value);
+    this._nodes[value.key] = value;
     setState(() {});
   }
 
@@ -226,7 +293,7 @@ class PictextEditorState extends State<PictextEditor> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: _nodes,
+      children: _nodes.values.toList(),
     );
   }
 }
@@ -242,7 +309,8 @@ class PicNode extends StatefulWidget {
 class _PicNodeState extends State<PicNode> {
   TextEditingController _textNodeFieldController;
   FocusNode _focusNode;
-
+  XFile get image => widget.imageFile;
+  String get text => _textNodeFieldController.text;
   bool get hasFocus => _focusNode.hasFocus;
 
   @override
@@ -288,6 +356,7 @@ class TextNode extends StatefulWidget {
 class _TextNodeState extends State<TextNode> {
   FocusNode _focusNode;
   TextEditingController _textNodeFieldController;
+  String get text => _textNodeFieldController.text;
 
   @override
   void initState() {
