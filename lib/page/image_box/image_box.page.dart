@@ -1,20 +1,27 @@
+import 'dart:io';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 class ImageBox extends StatelessWidget {
   final List<dynamic> urls;
   final int initIndex;
-  const ImageBox({Key key, @required this.urls, this.initIndex = 0})
+  final bool fileMode;
+  const ImageBox(
+      {Key key, @required this.urls, this.initIndex = 0, this.fileMode})
       : super(key: key);
 
   static push(final BuildContext context,
-      {@required List<dynamic> urls, int initIndex = 0}) {
+      {@required List<dynamic> urls,
+      int initIndex = 0,
+      bool fileMode = false}) {
     Navigator.push(
       context,
       TransparentMaterialPageRoute(
         builder: (_) => ImageBox(
           urls: urls,
           initIndex: initIndex,
+          fileMode: fileMode,
         ),
       ),
     );
@@ -33,7 +40,8 @@ class ImageBox extends StatelessWidget {
         onPageChanged: (value) {},
         physics: BouncingScrollPhysics(),
         itemBuilder: (context, index) {
-          return _SubImage(urls[index].toString(), urls.length, index);
+          return _SubImage(
+              urls[index].toString(), urls.length, index, fileMode);
         },
       ),
     );
@@ -44,7 +52,9 @@ class _SubImage extends StatefulWidget {
   final String url;
   final int totalImageCount;
   final int myIndex;
-  _SubImage(this.url, this.totalImageCount, this.myIndex, {Key key})
+  final bool fileMode;
+  _SubImage(this.url, this.totalImageCount, this.myIndex, this.fileMode,
+      {Key key})
       : super(key: key);
 
   @override
@@ -105,8 +115,10 @@ class __SubImageState extends State<_SubImage> {
         elevation: 1,
         title: Text("蜜汁原因，pc端需要先点击一下图片，才能正常缩放"),
       ),
-      body: ExtendedImage.network(
-        widget.url,
+      body: ExtendedImage(
+        image: widget.fileMode
+            ? ExtendedFileImageProvider(File(widget.url))
+            : ExtendedNetworkImageProvider(widget.url),
         width: double.infinity,
         fit: BoxFit.contain,
         alignment: Alignment.center,

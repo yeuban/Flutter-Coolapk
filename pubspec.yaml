@@ -17,7 +17,8 @@ dependencies:
   uuid: ^2.0.4
   path_provider: ^1.6.0
   path_provider_fde:
-    path: ./path_provider_fde
+    path: ./fde_plugins/path_provider_fde
+  file_picker: ^1.6.2
   carousel_slider: ^1.4.1
   flutter_html: ^0.11.1
   qr_flutter: ^3.2.0
@@ -33,7 +34,7 @@ dependencies:
   flutter_easyrefresh: ^2.0.9
   toast: ^0.1.5
   dartx: ^0.3.0
-  demoji: ^1.0.1
+  emoji_picker: ^0.1.0
   # fluro: ^1.5.2 # Flutter SDK version >=1.5.0 <1.13.0
 
 dev_dependencies:
@@ -51,5 +52,5 @@ flutter:
         # - asset: assets/fonts/sarasa-ui-sc-bold.ttf
         #   weight: 600
   assets:
-    - assets/images/
+    - assets/images/  
     - assets/images/emoji/

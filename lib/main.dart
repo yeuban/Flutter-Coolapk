@@ -32,10 +32,9 @@ void main() {
               fontFamily: "Sarasa-UI-SC-Regular",
               scaffoldBackgroundColor: Color.fromRGBO(242, 242, 246, 1),
             ),
-            darkTheme: ThemeData(
-
-            ),
-            home: child,
+            darkTheme: ThemeData(),
+            home: LauncherPage(),
+            // home: child,
             debugShowCheckedModeBanner: false,
           );
         },
