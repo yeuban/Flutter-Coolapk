@@ -1,45 +1,84 @@
 import 'dart:convert' show json;
 
 import 'package:coolapk_flutter/network/model/util.dart';
+import 'package:flutter/cupertino.dart';
 
 class FeedCreateModel {
+  @required
   final String message;
+  @required
   final String type;
+  @required
   final int isHtmlArticle;
+  @required
   final String pic;
+  @required
   final int status;
+  @required
   final String location;
+  @required
   final String longLocation;
+  @required
   final double latitude;
+  @required
   final double longitude;
+  @required
   final String mediaUrl;
+  @required
   final int mediaType;
+  @required
   final String mediaPic;
+  @required
   final String messageTitle;
+  @required
   final String messageBrief;
+  @required
   final String extraTitle;
+  @required
   final String extraKey;
+  @required
   final String extraUrl;
+  @required
   final String extraPic;
+  @required
   final String extraInfo;
+  @required
   final String messageCover;
+  @required
   final int disallowRepost;
+  @required
   final int isAnonymous;
+  @required
   final int isEditindyh;
+  @required
   final String forwardid;
+  @required
   final String fid;
+  @required
   final String dyhId;
+  @required
   final String targetType;
+  @required
   final String productId;
+  @required
   final String province;
+  @required
   final String cityCode;
+  @required
   final String targetId;
+  @required
   final String locationCity;
+  @required
   final String locationCountry;
+  @required
   final int disallowReply;
+  @required
   final int voteScore;
+  @required
   final int replyWithForward;
+  @required
   final String mediaInfo;
+  @required
   final int insertProductMedia;
 
   FeedCreateModel({
@@ -148,7 +187,8 @@ class FeedCreateModel {
               stack: "FeedCreateModel-targetId"),
           locationCity: convertValueByType(jsonRes['location_city'], String,
               stack: "FeedCreateModel-location_city"),
-          locationCountry: convertValueByType(jsonRes['location_country'], String,
+          locationCountry: convertValueByType(
+              jsonRes['location_country'], String,
               stack: "FeedCreateModel-location_country"),
           disallowReply: convertValueByType(jsonRes['disallow_reply'], int,
               stack: "FeedCreateModel-disallow_reply"),

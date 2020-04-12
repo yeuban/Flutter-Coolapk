@@ -39,6 +39,8 @@ class DataListConfig with ChangeNotifier {
   bool _needFirstItem = true;
   bool _needLastItem = true;
 
+  void get notifyChanged => this.notifyListeners();
+
   Future<void> init() async {
     if (state != DataListConfigState.Firstime) return;
     state = DataListConfigState.Idle;
@@ -156,6 +158,11 @@ class DataListConfig with ChangeNotifier {
     return AutoItemAdapter(
       entity: dataList[index],
       sliverMode: sliverMode,
+      onRequireDeleteItem: (entity) {
+        dataList.removeWhere(
+            (element) => element["entityId"] == entity["entityId"]);
+        notifyChanged;
+      },
     );
   }
 }

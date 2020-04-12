@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 class AutoItemAdapter extends StatelessWidget {
   final entity;
   final sliverMode;
-  const AutoItemAdapter({Key key, this.entity, this.sliverMode = true})
+  final Function(dynamic entity) onRequireDeleteItem;
+  const AutoItemAdapter(
+      {Key key, this.entity, this.sliverMode = true, this.onRequireDeleteItem})
       : super(key: key);
 
   @override
@@ -57,10 +59,16 @@ class AutoItemAdapter extends StatelessWidget {
       case "feed":
         switch (template) {
           case "feed":
-            item = FeedItem(source: entity);
+            item = FeedItem(
+              source: entity,
+              requireDelete: onRequireDeleteItem,
+            );
             break;
           case "feedCover":
-            item = FeedItem(source: entity);
+            item = FeedItem(
+              source: entity,
+              requireDelete: onRequireDeleteItem,
+            );
             break;
         }
         break;

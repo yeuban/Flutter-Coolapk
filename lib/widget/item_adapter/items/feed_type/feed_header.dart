@@ -8,6 +8,7 @@ class FeedItemHeader extends StatelessWidget {
   final String subTitle1;
   final String phoneName; // 可能有
   final dynamic source;
+  final Function(dynamic) delete;
 
   const FeedItemHeader(
       {Key key,
@@ -15,7 +16,8 @@ class FeedItemHeader extends StatelessWidget {
       this.headImgUrl,
       this.userName,
       this.subTitle1,
-      this.phoneName})
+      this.phoneName,
+      this.delete})
       : super(key: key);
 
   @override
@@ -89,7 +91,7 @@ class FeedItemHeader extends StatelessWidget {
           ),
           PopupMenuButton<int>(
             icon: Icon(Icons.keyboard_arrow_down),
-            onSelected: (value) {
+            onSelected: (value) async {
               // TODO:
               switch (value) {
                 case 1:
@@ -103,6 +105,13 @@ class FeedItemHeader extends StatelessWidget {
                   break;
                 case 5:
                   showSource(context);
+                  break;
+                case 6:
+                  final resp =
+                      await FeedApi.deleteFeed(feedId: source["entityId"]);
+                  Toast.show(resp["data"] ?? resp["message"], context,
+                      duration: 2);
+                  delete?.call(source);
                   break;
               }
             },
@@ -127,8 +136,19 @@ class FeedItemHeader extends StatelessWidget {
                 PopupMenuItem(
                   value: 5,
                   child: Text("查看源数据"),
-                )
-              ];
+                ),
+              ]..addAll(source["uid"].toString() ==
+                      Provider.of<UserStore>(context, listen: false)
+                          .loginInfo
+                          .uid
+                          .toString()
+                  ? [
+                      PopupMenuItem(
+                        value: 6,
+                        child: Text("删除动态"),
+                      )
+                    ]
+                  : []);
             },
           ),
         ],

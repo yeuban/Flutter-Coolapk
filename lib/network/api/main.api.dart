@@ -11,6 +11,22 @@ class MainApi {
     );
   }
 
+  // // 上传图片 暂时无解 做不了 因为上传图片走的阿里云oss，要验证的，暂且没有算法
+  // static Future uploadImage(XFile imageFile) async {
+  //   final resp = Network.apiDio.post("/upload/ossUploadPrepare", data: FormData.fromMap({
+  //     "uploadBucket": "image",
+  //     "uploadDir": "feed",
+  //     "is_anonymous": 0,
+  //     "uploadFileList": [
+  //       {
+  //         "name": "xxx.jpeg",
+  //         "resolution": "123x341",
+  //         "md5": "md5",
+  //       }
+  //     ],
+  //   }));
+  // }
+
   // 获取产品信息
   // 返回的内容 主要字段
   /*

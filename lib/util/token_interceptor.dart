@@ -17,6 +17,7 @@ class TokenInterceptors extends InterceptorsWrapper {
       "X-Sdk-Int": "23",
       "X-Sdk-Locale": "zh-CN",
       "X-App-Token": buildToken(),
+      "X-App-Device": buildDeviceStr("Flutter Coolapk"),
     });
     return super.onRequest(options);
   }
@@ -53,9 +54,9 @@ buildDeviceStr(final String device) {
   const imeiOrMeid = "null";
   const imsi = "null";
   final macAddr = randomMac();
-  const manu = "CoolapkWeb";
-  const brand = "CoolapkWeb";
-  const model = "CoolapkWeb";
+  const manu = "FlutterCoolapk";
+  final brand = device;
+  final model = device;
   final f = '$androidID; $imeiOrMeid; $imsi; $macAddr; $manu; $brand; $model';
   final f1 = ((base64.encode(utf8.encode(f))).split("")..reversed)
       .join("")

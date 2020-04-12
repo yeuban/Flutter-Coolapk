@@ -1,5 +1,7 @@
 part of 'create_feed.page.dart';
 
+// 暂时无法上传图片 发布图文无解
+
 class CreateHtmlArticleFeedPage extends StatefulWidget {
   CreateHtmlArticleFeedPage({Key key}) : super(key: key);
 
@@ -23,12 +25,9 @@ class _CreateHtmlArticleFeedPageState extends State<CreateHtmlArticleFeedPage> {
   }
 
   createFeed() async {
-    if (_cover == null) {
-      Toast.show("请先设置头图", context, duration: 2);
-      return;
-    }
     final List<HtmlArticleFragment> content =
         this._pictextEditorKey.currentState.generate();
+
     final resp = await FeedApi.createHtmlArticleFeed(
         message: content, title: _titleEditingCtr.text, cover: this._cover);
     if (resp["message"] != null) {
@@ -55,37 +54,11 @@ class _CreateHtmlArticleFeedPageState extends State<CreateHtmlArticleFeedPage> {
             iconTheme: Theme.of(context).iconTheme,
             textTheme: Theme.of(context).textTheme,
             leading: CloseButton(),
-            title: Text("发布图文"),
+            title: Text("发布图文动态"),
             expandedHeight: expandedHeight > 300 ? 300 : expandedHeight,
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.parallax,
-              background: InkWell(
-                onTap: () async {
-                  //TODO:
-                  final List<XFile> imgs = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FileChooser(
-                          chooseFilterRegExp: FileChooser.FilterImages,
-                          max: 1,
-                        ),
-                      ));
-                  if (imgs != null && imgs.length > 0)
-                    setState(() {
-                      _cover = imgs[0];
-                    });
-                },
-                child: _cover == null
-                    ? Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.add),
-                          Text("设置头图"),
-                        ],
-                      )
-                    : ExtendedImage.file(_cover.file),
-              ),
+              background: _buildCover(context),
               stretchModes: [
                 StretchMode.fadeTitle,
               ],
@@ -102,8 +75,8 @@ class _CreateHtmlArticleFeedPageState extends State<CreateHtmlArticleFeedPage> {
                         fontWeight: FontWeight.bold,
                       ),
                   controller: _titleEditingCtr,
-                  decoration:
-                      InputDecoration(hintText: "标题", border: InputBorder.none),
+                  decoration: InputDecoration(
+                      hintText: "标题(最少五个字)", border: InputBorder.none),
                 ),
               ),
               SliverToBoxAdapter(
@@ -142,6 +115,35 @@ class _CreateHtmlArticleFeedPageState extends State<CreateHtmlArticleFeedPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCover(final BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        final List<XFile> imgs = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FileChooser(
+                chooseFilterRegExp: FileChooser.FilterImages,
+                max: 1,
+              ),
+            ));
+        if (imgs != null && imgs.length > 0)
+          setState(() {
+            _cover = imgs[0];
+          });
+      },
+      child: _cover == null
+          ? Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.add),
+                Text("设置图文动态头图"),
+              ],
+            )
+          : ExtendedImage.file(_cover.file),
     );
   }
 

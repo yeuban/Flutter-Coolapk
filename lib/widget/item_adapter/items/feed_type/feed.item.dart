@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'package:coolapk_flutter/network/api/feed.api.dart';
 import 'package:coolapk_flutter/page/detail/feed_detail.page.dart';
 import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
+import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/html_text.dart';
-import 'package:coolapk_flutter/util/level_label.dart';
 import 'package:coolapk_flutter/util/show_qr_code.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
+import 'package:coolapk_flutter/widget/level_label.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 part './feed_type_cover_12_content.dart';
 part './feed_type_12_content.dart';
@@ -33,7 +37,8 @@ part './feed_item_imagebox.dart';
 ///   20: 出自 数码->交易列表，看起来能用0来代替
 class FeedItem extends StatelessWidget {
   final dynamic source;
-  const FeedItem({Key key, this.source}) : super(key: key);
+  final Function(dynamic) requireDelete;
+  const FeedItem({Key key, this.source, this.requireDelete}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +74,8 @@ class FeedItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(ScaleInRoute(
             widget: FeedDetailPage(
-              url: source["url"],
-            )));
+          url: source["url"],
+        )));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,6 +87,7 @@ class FeedItem extends StatelessWidget {
             subTitle1: source["infoHtml"].toString(),
             phoneName: source["device_title"],
             source: source,
+            delete: requireDelete,
           ),
           content,
           const Divider(

@@ -36,6 +36,11 @@ class _NormalTemplateState extends State<NormalTemplate>
                 (context, index) => AutoItemAdapter(
                   entity: config.dataList[index],
                   sliverMode: false,
+                  onRequireDeleteItem: (entity) {
+                    config.dataList.removeWhere(
+                        (element) => element["entityId"] == entity["entityId"]);
+                    config.notifyChanged;
+                  },
                 ),
                 childCount: config.dataList.length,
               ),

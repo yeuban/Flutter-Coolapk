@@ -53,7 +53,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context)
-              .push(ScaleInRoute(widget: CreateHtmlArticleFeedPage()));
+              // .push(ScaleInRoute(widget: CreateHtmlArticleFeedPage()));
+              .push(ScaleInRoute(widget: CreateNormalFeedPage()));
         },
         child: Icon(Icons.add),
       ),

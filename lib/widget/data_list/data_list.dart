@@ -115,6 +115,11 @@ class SliverDataList extends StatelessWidget {
                         child: AutoItemAdapter(
                           entity: entity,
                           sliverMode: false,
+                          onRequireDeleteItem: (entity) {
+                            config.dataList.removeWhere((element) =>
+                                element["entityId"] == entity["entityId"]);
+                            config.notifyChanged;
+                          },
                         ),
                       );
                     },

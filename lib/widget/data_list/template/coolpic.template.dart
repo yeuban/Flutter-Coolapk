@@ -48,15 +48,23 @@ class _CoolpicTemplateState extends State<CoolpicTemplate> {
                     ),
                   ),
                 ),
-              )
-            ]
-              ..addAll(dataList
-                  .map<Widget>((entity) => AutoItemAdapter(
-                        entity: entity,
-                        sliverMode: true,
-                      ))
-                  .toList())
-              ..add(
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => AutoItemAdapter(
+                    entity: dataList[index],
+                    sliverMode: false,
+                    onRequireDeleteItem: (entity) {
+                      dataList.removeWhere((element) =>
+                          element["entityId"] == entity["entityId"]);
+                      Provider.of<DataListConfig>(context, listen: false)
+                          .notifyChanged;
+                    },
+                  ),
+                  childCount: dataList.length,
+                ),
+              ),
+            ]..add(
                 ChangeNotifierProvider.value(
                   value: innerDataListConfig,
                   child: SliverPadding(
