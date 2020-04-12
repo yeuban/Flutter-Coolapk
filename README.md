@@ -2,6 +2,8 @@
 
 ![Build Action](https://github.com/Cyenoch/Flutter-Coolapk/workflows/Build%20Action/badge.svg)
 
+[Flutter Coolapk官方网站](https://cyenoch.github.io/flutter-coolapk-website/)
+
 ## 兴趣使然
 
 ## 本项目主要适配桌面端（宽屏）
@@ -97,8 +99,11 @@ test/ 测试(基本不用)
   - [ ] 查看赞
   - [x] 查看评论
   - [x] 关注/取消关注楼主
-- [ ] 发动态
-- [ ] 发酷图
+- [x] 发动态
+  - [x] 普通动态
+    - [ ] ~~附带图片~~
+  - [ ] ~~图文动态~~
+- [ ] ~~发酷图~~
 - [ ] 发二手
 - [ ] 发图文
 - [ ] 发提问
@@ -162,8 +167,8 @@ test/ 测试(基本不用)
 ### 欢迎给我点赞(star) 投币(捐赠) 转发(fork)三连支持=,=你的每亿点帮助都会转化成我的动力
 
 <p align="center" hidden>
- <img src="https://s2.ax1x.com/2020/03/01/365mqJ.jpg" alt="Sample" emm="220 330" width="0" height="0">
-	<img src="https://s2.ax1x.com/2020/03/01/365uZ9.md.png" alt="Sample" emm="220 300" width="0" height="0">
+ <img src="https://ftp.bmp.ovh/imgs/2020/04/63315f1f7170f7b1.jpg" alt="Sample" emm="220 330" width="0" height="0">
+	<img src="https://ftp.bmp.ovh/imgs/2020/04/2bbe6679a8505512.png" alt="Sample" emm="220 300" width="0" height="0">
 </p>
 
 ## 以下是预览图(2020/3/2)
