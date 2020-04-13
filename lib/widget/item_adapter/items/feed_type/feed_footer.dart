@@ -12,87 +12,39 @@ class FeedItemFooter extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        FeedItemFooterThumbup(source),
-        _buildItem(context, Icons.comment, str: source["replynum"].toString()),
-        _buildItem(context, Icons.share),
+        ThumbUpButton(
+          feedID: source["entityId"],
+          initThumbNum: 10,
+          initThumbState: source["userAction"] != null
+              ? source["userAction"]["like"] == 1
+              : false,
+        ),
+        _buildItem(
+          context,
+          "assets/images/coolapk/ic_comment_outline_white_24dp.png",
+          str: source["replynum"].toString(),
+        ),
+        _buildItem(
+          context,
+          "assets/images/coolapk/ic_share_outline_white_24dp.png",
+          str: source["share_num"].toString(),
+        ),
       ],
     );
   }
 }
 
-class FeedItemFooterThumbup extends StatefulWidget {
-  final dynamic source;
-  FeedItemFooterThumbup(this.source, {Key key}) : super(key: key);
-
-  @override
-  _FeedItemFooterThumbupState createState() => _FeedItemFooterThumbupState();
-}
-
-class _FeedItemFooterThumbupState extends State<FeedItemFooterThumbup> {
-  dynamic get source => widget.source;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: DefaultTextStyle(
-          style: TextStyle(
-            fontSize: 15,
-            color: Theme.of(context).textTheme.bodyText1.color.withAlpha(100),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(
-                Icons.thumb_up,
-                size: 17,
-                color:
-                    Theme.of(context).textTheme.bodyText1.color.withAlpha(100),
-              ),
-              const VerticalDivider(
-                color: Colors.transparent,
-                width: 4,
-              ),
-              Text(source["likenum"].toString()),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-Widget _buildItem(final BuildContext context, final IconData icon,
+Widget _buildItem(final BuildContext context, final String iconAssets,
     {final String str}) {
-  return InkWell(
-    onTap: () {},
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: DefaultTextStyle(
-        style: TextStyle(
-          fontSize: 15,
-          color: Theme.of(context).textTheme.bodyText1.color.withAlpha(100),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              icon,
-              size: 19,
-              color: Theme.of(context).textTheme.bodyText1.color.withAlpha(100),
-            ),
-          ]..addAll(str != null
-              ? [
-                  const VerticalDivider(
-                    color: Colors.transparent,
-                    width: 4,
-                  ),
-                  Text(str)
-                ]
-              : []),
-        ),
-      ),
+  return FlatButton.icon(
+    onPressed: () {},
+    icon: ExtendedImage.asset(
+      iconAssets,
+      width: 21,
+      height: 21,
+      filterQuality: FilterQuality.medium,
+      color: Theme.of(context).iconTheme.color,
     ),
+    label: Text(str),
   );
 }

@@ -9,6 +9,7 @@ import 'package:coolapk_flutter/util/html_text.dart';
 import 'package:coolapk_flutter/util/show_qr_code.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:coolapk_flutter/widget/level_label.dart';
+import 'package:coolapk_flutter/widget/thumb_up_button.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ import 'package:toast/toast.dart';
 
 part './feed_type_cover_12_content.dart';
 part './feed_type_12_content.dart';
+part './feed_type_16_content.dart';
 part './feed_type_11_content.dart';
 part './feed_type_9_content.dart';
 part './feed_type_4_content.dart';
@@ -42,6 +44,11 @@ class FeedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final feedType = source["feedType"];
+    // vote: 投票
+    // feedArticle: 图文
+    // album: 应用集
+    // feed: 普通动态
     Widget content;
     switch (source["type"].toString()) {
       case "0":
@@ -61,6 +68,9 @@ class FeedItem extends StatelessWidget {
           content = FeedTypeCover12Content(source);
         else
           content = FeedType12Content(source);
+        break;
+      case "16":
+        content = FeedType16Content(source);
         break;
       case "20":
         content = FeedType0Content(source);
@@ -90,14 +100,14 @@ class FeedItem extends StatelessWidget {
             delete: requireDelete,
           ),
           content,
+          buildForwardSourceFeed(source, context),
+          buildRelationRow(source, context),
+          FeedItemReplyRows(source),
           const Divider(
             color: Colors.transparent,
             height: 8,
           ),
-          buildForwardSourceFeed(source, context),
-          buildRelationRow(source, context),
-          FeedItemReplyRows(source),
-          FeedItemFooter(source),
+          feedType == "vote" ? const SizedBox() : FeedItemFooter(source),
         ],
       ),
     );

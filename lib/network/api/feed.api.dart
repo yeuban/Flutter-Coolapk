@@ -8,6 +8,42 @@ import 'package:flutter/material.dart';
 enum CreateFeedType { feed }
 
 class FeedApi {
+  /**
+   * 投票
+   */
+  static Future<dynamic> vote({
+    @required dynamic voteID,
+    @required List<dynamic> selectOption,
+    @required bool anonymous,
+  }) async {
+    final resp = await Network.apiDio.post("/vote/createUserVote",
+        data: FormData.fromMap({
+          "id": voteID,
+          "select_option[0]":
+              selectOption.toString().replaceAll(RegExp(r'\[|\]'), ""),
+          "anonymous_status": anonymous ? 1 : 0,
+        }));
+    return resp.data;
+  }
+
+  /**
+   * 给动态点赞
+   */
+  static Future<dynamic> thumbUp({
+    @required feedId,
+    bool unThumbup = false,
+    bool detail = false,
+  }) async {
+    final resp = await Network.apiDio.post(
+      unThumbup ? "/feed/unlike" : "/feed/like",
+      queryParameters: {
+        "id": feedId,
+        "detail": detail ? 1 : 0,
+      },
+    );
+    return resp.data;
+  }
+
   static Future<dynamic> deleteFeed({
     @required feedId,
   }) async {
