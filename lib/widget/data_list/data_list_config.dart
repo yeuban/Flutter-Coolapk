@@ -38,6 +38,7 @@ class DataListConfig with ChangeNotifier {
 
   bool _needFirstItem = true;
   bool _needLastItem = true;
+  bool _needTitle = true;
 
   void get notifyChanged => this.notifyListeners();
 
@@ -80,6 +81,10 @@ class DataListConfig with ChangeNotifier {
       this._requestPath = url
           ?.replaceAll("/page?", "/page/dataList?")
           ?.replaceAll("/main/headline", "/main/indexV8");
+      if (_requestPath.contains("/main/indexV8")) {
+        this._requestExtParam.removeWhere((key, value) => true);
+        this._needFirstItem = false;
+      }
     }
     if (this._requestPath.startsWith(r'/user/dyhSubscribe'))
       _needFirstItem = false;
@@ -106,12 +111,12 @@ class DataListConfig with ChangeNotifier {
           "page": page,
         }
           ..addAll(_requestExtParam)
-          ..addAll(_needFirstItem && dataList.length > 0
+          ..addAll(_needFirstItem && firstItem != null && dataList.length > 0
               ? {
                   "firstItem": firstItem,
                 }
               : {})
-          ..addAll(_needLastItem
+          ..addAll(_needLastItem && lastItem != null
               ? {
                   "lastItem": lastItem,
                 }

@@ -17,7 +17,7 @@ class TokenInterceptors extends InterceptorsWrapper {
       "X-Sdk-Int": "23",
       "X-Sdk-Locale": "zh-CN",
       "X-App-Token": buildToken(),
-      "X-App-Device": buildDeviceStr("Flutter Coolapk"),
+      // "X-App-Device": buildDeviceStr("Flutter Coolapk"), 会引发一些奇怪的bug
     });
     return super.onRequest(options);
   }
