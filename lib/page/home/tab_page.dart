@@ -8,22 +8,32 @@ class TabPage extends StatefulWidget {
   TabPage({Key key, @required this.data}) : super(key: key);
 
   @override
-  _TabPageState createState() => _TabPageState();
+  TabPageState createState() => TabPageState();
 }
 
-class _TabPageState extends State<TabPage> with AutomaticKeepAliveClientMixin {
+class TabPageState extends State<TabPage> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  DataListConfig _dataListConfig;
+  @override
+  void initState() {
+    _dataListConfig = DataListConfig(
+      title: widget.data.title,
+      url: widget.data.url,
+    );
+    super.initState();
+  }
+
+  refresh() {
+    _dataListConfig.refresh;
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return LimitedContainer(
       limiteType: LimiteType.SingleColumn,
-      child: DataListPage(DataListConfig(
-        title: widget.data.title,
-        url: widget.data.url,
-      )),
+      child: DataListPage(_dataListConfig),
     );
     // return DataListPageFrameWidget();
   }

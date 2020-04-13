@@ -86,6 +86,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // animateToPage 会导致经过的页面都会拉取数据...
   }
 
+  void _refreshTab(int pageEntityId, int page) {
+    try {
+      _tabMap[pageEntityId].currentState.refresh(page);
+    } catch (err) {}
+  }
+
   TabController _tabController; //
 
   @override
@@ -114,6 +120,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       key: _homePageDrawerStateKey,
       tabConfigs: _pageConfigs,
       gotoTab: _gotoTab,
+      refreshTab: _refreshTab,
     );
     // 不收起drawer时用上
     final innerDrawer = <Widget>[
@@ -146,13 +153,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  // 为了实现某个功能而写的垃圾代码...能用就行能用就行
+  Map<int, GlobalKey<__TabState>> _tabMap = {};
+
   // 主要内容
   Widget _buildContent(final BuildContext context) {
     return TabBarView(
       controller: Provider.of<TabController>(context, listen: false),
       // 顶层controller
       children: _pageConfigs.map<Widget>((pageConfig) {
+        GlobalKey<__TabState> _key = GlobalKey();
+        _tabMap[pageConfig.entityId] = _key;
         return _Tab(
+          key: _key,
           configs: pageConfig.entities,
           controller: _controllerMap[pageConfig.entityId],
           onPageChanged: (newPage) {
@@ -179,16 +192,10 @@ class _Tab extends StatefulWidget {
 class __TabState extends State<_Tab> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  Map<int, GlobalKey<TabPageState>> _emm = {};
 
-  List<Widget> pages;
-
-  @override
-  void initState() {
-    super.initState();
-    pages = widget.configs.map<Widget>((pageTab) {
-      // 这里是子tab
-      return TabPage(data: pageTab);
-    }).toList();
+  refresh(int index) {
+    _emm[index].currentState.refresh();
   }
 
   @override
@@ -198,7 +205,11 @@ class __TabState extends State<_Tab> with AutomaticKeepAliveClientMixin {
       onPageChanged: widget.onPageChanged,
       physics: BouncingScrollPhysics(),
       controller: widget.controller,
-      children: pages,
+      children: widget.configs.map<Widget>((pageTab) {
+        GlobalKey<TabPageState> _key = GlobalKey();
+        _emm[widget.configs.indexOf(pageTab)] = _key;
+        return TabPage(key: _key, data: pageTab);
+      }).toList(),
     );
   }
 }

@@ -1,5 +1,10 @@
 part of './data_list.dart';
 
+/**
+ * 最垃圾的代码
+ * 难受
+ */
+
 enum DataListTemplate {
   Loading,
   Tab,

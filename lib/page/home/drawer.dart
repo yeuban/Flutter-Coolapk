@@ -9,10 +9,15 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/**
+ * 最垃圾的代码x2
+ */
+
 class HomePageDrawer extends StatefulWidget {
   final List<MainInitModel.MainInitModelData> tabConfigs;
   final Function(int, int) gotoTab;
-  HomePageDrawer({Key key, this.tabConfigs, this.gotoTab}) : super(key: key);
+  final Function(int, int) refreshTab;
+  HomePageDrawer({Key key, this.tabConfigs, this.gotoTab, this.refreshTab}) : super(key: key);
 
   @override
   HomePageDrawerState createState() => HomePageDrawerState();
@@ -122,11 +127,12 @@ class HomePageDrawerState extends State<HomePageDrawer>
                 shrinkWrap: true,
                 children: tabConfig.entities.map<Widget>((tabItem) {
                   final tabItemIndex = tabConfig.entities.indexOf(tabItem);
+                  final selected = tabItemIndex ==
+                      (tabConfig.entityId == 6390
+                          ? _homePageSelected
+                          : _digitalPageSelected);
                   return ListTile(
-                    selected: tabItemIndex ==
-                        (tabConfig.entityId == 6390
-                            ? _homePageSelected
-                            : _digitalPageSelected),
+                    selected: selected,
                     dense: false,
                     title: Text(tabItem.title),
                     onTap: () {
@@ -139,6 +145,15 @@ class HomePageDrawerState extends State<HomePageDrawer>
                         }
                       });
                     },
+                    trailing: !selected
+                        ? const SizedBox()
+                        : IconButton(
+                            icon: Icon(Icons.refresh),
+                            onPressed: () {
+                              widget.refreshTab(
+                                  tabConfig.entityId, tabItemIndex);
+                            },
+                          ),
                     leading: tabItem.logo.length > 0 // 数码TAB没有logo.....
                         ? ExtendedImage.network(
                             tabItem.logo,
