@@ -18,6 +18,7 @@ Future<bool> setupComponent() async {
 }
 
 Future<bool> init(final BuildContext context) async {
+  print("获取登录信息");
   await Provider.of<ThemeStore>(context, listen: false).loadConfig();
   final loginInfo =
       await Provider.of<UserStore>(context, listen: false).checkLoginInfo();

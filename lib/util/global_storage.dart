@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class GlobalStorage {
   static Future<bool> setupGlobalStorage() async {
+    if (UniversalPlatform.isWeb) {
+      
+    }
     if (_storageObj != null) return true;
     Directory dir;
     try {

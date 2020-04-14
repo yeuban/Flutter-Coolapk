@@ -9,6 +9,10 @@ import 'package:coolapk_flutter/page/home/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/**
+ * 太烂了，不改了
+ */
+
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -88,7 +92,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void _refreshTab(int pageEntityId, int page) {
     try {
-      _tabMap[pageEntityId].currentState.refresh(page);
+      _tabKeyMap[pageEntityId].currentState.refresh(page);
     } catch (err) {}
   }
 
@@ -96,8 +100,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    super.initState();
     _tabController = TabController(vsync: this, length: 2);
+    super.initState();
   }
 
   @override
@@ -154,7 +158,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   // 为了实现某个功能而写的垃圾代码...能用就行能用就行
-  Map<int, GlobalKey<__TabState>> _tabMap = {};
+  // key 是entityId value 是key
+  Map<int, GlobalKey<__TabState>> _tabKeyMap = {};
 
   // 主要内容
   Widget _buildContent(final BuildContext context) {
@@ -162,8 +167,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       controller: Provider.of<TabController>(context, listen: false),
       // 顶层controller
       children: _pageConfigs.map<Widget>((pageConfig) {
-        GlobalKey<__TabState> _key = GlobalKey();
-        _tabMap[pageConfig.entityId] = _key;
+        GlobalKey<__TabState> _key = _tabKeyMap[pageConfig.entityId];
+        if (_key == null)
+          _key = _tabKeyMap[pageConfig.entityId] = GlobalKey<__TabState>();
         return _Tab(
           key: _key,
           configs: pageConfig.entities,
@@ -198,6 +204,23 @@ class __TabState extends State<_Tab> with AutomaticKeepAliveClientMixin {
     _emm[index].currentState.refresh();
   }
 
+  List<Widget> _pages;
+
+  @override
+  void initState() {
+    _pages = widget.configs.map<Widget>((pageTab) {
+      GlobalKey<TabPageState> _key = _emm[widget.configs.indexOf(pageTab)];
+      if (_key == null)
+        _key =
+            _emm[widget.configs.indexOf(pageTab)] = GlobalKey<TabPageState>();
+      return TabPage(
+        key: _key,
+        data: pageTab,
+      );
+    }).toList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -205,11 +228,7 @@ class __TabState extends State<_Tab> with AutomaticKeepAliveClientMixin {
       onPageChanged: widget.onPageChanged,
       physics: BouncingScrollPhysics(),
       controller: widget.controller,
-      children: widget.configs.map<Widget>((pageTab) {
-        GlobalKey<TabPageState> _key = GlobalKey();
-        _emm[widget.configs.indexOf(pageTab)] = _key;
-        return TabPage(key: _key, data: pageTab);
-      }).toList(),
+      children: _pages,
     );
   }
 }

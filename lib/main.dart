@@ -1,15 +1,14 @@
-import 'dart:io';
-
 import 'package:coolapk_flutter/page/launcher/launcher.page.dart';
 import 'package:coolapk_flutter/store/theme.store.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 void main() {
   Provider.debugCheckInvalidValueType = null;
-  if (Platform.isWindows || Platform.isLinux) {
+  if (UniversalPlatform.isWindows || UniversalPlatform.isLinux) {
     debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
   }
   runApp(

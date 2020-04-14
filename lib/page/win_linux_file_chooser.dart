@@ -5,6 +5,7 @@ import 'package:coolapk_flutter/util/xfile.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 /**
  * 简单粗糙的做了一个文件选择器，windows 和 Linux 平台支持
@@ -43,7 +44,7 @@ class _FileChooserState extends State<FileChooser> {
     super.initState();
     _choosed = [];
     _chooseMode = false;
-    _current = Platform.isWindows ? XFile("_root_") : XFile("/");
+    _current = UniversalPlatform.isWindows ? XFile("_root_") : XFile("/");
   }
 
   Future<List<FileSystemEntity>> _listCurrentFiles() async {
@@ -157,7 +158,7 @@ class _FileChooserState extends State<FileChooser> {
       child: InkWell(
         onTap: onTap ??
             () {
-              if (Platform.isWindows &&
+              if (UniversalPlatform.isWindows &&
                   this._current.path.startsWith(RegExp(r'^[a-zA-Z]:\\$')))
                 this._current = XFile("_root_");
               else
@@ -202,7 +203,7 @@ class _FileChooserState extends State<FileChooser> {
   }
 
   Widget _buildChooseDrive() {
-    if (Platform.isWindows)
+    if (UniversalPlatform.isWindows)
       return ListView(
         children: winDrives.map((drive) {
           return ListTile(
