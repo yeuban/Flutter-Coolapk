@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:coolapk_flutter/network/model/main_init.model.dart'
     as MainInitModel;
 import 'package:coolapk_flutter/page/login/login.page.dart';
+import 'package:coolapk_flutter/page/settings/settings.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:extended_image/extended_image.dart';
@@ -17,7 +18,8 @@ class HomePageDrawer extends StatefulWidget {
   final List<MainInitModel.MainInitModelData> tabConfigs;
   final Function(int, int) gotoTab;
   final Function(int, int) refreshTab;
-  HomePageDrawer({Key key, this.tabConfigs, this.gotoTab, this.refreshTab}) : super(key: key);
+  HomePageDrawer({Key key, this.tabConfigs, this.gotoTab, this.refreshTab})
+      : super(key: key);
 
   @override
   HomePageDrawerState createState() => HomePageDrawerState();
@@ -266,7 +268,10 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
                           Icons.settings,
                           size: 18,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(ScaleInRoute(widget: SettingPage()));
+                        },
                       ),
                       IconButton(
                         padding: const EdgeInsets.all(0),

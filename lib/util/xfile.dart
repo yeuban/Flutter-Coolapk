@@ -160,6 +160,15 @@ class XFile {
     }
   }
 
+  writeAsync(dynamic str, {final bool convertToJsonStr = false}) {
+    if (isFile) {
+      if (convertToJsonStr) {
+        str = jsonEncode(str);
+      }
+      file.writeAsString(str);
+    }
+  }
+
   T read<T extends dynamic>({final bool convertToJsonObj = false}) {
     if (isFile) {
       final str = file.readAsStringSync();

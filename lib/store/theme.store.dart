@@ -16,20 +16,19 @@ const Map<String, MaterialColor> ThemeMap = {
 class ThemeStore extends ChangeNotifier {
   bool _dark;
   String _color;
-
+  String get colorKey => _color;
   MaterialColor get swatch => ThemeMap[_color];
   bool get dark => _dark;
   Brightness get brightness => dark ? Brightness.dark : Brightness.light;
 
   ThemeStore() {
-    this._dark =
-        WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
+    loadConfig();
   }
 
   setTheme(String newTheme, bool dark) {
     if (_color != newTheme || _dark != dark) {
-      if (_color != newTheme) _color = newTheme;
-      if (_dark != dark) _dark = dark;
+      _color = newTheme;
+      _dark = dark;
       notifyListeners();
     }
   }
@@ -55,15 +54,20 @@ class ThemeStore extends ChangeNotifier {
   }
 
   loadConfig() {
-    final _color =
-        GlobalStorage.get<String>("theme", "color", defaultValue: "blue");
-    final _dark = GlobalStorage.get<bool>("theme", "dark", defaultValue: false);
+    final _color = GlobalStorage.instance
+        .get<String>(box: "theme", key: "color", defaultValue: "blue");
+    final _dark = GlobalStorage.instance.get<bool>(
+        box: "theme",
+        key: "dark",
+        defaultValue: WidgetsBinding.instance.window.platformBrightness ==
+            Brightness.dark);
+    print("$_color $_dark");
     setTheme(_color, _dark);
   }
 
   _save() {
-    GlobalStorage.set("theme", "color", _color);
-    GlobalStorage.set("theme", "dark", _dark);
+    GlobalStorage.instance.set(box: "theme", key: "color", value: colorKey);
+    GlobalStorage.instance.set(box: "theme", key: "dark", value: _dark);
   }
 
   static ThemeStore of(final BuildContext context, {final listen = false}) =>
