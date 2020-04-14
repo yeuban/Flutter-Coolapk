@@ -1,4 +1,7 @@
+import 'package:coolapk_flutter/page/model_selector/model_selector.page.dart';
 import 'package:coolapk_flutter/store/theme.store.dart';
+import 'package:coolapk_flutter/util/anim_page_route.dart';
+import 'package:coolapk_flutter/util/fake_device.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,12 +27,41 @@ class SettingPage extends StatelessWidget {
                 delegate: SliverChildListDelegate([
                   ThemeSettingTile(),
                   PrimarySwatchTile(),
+                  Divider(),
+                  FakeDeviceTile(),
                 ]),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class FakeDeviceTile extends StatefulWidget {
+  const FakeDeviceTile({Key key}) : super(key: key);
+
+  @override
+  _FakeDeviceTileState createState() => _FakeDeviceTileState();
+}
+
+class _FakeDeviceTileState extends State<FakeDeviceTile> {
+  @override
+  Widget build(BuildContext context) {
+    final device = FakeDevice.get();
+    return ListTile(
+      title: Text("机型伪装"),
+      subtitle: Text("当前机型: ${device.name} | 厂商:${device.manufacturer} | BRAND:${device.brand} | MODEL:${device.model}"),
+      trailing: Icon(Icons.chevron_right),
+      onTap: () async {
+        final resp = await Navigator.push(
+            context, ScaleInRoute(widget: ModelSelectorPage()));
+        if (resp != null) {
+          FakeDevice.set(resp);
+          setState(() {});
+        }
+      },
     );
   }
 }
@@ -45,7 +77,6 @@ class PrimarySwatchTile extends StatelessWidget {
         return ListTile(
           title: Text("主题涩"),
           subtitle: Container(
-            height: 500,
             margin: const EdgeInsets.all(16),
             child: Wrap(
               spacing: 16,

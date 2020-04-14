@@ -58,6 +58,7 @@ class Create_NormalFeedPageState extends State<CreateNormalFeedPage> {
               Toast.show(resp["message"], context, duration: 3);
               return;
             }
+            print(resp);
             Navigator.pop(context, true);
           } catch (err) {
             Toast.show(err.toString(), context, duration: 3);

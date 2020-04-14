@@ -14,8 +14,15 @@ class GlobalStorage {
   Map<String, dynamic> boxes;
   XFile boxesFile;
 
-  Future<void> init() async {
+  factory GlobalStorage() {
+    return instance == null ? GlobalStorage._() : instance;
+  }
+
+  GlobalStorage._() {
     instance = this;
+  }
+
+  Future<void> init() async {
     if (inited) return;
     try {
       boxesFile =

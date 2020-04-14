@@ -12,8 +12,7 @@ void main() async {
   if (UniversalPlatform.isWindows || UniversalPlatform.isLinux) {
     debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
   }
-  final globalStorage = GlobalStorage();
-  await globalStorage.init();
+  await GlobalStorage().init();
   runApp(
     MultiProvider(
       providers: [
@@ -24,7 +23,7 @@ void main() async {
           create: (context) => UserStore(), // 然后在init 中 checkLoginInfo
         ),
         Provider.value(
-          value: globalStorage,
+          value: GlobalStorage(), // 单例得哦
         )
       ],
       child: Consumer<ThemeStore>(
