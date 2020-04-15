@@ -5,8 +5,8 @@ import 'package:coolapk_flutter/page/detail/feed_detail.page.dart';
 import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
-import 'package:coolapk_flutter/util/html_text.dart';
 import 'package:coolapk_flutter/util/show_qr_code.dart';
+import 'package:coolapk_flutter/widget/html_text.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:coolapk_flutter/widget/level_label.dart';
 import 'package:coolapk_flutter/widget/thumb_up_button.dart';
@@ -16,15 +16,27 @@ import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 part './feed_type_cover_12_content.dart';
+
 part './feed_type_12_content.dart';
+
 part './feed_type_16_content.dart';
+
 part './feed_type_11_content.dart';
+
+part './feed_type_10_content.dart';
+
 part './feed_type_9_content.dart';
+
 part './feed_type_4_content.dart';
+
 part './feed_type_0_content.dart';
+
 part './feed_footer.dart';
+
 part './feed_header.dart';
+
 part './feed_item_replyrows.dart';
+
 part './feed_item_imagebox.dart';
 
 /// 最难搞的东西
@@ -32,14 +44,17 @@ part './feed_item_imagebox.dart';
 ///   0: 普通动态
 ///   5: 点评
 ///   9: 评论 某应用的
+///   10: 提问
 ///   11: 回答
 ///   12: 图文
 ///   13: 视频
 ///   15: 交易
+///   16:
 ///   20: 出自 数码->交易列表，看起来能用0来代替
 class FeedItem extends StatelessWidget {
   final dynamic source;
   final Function(dynamic) requireDelete;
+
   const FeedItem({Key key, this.source, this.requireDelete}) : super(key: key);
 
   @override
@@ -59,6 +74,9 @@ class FeedItem extends StatelessWidget {
         break;
       case "4":
         content = FeedType4Content(source);
+        break;
+      case "10":
+        content = FeedType10Content(source);
         break;
       case "11":
         content = FeedType11Content(source);
@@ -107,7 +125,9 @@ class FeedItem extends StatelessWidget {
             color: Colors.transparent,
             height: 8,
           ),
-          feedType == "vote" ? const SizedBox() : FeedItemFooter(source),
+          feedType == "vote" || source["type"] == 10
+              ? const SizedBox()
+              : FeedItemFooter(source),
         ],
       ),
     );

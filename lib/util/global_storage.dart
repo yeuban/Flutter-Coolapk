@@ -59,15 +59,19 @@ class GlobalStorage {
       this.boxes[box] = {};
     }
     this.boxes[box][key] = value;
-    _saveSync();
+    _save();
   }
 
   get<T>({
     String box = DefaultBoxName,
     @required String key,
     T defaultValue,
+    bool saveIfNull,
   }) {
-    return ((this.boxes[box] ?? {})[key] ?? defaultValue);
+    final value = (this.boxes[box] ?? {})[key];
+    if (value == null && saveIfNull)
+      set(box: box, key: key, value: defaultValue);
+    return value ?? defaultValue;
   }
 
   static setValue(

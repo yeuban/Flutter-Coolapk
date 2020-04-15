@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:coolapk_flutter/util/fake_device.dart';
+import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:uuid/uuid.dart';
@@ -52,17 +53,35 @@ class TokenInterceptors extends InterceptorsWrapper {
 
 buildDeviceStr(final String device) {
   final device = FakeDevice.get();
-  String androidId = randomNum("1234567890abcdefchijklmnopqrstuvwxyz");
+  final gs = GlobalStorage.instance;
+
+  String androidId = gs.get(
+      box: "token_info",
+      key: "androidId",
+      defaultValue: randomNum("1234567890abcdefchijklmnopqrstuvwxyz"),
+      saveIfNull: true);
 
   /**IMEI(International Mobile Equipment Identity)是国际移动设备身份码的缩写，国际移动装备辨识码，是由15位数字组成的”电子串号”，它与每台移动电话机一一对应，而且该码是全世界唯一的。每一只移动电话机在组装完成后都将被赋予一个全球唯一的一组号码，这个号码从生产到交付使用都将被制造生产的厂商所记录。
-PS：通俗来讲就是标识你当前设备(手机)全世界唯一，类似于个人身份证，这个肯定唯一啦~ */
-  String imei = randomNum();
+      PS：通俗来讲就是标识你当前设备(手机)全世界唯一，类似于个人身份证，这个肯定唯一啦~ */
+  String imei = gs.get(
+      box: "token_info",
+      key: "imei",
+      defaultValue: randomNum(),
+      saveIfNull: true);
 
-/**国际移动用户识别码（IMSI：International Mobile Subscriber Identification
-Number）是区别移动用户的标志，储存在SIM卡中，可用于区别移动用户的有效信息。其总长度不超过15位，同样使用0~9的数字。其中MCC是移动用户所属国家代号，占3位数字，中国的MCC规定为460；MNC是移动网号码，由两位或者三位数字组成，中国移动的移动网络编码（MNC）为00；用于识别移动用户所归属的移动通信网；MSIN是移动用户识别码，用以识别某一移动通信网中的移动用户
-PS：通俗来讲就是标识你当前SIM卡(手机卡)唯一，同样类似于个人身份证，肯定唯一啦~*/
-  String imsi = randomNum("1234567890abcdefchijklmnopqrstuvwxyz");
-  String macAddr = randomMac();
+  /**国际移动用户识别码（IMSI：International Mobile Subscriber Identification
+      Number）是区别移动用户的标志，储存在SIM卡中，可用于区别移动用户的有效信息。其总长度不超过15位，同样使用0~9的数字。其中MCC是移动用户所属国家代号，占3位数字，中国的MCC规定为460；MNC是移动网号码，由两位或者三位数字组成，中国移动的移动网络编码（MNC）为00；用于识别移动用户所归属的移动通信网；MSIN是移动用户识别码，用以识别某一移动通信网中的移动用户
+      PS：通俗来讲就是标识你当前SIM卡(手机卡)唯一，同样类似于个人身份证，肯定唯一啦~*/
+  String imsi = gs.get(
+      box: "token_info",
+      key: "imsi",
+      defaultValue: randomNum("1234567890abcdefchijklmnopqrstuvwxyz"),
+      saveIfNull: true);
+  String macAddr = gs.get(
+      box: "token_info",
+      key: "macAddr",
+      defaultValue: randomMac(),
+      saveIfNull: true);
   String manufacturer = device.manufacturer; // Meizu
   String brand = device.brand; // Meizu
   String model = device.model; // M351

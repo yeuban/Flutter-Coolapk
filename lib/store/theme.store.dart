@@ -61,7 +61,6 @@ class ThemeStore extends ChangeNotifier {
         key: "dark",
         defaultValue: WidgetsBinding.instance.window.platformBrightness ==
             Brightness.dark);
-    print("$_color $_dark");
     setTheme(_color, _dark);
   }
 

@@ -2,6 +2,7 @@ import 'package:coolapk_flutter/page/model_selector/model_selector.page.dart';
 import 'package:coolapk_flutter/store/theme.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/fake_device.dart';
+import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,12 +30,47 @@ class SettingPage extends StatelessWidget {
                   PrimarySwatchTile(),
                   Divider(),
                   FakeDeviceTile(),
+                  Divider(),
+                  HideUnsupportItemTile(),
                 ]),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class HideUnsupportItemTile extends StatefulWidget {
+  @override
+  _HideUnsupportItemTileState createState() => _HideUnsupportItemTileState();
+}
+
+class _HideUnsupportItemTileState extends State<HideUnsupportItemTile> {
+  bool _hide = true;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        _hide = GlobalStorage()
+            .get<bool>(key: "hide_unsupport_item", defaultValue: true);
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CheckboxListTile(
+      value: _hide,
+      title: Text("隐藏暂未支持的item"),
+      onChanged: (value) {
+        _hide = value;
+        GlobalStorage().set(key: "hide_unsupport_item", value: value);
+        setState(() {});
+      },
     );
   }
 }
@@ -52,7 +88,8 @@ class _FakeDeviceTileState extends State<FakeDeviceTile> {
     final device = FakeDevice.get();
     return ListTile(
       title: Text("机型伪装"),
-      subtitle: Text("当前机型: ${device.name} | 厂商:${device.manufacturer} | BRAND:${device.brand} | MODEL:${device.model}"),
+      subtitle: Text(
+          "当前机型: ${device.name} | 厂商:${device.manufacturer} | BRAND:${device.brand} | MODEL:${device.model}"),
       trailing: Icon(Icons.chevron_right),
       onTap: () async {
         final resp = await Navigator.push(

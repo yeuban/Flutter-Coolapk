@@ -11,12 +11,15 @@ class ThumbUpButton extends StatefulWidget {
   final dynamic feedID;
   final int initThumbNum;
   final bool initThumbState;
-  ThumbUpButton(
-      {Key key,
-      @required this.initThumbNum,
-      @required this.feedID,
-      this.initThumbState = false})
-      : super(key: key);
+  final bool inPrimaryColor;
+
+  ThumbUpButton({
+    Key key,
+    @required this.initThumbNum,
+    @required this.feedID,
+    this.initThumbState = false,
+    this.inPrimaryColor = false,
+  }) : super(key: key);
 
   @override
   _ThumbUpButtonState createState() => _ThumbUpButtonState();
@@ -65,9 +68,11 @@ class _ThumbUpButtonState extends State<ThumbUpButton> {
           width: 21,
           height: 21,
           filterQuality: FilterQuality.medium,
-          color: this._thumbupState
-              ? Theme.of(context).primaryColor
-              : Theme.of(context).iconTheme.color,
+          color: !widget.inPrimaryColor
+              ? this._thumbupState
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).iconTheme.color
+              : Theme.of(context).primaryTextTheme.bodyText1.color,
         ),
         secondChild: FittedBox(
           fit: BoxFit.fitHeight,
@@ -78,11 +83,13 @@ class _ThumbUpButtonState extends State<ThumbUpButton> {
         duration: Duration(milliseconds: 300),
       ),
       label: Text(
-        this._num.toString(),
+        _num == null ? "" : _num.toString(),
         style: TextStyle(
-          color: this._thumbupState
-              ? Theme.of(context).primaryColor
-              : Theme.of(context).textTheme.bodyText1.color,
+          color: widget.inPrimaryColor
+              ? Theme.of(context).primaryTextTheme.bodyText1.color
+              : this._thumbupState
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).textTheme.bodyText1.color,
         ),
       ),
       onPressed: thumbUp,

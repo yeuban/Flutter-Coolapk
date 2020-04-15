@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:coolapk_flutter/network/model/main_init.model.dart'
     as MainInitModel;
 import 'package:coolapk_flutter/page/login/login.page.dart';
+import 'package:coolapk_flutter/page/notification/notification.page.dart';
 import 'package:coolapk_flutter/page/settings/settings.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
@@ -18,6 +19,7 @@ class HomePageDrawer extends StatefulWidget {
   final List<MainInitModel.MainInitModelData> tabConfigs;
   final Function(int, int) gotoTab;
   final Function(int, int) refreshTab;
+
   HomePageDrawer({Key key, this.tabConfigs, this.gotoTab, this.refreshTab})
       : super(key: key);
 
@@ -213,8 +215,6 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
           ),
         ),
       );
-    final iconColor =
-        Theme.of(context).textTheme.bodyText1.color.withAlpha(120);
     return InkWell(
       onTap: () {
         // TODO:
@@ -256,55 +256,24 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
                     height: 4,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      IconButton(
-                        padding: const EdgeInsets.all(0),
-                        constraints:
-                            const BoxConstraints(maxWidth: 20, maxHeight: 20),
-                        color: iconColor,
-                        tooltip: "设置",
-                        icon: Icon(
-                          Icons.settings,
-                          size: 18,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .push(ScaleInRoute(widget: SettingPage()));
-                        },
-                      ),
-                      IconButton(
-                        padding: const EdgeInsets.all(0),
-                        constraints:
-                            const BoxConstraints(maxWidth: 24, maxHeight: 24),
-                        color: iconColor,
-                        tooltip: "消息",
-                        icon: Icon(
-                          Icons.mail_outline,
-                          size: 18,
-                        ),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        padding: const EdgeInsets.all(0),
-                        constraints:
-                            const BoxConstraints(maxWidth: 24, maxHeight: 24),
-                        color: iconColor,
-                        tooltip: "退出登录",
-                        icon: Icon(
-                          Icons.exit_to_app,
-                          size: 18,
-                        ),
-                        onPressed: () {
-                          Provider.of<UserStore>(context, listen: false)
-                              .logout();
-                          Navigator.of(context).pushReplacement(
-                            ScaleInRoute(
-                              widget: LoginPage(),
-                            ),
-                          );
-                        },
-                      )
+                      _buildActionButton(context,
+                          tooltip: "设置",
+                          icon: Icons.settings,
+                          onClick: () => Navigator.of(context)
+                              .push(ScaleInRoute(widget: SettingPage()))),
+                      _buildActionButton(context,
+                          tooltip: "消息通知",
+                          icon: Icons.mail_outline,
+                          onClick: () =>
+                              Navigator.of(context).push(ScaleInRoute(
+                                widget: NotificationPage(),
+                              ))),
+                      _buildActionButton(context,
+                          tooltip: "退出登录",
+                          icon: Icons.exit_to_app,
+                          onClick: _alertLogout),
                     ],
                   )
                 ],
@@ -313,6 +282,50 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
           ],
         ),
       ),
+    );
+  }
+
+  _alertLogout() async {
+    final ok = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("确定退出登录吗"),
+              actions: [
+                FlatButton(
+                  child: Text("手滑点错"),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                FlatButton(
+                  child: Text("确定"),
+                  onPressed: () => Navigator.pop(context, true),
+                ),
+              ],
+            ));
+    if (ok == null) return;
+    Provider.of<UserStore>(context, listen: false).logout();
+    Navigator.of(context).pushReplacement(
+      ScaleInRoute(
+        widget: LoginPage(),
+      ),
+    );
+  }
+
+  _buildActionButton(
+    final BuildContext context, {
+    String tooltip,
+    IconData icon,
+    Function onClick,
+  }) {
+    return IconButton(
+      padding: const EdgeInsets.all(0),
+      constraints: const BoxConstraints(maxWidth: 24, maxHeight: 24),
+      color: Theme.of(context).textTheme.bodyText1.color.withAlpha(120),
+      tooltip: tooltip,
+      icon: Icon(
+        icon,
+        size: 18,
+      ),
+      onPressed: onClick,
     );
   }
 }

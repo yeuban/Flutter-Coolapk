@@ -1,4 +1,5 @@
 import 'package:coolapk_flutter/page/launcher/launcher.page.dart';
+import 'package:coolapk_flutter/store/notifaction.store.dart';
 import 'package:coolapk_flutter/store/theme.store.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/global_storage.dart';
@@ -21,6 +22,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => UserStore(), // 然后在init 中 checkLoginInfo
+        ),
+        ChangeNotifierProvider(
+          create: (context) => NotificationStore(),
         ),
         Provider.value(
           value: GlobalStorage(), // 单例得哦

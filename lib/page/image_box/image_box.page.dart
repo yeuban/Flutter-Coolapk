@@ -30,19 +30,29 @@ class ImageBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // _gestureState.currentState.extendedImageGestureState.gestureDetails.totalScale
-    return ExtendedImageSlidePage(
-      slideType: SlideType.wholePage,
-      slideAxis: SlideAxis.both,
-      resetPageDuration: Duration(milliseconds: 200),
-      child: ExtendedImageGesturePageView.builder(
-        controller: PageController(initialPage: initIndex),
-        itemCount: urls.length,
-        onPageChanged: (value) {},
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          return _SubImage(
-              urls[index].toString(), urls.length, index, fileMode);
-        },
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).cardColor,
+        textTheme: Theme.of(context).textTheme,
+        iconTheme: Theme.of(context).iconTheme,
+        leading: CloseButton(),
+        elevation: 1,
+        title: Text("蜜汁原因，pc端需要先点击一下图片，才能正常缩放"),
+      ),
+      body: ExtendedImageSlidePage(
+        slideType: SlideType.wholePage,
+        slideAxis: SlideAxis.both,
+        resetPageDuration: Duration(milliseconds: 200),
+        child: ExtendedImageGesturePageView.builder(
+          controller: PageController(initialPage: initIndex),
+          itemCount: urls.length,
+          onPageChanged: (value) {},
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            return _SubImage(
+                urls[index].toString(), urls.length, index, fileMode);
+          },
+        ),
       ),
     );
   }
@@ -106,14 +116,6 @@ class __SubImageState extends State<_SubImage> {
             ),
           ],
         ),
-      ),
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).cardColor,
-        textTheme: Theme.of(context).textTheme,
-        iconTheme: Theme.of(context).iconTheme,
-        leading: CloseButton(),
-        elevation: 1,
-        title: Text("蜜汁原因，pc端需要先点击一下图片，才能正常缩放"),
       ),
       body: ExtendedImage(
         image: widget.fileMode

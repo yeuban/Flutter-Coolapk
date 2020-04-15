@@ -6,12 +6,13 @@ import 'package:coolapk_flutter/page/collection_list/add_collect.sheet.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/widget/feed_author_tag.dart';
 import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
-import 'package:coolapk_flutter/util/html_text.dart';
+import 'file:///E:/coolapk_flutter/lib/widget/html_text.dart';
 import 'package:coolapk_flutter/util/image_url_size_parse.dart';
 import 'package:coolapk_flutter/widget/common_error_widget.dart';
 import 'package:coolapk_flutter/widget/future_switch.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed.item.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
+import 'package:coolapk_flutter/widget/thumb_up_button.dart';
 import 'package:coolapk_flutter/widget/to_login_snackbar.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +22,16 @@ import 'package:flutter_easyrefresh/phoenix_header.dart';
 import 'package:toast/toast.dart';
 
 part 'feed_reply_list.dart';
+
 part 'feed_reply_item.dart';
+
 part 'reply_input.sheet.dart';
+
 part 'util.dart';
 
 class FeedDetailPage extends StatefulWidget {
   final String url;
+
   FeedDetailPage({Key key, this.url}) : super(key: key);
 
   @override
@@ -35,7 +40,9 @@ class FeedDetailPage extends StatefulWidget {
 
 class _FeedDetailPageState extends State<FeedDetailPage> {
   Map<String, dynamic> data;
+
   String get url => widget.url;
+
   String get feedId =>
       url.startsWith("/feed/") ? url.replaceAll("/feed/", "") : null;
 
@@ -119,6 +126,7 @@ class _FeedDetailPageState extends State<FeedDetailPage> {
 
 class FeedDetailMobile extends StatelessWidget {
   final Map<String, dynamic> data;
+
   const FeedDetailMobile(this.data, {Key key}) : super(key: key);
 
   @override
@@ -178,6 +186,11 @@ Widget _buildAppBar(
     trailing: Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        ThumbUpButton(
+          feedID: data["entityId"],
+          initThumbNum: data["likenum"],
+          inPrimaryColor: true,
+        ),
         FlatButton(
           child: Text(
             "写评论",
@@ -280,7 +293,8 @@ List<Widget> _buildDetail(
         ? const SizedBox()
         : Padding(
             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-            child: Center(child: buildIfImageBox(data, context, tapToImageBox: true)),
+            child: Center(
+                child: buildIfImageBox(data, context, tapToImageBox: true)),
           ),
     Divider(indent: 16, endIndent: 16),
   ];

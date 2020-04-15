@@ -1,15 +1,19 @@
 import 'dart:convert';
 
 import 'package:coolapk_flutter/util/anim_page_route.dart';
+import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed.item.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:coolapk_flutter/widget/primary_button.dart';
 import 'package:flutter/material.dart';
 
+import 'items/card_type/text_title_scroll_card.item.dart';
+
 class AutoItemAdapter extends StatelessWidget {
   final entity;
   final sliverMode;
   final Function(dynamic entity) onRequireDeleteItem;
+
   const AutoItemAdapter(
       {Key key, this.entity, this.sliverMode = true, this.onRequireDeleteItem})
       : super(key: key);
@@ -48,9 +52,9 @@ class AutoItemAdapter extends StatelessWidget {
           case "imageCarouselCard_1":
             item = ImageCarouselCard(source: entity);
             break;
-          // case "textTitleScrollCard":
-          //   item = TextTitleScrollCardItem(source: entity);
-          //   break;
+          case "textTitleScrollCard":
+            item = TextTitleScrollCardItem(source: entity);
+            break;
           case "selectorLinkCard":
             item = const SizedBox();
             break;
@@ -83,41 +87,49 @@ class AutoItemAdapter extends StatelessWidget {
         break;
     }
     item = item ??
-        Container(
-          margin: const EdgeInsets.all(8),
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "\ntitle:${entity["title"]}\ntype:${entity["type"]}\nentityType:${entity["entityType"]}\ntemplate:${entity["entityTemplate"] ?? "null"}",
-              ),
-              PrimaryButton(
-                text: "源",
-                onPressed: () {
-                  final json = JsonEncoder.withIndent("  ").convert(entity);
-                  Navigator.of(context).push(ScaleInRoute(
-                      widget: Scaffold(
-                    appBar: AppBar(
-                      title: Text("源"),
+        (!GlobalStorage()
+                .get<bool>(key: "hide_unsupport_item", defaultValue: true)
+            ? Container(
+                margin: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      "未适配的item",
+                      style: TextStyle(color: Colors.red),
                     ),
-                    body: TextField(
-                      scrollPadding: const EdgeInsets.all(8),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(8),
-                      ),
-                      controller: TextEditingController.fromValue(
-                        TextEditingValue(text: json),
-                      ),
-                      maxLines: 100,
+                    Text(
+                      "\标题:${entity["title"]}\ntype:${entity["type"]}\nentityType:${entity["entityType"]}\ntemplate:${entity["entityTemplate"] ?? "null"}",
                     ),
-                  )));
-                },
-              ),
-            ],
-          ),
-        );
+                    PrimaryButton(
+                      text: "查看源",
+                      onPressed: () {
+                        final json =
+                            JsonEncoder.withIndent("  ").convert(entity);
+                        Navigator.of(context).push(ScaleInRoute(
+                            widget: Scaffold(
+                          appBar: AppBar(
+                            title: Text("源"),
+                          ),
+                          body: TextField(
+                            scrollPadding: const EdgeInsets.all(8),
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(8),
+                            ),
+                            controller: TextEditingController.fromValue(
+                              TextEditingValue(text: json),
+                            ),
+                            maxLines: 100,
+                          ),
+                        )));
+                      },
+                    ),
+                  ],
+                ),
+              )
+            : const SizedBox());
 
     return (sliverMode) ? SliverToBoxAdapter(child: item) : item;
   }
