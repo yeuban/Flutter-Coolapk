@@ -26,9 +26,9 @@ class GlobalStorage {
     if (inited) return;
     try {
       boxesFile =
-          XFile(await getTemporaryDirectory(), "coolapk_flutter/storage.json");
+          XFile(await getTemporaryDirectory(), "flutter_coolapk/storage.json");
     } catch (err) {
-      boxesFile = XFile(Directory.systemTemp, "coolapk_flutter/storage.json");
+      boxesFile = XFile(Directory.systemTemp, "flutter_coolapk/storage.json");
     }
 
     if (!boxesFile.exists) {
@@ -66,7 +66,7 @@ class GlobalStorage {
     String box = DefaultBoxName,
     @required String key,
     T defaultValue,
-    bool saveIfNull,
+    bool saveIfNull = false,
   }) {
     final value = (this.boxes[box] ?? {})[key];
     if (value == null && saveIfNull)
