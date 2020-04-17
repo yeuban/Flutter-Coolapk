@@ -5,12 +5,14 @@ class MCard extends StatelessWidget {
   final EdgeInsets padding;
   final EdgeInsets margin;
   final Function onTap;
+  final Function onLongPress;
   const MCard({
     Key key,
     this.child,
     this.padding,
     this.margin,
     this.onTap,
+    this.onLongPress,
   }) : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class MCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         color: Theme.of(context).cardColor,
         child: InkWell(
+          onLongPress: onLongPress,
           borderRadius: BorderRadius.circular(8),
           onTap: onTap,
           child: Padding(

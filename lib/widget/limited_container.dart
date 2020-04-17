@@ -33,6 +33,7 @@ class LimitedContainer extends StatelessWidget {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
+        width: double.infinity,
         decoration: boxDecoration,
         constraints: BoxConstraints(maxWidth: maxWidth),
         child: child,

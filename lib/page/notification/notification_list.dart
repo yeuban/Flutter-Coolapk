@@ -70,7 +70,7 @@ class _NotificationListState extends State<NotificationList> {
                       } else if (howHoursAgo >= 1) {
                         titleLeading = "$howHoursAgo小时前";
                       } else {
-                        titleLeading = "$howMinutesAge}分钟前";
+                        titleLeading = "$howMinutesAge分钟前";
                       }
                       return _buildItem(
                         context,

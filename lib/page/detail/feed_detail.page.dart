@@ -9,11 +9,10 @@ import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
 import 'file:///E:/coolapk_flutter/lib/widget/html_text.dart';
 import 'package:coolapk_flutter/util/image_url_size_parse.dart';
 import 'package:coolapk_flutter/widget/common_error_widget.dart';
-import 'package:coolapk_flutter/widget/future_switch.dart';
+import 'package:coolapk_flutter/widget/follow_btn.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed.item.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:coolapk_flutter/widget/thumb_up_button.dart';
-import 'package:coolapk_flutter/widget/to_login_snackbar.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
@@ -224,31 +223,10 @@ Widget _buildAppBar(
           },
         ),
         Builder(builder: (context) {
-          return FutureSwitch(
-            initValue:
+          return FollowButton(
+            uid: data["uid"],
+            initIsFollow:
                 (data["userAction"]["followAuthor"] ?? 0) == 0 ? false : true,
-            color: Theme.of(context).primaryColorDark,
-            fontColor: Theme.of(context).primaryTextTheme.bodyText1.color,
-            margin: const EdgeInsets.only(right: 8),
-            future: (value) async {
-              final resp = await MainApi.setFollowUser(data["uid"], value);
-              if (resp["status"] == 401) {
-                showToLoginSnackBar(context, message: resp["message"]);
-                return false;
-              } else {
-                if (resp["data"] == 1 && value == false) {
-                  return false;
-                }
-              }
-              return true;
-            },
-            builder: (context, value, error) {
-              if (value) {
-                return Text("取消关注");
-              } else {
-                return Text("关注大佬");
-              }
-            },
           );
         }),
       ],

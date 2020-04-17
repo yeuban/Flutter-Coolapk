@@ -1,5 +1,4 @@
 import 'package:coolapk_flutter/widget/data_list/data_list.dart';
-import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:flutter/material.dart';
 
 class TabPage extends StatefulWidget {
@@ -31,10 +30,7 @@ class TabPageState extends State<TabPage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return LimitedContainer(
-      limiteType: LimiteType.SingleColumn,
-      child: DataListPage(_dataListConfig),
-    );
+    return DataListPage(_dataListConfig);
     // return DataListPageFrameWidget();
   }
 }

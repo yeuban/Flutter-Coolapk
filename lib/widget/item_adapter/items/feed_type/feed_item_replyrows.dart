@@ -72,7 +72,7 @@ class FeedItemReplyRows extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    // TODO: handle this ->
+                    ImageBox.push(context, urls: [replyRow["pic"]]);
                   },
                 )
               : const SizedBox(),

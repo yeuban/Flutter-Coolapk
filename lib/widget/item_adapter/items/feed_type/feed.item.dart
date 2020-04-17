@@ -139,7 +139,8 @@ Widget buildForwardSourceFeed(
   final sfeed = source["forwardSourceFeed"];
   return sfeed == null
       ? const SizedBox()
-      : Padding(
+      : Container(
+          margin: const EdgeInsets.only(top: 8),
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: InkWell(
             borderRadius: BorderRadius.circular(8),
@@ -162,12 +163,12 @@ Widget buildForwardSourceFeed(
 }
 
 Widget buildRelationRow(final dynamic source, final BuildContext context) {
-  final List<dynamic> rr = source["relationRows"] ?? [];
+  final List<dynamic> rr = [];
+  rr.addAll(source["relationRows"] ?? []);
   final tr = source["targetRow"];
   if ((rr == null && tr == null) || (tr != null && rr.length == 0)) {
     return const SizedBox(width: 0, height: 0);
   }
-
   if (tr != null && tr["title"] != null) {
     rr.add(source["targetRow"]);
   }

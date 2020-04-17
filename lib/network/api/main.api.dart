@@ -3,8 +3,43 @@ import 'package:coolapk_flutter/network/model/collection.model.dart';
 import 'package:coolapk_flutter/network/model/main_init.model.dart';
 import 'package:coolapk_flutter/network/model/reply_data_list.model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+
+enum SearchType {
+  feed,
+  all,
+  user,
+  feedTopic, // 话题
+  ask, // 问答
+  dyhMix, // 看看号
+  // album, // 应用集
+}
 
 class MainApi {
+  static Future search({
+    SearchType searchType = SearchType.feed,
+    @required String searchValue,
+    int page,
+    int showAnonymous = -1,
+    int lastItem,
+  }) async {
+    return (await Network.apiDio.get(
+      "/search",
+      queryParameters: {
+        "page": page,
+        "showAnonymous": showAnonymous,
+        "searchValue": searchValue,
+        "type": searchType.toString().split(".")[1],
+      }
+        ..addAll(lastItem != null ? {"lastItem": lastItem} : {})
+        ..addAll(searchType == SearchType.feed ? {"sort": "default"} : {})
+        ..addAll(searchType == SearchType.ask || searchType == SearchType.feed
+            ? {"feedType": "all"}
+            : {}),
+    ))
+        .data;
+  }
+
   static Future<MainInitModel> getInitConfig() async {
     return MainInitModel.fromJson(
       (await Network.apiDio.get("/main/init")).data,

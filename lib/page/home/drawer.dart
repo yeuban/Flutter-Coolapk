@@ -4,6 +4,7 @@ import 'package:coolapk_flutter/network/model/main_init.model.dart'
     as MainInitModel;
 import 'package:coolapk_flutter/page/login/login.page.dart';
 import 'package:coolapk_flutter/page/notification/notification.page.dart';
+import 'package:coolapk_flutter/page/search/search.page.dart';
 import 'package:coolapk_flutter/page/settings/settings.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
@@ -74,6 +75,14 @@ class HomePageDrawerState extends State<HomePageDrawer>
         child: TextField(
           autofocus: false,
           style: TextStyle(fontSize: 14),
+          onSubmitted: (string) {
+            Navigator.push(
+                context,
+                ScaleInRoute(
+                    widget: SearchPage(
+                  searchString: string,
+                )));
+          },
           decoration: InputDecoration(
             hintText: "搜索",
             fillColor: Theme.of(context).primaryColor.withAlpha(30),

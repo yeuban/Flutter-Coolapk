@@ -4,18 +4,27 @@ import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed.item.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
+import 'package:coolapk_flutter/widget/item_adapter/items/user_type/user_card.item.dart';
+import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:coolapk_flutter/widget/primary_button.dart';
 import 'package:flutter/material.dart';
 
 import 'items/card_type/text_title_scroll_card.item.dart';
 
 class AutoItemAdapter extends StatelessWidget {
-  final entity;
-  final sliverMode;
+  final dynamic entity;
+  final bool sliverMode;
+  final bool addLimitContainer;
+  final LimiteType limitContainerType;
   final Function(dynamic entity) onRequireDeleteItem;
 
   const AutoItemAdapter(
-      {Key key, this.entity, this.sliverMode = true, this.onRequireDeleteItem})
+      {Key key,
+      this.addLimitContainer = true,
+      this.limitContainerType = LimiteType.SingleColumn,
+      this.entity,
+      this.sliverMode = true,
+      this.onRequireDeleteItem})
       : super(key: key);
 
   @override
@@ -26,6 +35,9 @@ class AutoItemAdapter extends StatelessWidget {
     Widget item;
 
     switch (type) {
+      case "user":
+        item = UserCardItem(source: entity);
+        break;
       case "card":
         switch (template) {
           case "sortSelectCard":
@@ -130,6 +142,12 @@ class AutoItemAdapter extends StatelessWidget {
                 ),
               )
             : const SizedBox());
+
+    if (addLimitContainer)
+      item = LimitedContainer(
+        child: item,
+        limiteType: limitContainerType,
+      );
 
     return (sliverMode) ? SliverToBoxAdapter(child: item) : item;
   }

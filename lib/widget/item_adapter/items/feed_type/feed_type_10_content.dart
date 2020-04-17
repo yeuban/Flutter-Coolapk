@@ -10,6 +10,7 @@ class FeedType10Content extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildQuestionRow(context),
@@ -30,6 +31,7 @@ class FeedType10Content extends StatelessWidget {
 
   Widget _buildInfoRow(final BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
             "${source["question_answer_num"]}人回答 · ${source["question_follow_num"]}人关注"),
