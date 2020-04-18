@@ -86,7 +86,7 @@ class UserCardItem extends StatelessWidget {
             initIsFollow: source["isFollow"] == 0 ? false : true,
             uid: source["uid"],
             margin: const EdgeInsets.only(left: 16),
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).accentColor,
           ),
         ],
       ),

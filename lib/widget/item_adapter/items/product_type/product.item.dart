@@ -85,8 +85,8 @@ class ProductItem extends StatelessWidget {
           Text(
             source["release_time"],
             style: TextStyle(
-              backgroundColor: Theme.of(context).primaryColor.withAlpha(50),
-              color: Theme.of(context).primaryColor,
+              backgroundColor: Theme.of(context).accentColor.withAlpha(50),
+              color: Theme.of(context).accentColor,
             ),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -94,7 +94,7 @@ class ProductItem extends StatelessWidget {
           Text(
             "发布时间",
             style: TextStyle(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
             ),
           ),
         ],

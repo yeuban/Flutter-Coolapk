@@ -27,7 +27,7 @@ class FeedItemReplyRows extends StatelessWidget {
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(8),
                   bottomRight: Radius.circular(16)),
@@ -66,7 +66,7 @@ class FeedItemReplyRows extends StatelessWidget {
                     child: Text(
                       "查看图片",
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).accentColor,
                         fontSize: 15,
                       ),
                     ),

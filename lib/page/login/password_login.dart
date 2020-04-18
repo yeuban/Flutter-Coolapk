@@ -201,7 +201,7 @@ class _PasswordLoginState extends State<PasswordLogin>
                 : const SizedBox(),
             OutlineButton(
               child: Text("登录"),
-              textColor: Theme.of(context).primaryColor,
+              textColor: Theme.of(context).accentColor,
               onPressed: _logging
                   ? null
                   : () {
@@ -253,7 +253,7 @@ class _PasswordLoginState extends State<PasswordLogin>
                       alignment: Alignment.centerRight,
                       child: MaterialButton(
                         child: Text("同意"),
-                        textColor: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).accentColor,
                         onPressed: () {
                           enable = true;
                           setState(() {});

@@ -46,7 +46,7 @@ class FeedType11Content extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
               shape: BoxShape.rectangle,
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
             ),
             child: Text(
               source["feedTypeName"],

@@ -141,7 +141,7 @@ class ProductDetail extends StatelessWidget {
                       child: Text(
                     entity["entityTypeName"],
                     style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).accentColor,
                       fontSize: 16,
                     ),
                   )),
@@ -197,11 +197,11 @@ class ProductDetail extends StatelessWidget {
           return Chip(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-            backgroundColor: Theme.of(context).primaryColor.withAlpha(40),
+            backgroundColor: Theme.of(context).accentColor.withAlpha(40),
             label: Text(
               tag,
               style: TextStyle(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).accentColor,
               ),
             ),
           );
@@ -284,7 +284,7 @@ class ProductDetail extends StatelessWidget {
           Text(
             "酷安评分",
             style: TextStyle(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
@@ -364,7 +364,7 @@ class ProductDetail extends StatelessWidget {
                   return Text(
                     _detail["star_${e}_count"].toString(),
                     style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).accentColor,
                     ),
                   );
                 }).toList(),
@@ -387,7 +387,7 @@ class ProductDetail extends StatelessWidget {
           Text(
             "酷安评分",
             style: TextStyle(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),

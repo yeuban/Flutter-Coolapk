@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:coolapk_flutter/network/api/main.api.dart';
 import 'package:coolapk_flutter/network/model/reply_data_list.model.dart';
 import 'package:coolapk_flutter/page/collection_list/add_collect.sheet.dart';
+import 'package:coolapk_flutter/page/user_space/user_space.page.dart';
+import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/widget/feed_author_tag.dart';
 import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
@@ -13,6 +15,7 @@ import 'package:coolapk_flutter/widget/follow_btn.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed.item.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:coolapk_flutter/widget/thumb_up_button.dart';
+import 'package:coolapk_flutter/widget/to_login_snackbar.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
@@ -188,7 +191,7 @@ Widget _buildAppBar(
         ThumbUpButton(
           feedID: data["entityId"],
           initThumbNum: data["likenum"],
-          inPrimaryColor: true,
+          inaccentColor: true,
         ),
         FlatButton(
           child: Text(
@@ -208,19 +211,27 @@ Widget _buildAppBar(
             );
           },
         ),
-        FlatButton.icon(
-          label: Text(collected ? "取消收藏" : "收藏动态"),
-          textColor: Theme.of(context).primaryTextTheme.bodyText1.color,
-          icon: Icon(collected ? Icons.star : Icons.star_border),
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (context) =>
-                    AddCollectSheet(targetId: data["entityId"])).then((value) {
-              // value == true 收藏成功
-              if (value == null) return;
-            });
-          },
+        Builder(
+          builder: (context) => FlatButton.icon(
+            label: Text(collected ? "取消收藏" : "收藏动态"),
+            textColor: Theme.of(context).primaryTextTheme.bodyText1.color,
+            icon: Icon(collected ? Icons.star : Icons.star_border),
+            onPressed: () {
+              if (UserStore.getUserUid(context) == null) {
+                showToLoginSnackBar(context);
+                return;
+              }
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) =>
+                      AddCollectSheet(targetId: data["entityId"])).then(
+                (value) {
+                  // value == true 收藏成功
+                  if (value == null) return;
+                },
+              );
+            },
+          ),
         ),
         Builder(builder: (context) {
           return FollowButton(
@@ -262,7 +273,7 @@ List<Widget> _buildDetail(
         ? FlatButton(
             child: Text(
               pjson != null ? "点我查看所有图片" : "点我查看更多图片",
-              style: TextStyle(color: Theme.of(context).primaryColor),
+              style: TextStyle(color: Theme.of(context).accentColor),
             ),
             onPressed: () => ImageBox.push(context, urls: data["picArr"]),
           )

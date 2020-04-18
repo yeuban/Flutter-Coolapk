@@ -97,7 +97,7 @@ class _ProductPageState extends State<ProductPage> {
             // ),
             headerBar: Container(
               height: 50,
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
               alignment: Alignment.center,
               child: TabBar(
                 isScrollable: true,

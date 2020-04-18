@@ -11,7 +11,7 @@ class LevelLabel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).accentColor,
         borderRadius: BorderRadius.circular(4),
         shape: BoxShape.rectangle,
       ),

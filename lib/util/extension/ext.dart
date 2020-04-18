@@ -7,7 +7,7 @@ extension StringExt on String {
   Text textWidgetPrimary(context) => Text(
         this,
         style: TextStyle(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).accentColor,
         ),
       );
 }

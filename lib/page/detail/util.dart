@@ -5,6 +5,7 @@ void handleOnLinkTap(final String url, final BuildContext context) {
     ImageBox.push(context, urls: [url.split("=")[1]]);
   } else if (url.startsWith(RegExp(r'user=|/u/'))) {
     // TODO: handle to user space
+    UserSpacePage.entry(context, url.replaceAll(RegExp(r'user=|/u/'), ""));
   } else if (url.startsWith("https://www.coolapk.com/feed/")) {
     Navigator.push(
         context,

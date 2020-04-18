@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:coolapk_flutter/network/api/feed.api.dart';
 import 'package:coolapk_flutter/page/detail/feed_detail.page.dart';
 import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
+import 'package:coolapk_flutter/page/user_space/user_space.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/show_qr_code.dart';

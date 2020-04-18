@@ -54,7 +54,7 @@ class _TokenLoginState extends State<TokenLogin>
                       alignment: Alignment.centerRight,
                       child: MaterialButton(
                         child: Text("同意"),
-                        textColor: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).accentColor,
                         onPressed: () {
                           enable = true;
                           setState(() {});

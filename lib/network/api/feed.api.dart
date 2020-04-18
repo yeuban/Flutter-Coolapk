@@ -33,14 +33,17 @@ class FeedApi {
     @required feedId,
     bool unThumbup = false,
     bool detail = false,
+    bool isReply = false,
   }) async {
     final resp = await Network.apiDio.post(
-      unThumbup ? "/feed/unlike" : "/feed/like",
+      unThumbup
+          ? isReply ? "/feed/unLikeReply" : "/feed/unlike"
+          : isReply ? "/feed/likeReply" : "/feed/like",
       queryParameters: {
         "id": feedId,
-        "detail": detail ? 1 : 0,
-      },
+      }..addAll(isReply ? {} : {"detail": detail ? 1 : 0}),
     );
+    print(resp.request.path);
     return resp.data;
   }
 

@@ -18,7 +18,7 @@ class ProductComment extends StatelessWidget {
     final header = Container(
       height: 50,
       width: double.infinity,
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).accentColor,
       child: ConstrainedBox(
         child: Builder(builder: (context) => _buildTabBar(context)),
         constraints: BoxConstraints(

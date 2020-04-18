@@ -13,8 +13,8 @@ class PrimaryButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(32),
       ),
-      color: Theme.of(context).primaryColor.withAlpha(40),
-      textColor: Theme.of(context).primaryColor,
+      color: Theme.of(context).accentColor.withAlpha(40),
+      textColor: Theme.of(context).accentColor,
       elevation: 0,
       hoverElevation: 0,
       disabledElevation: 0,

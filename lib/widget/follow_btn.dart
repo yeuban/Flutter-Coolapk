@@ -22,7 +22,7 @@ class FollowButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureSwitch(
       initValue: initIsFollow,
-      color: color ?? Theme.of(context).primaryColorDark,
+      color: color ?? Theme.of(context).accentColor,
       fontColor: fontColor ?? Theme.of(context).primaryTextTheme.bodyText1.color,
       margin: margin ?? const EdgeInsets.only(right: 8),
       future: (value) async {

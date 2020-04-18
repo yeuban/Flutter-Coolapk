@@ -31,7 +31,7 @@ class FeedType4Content extends StatelessWidget {
                         filterQuality: FilterQuality.low,
                         width: 45,
                         height: 45,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).accentColor,
                       )
                     : ExtendedImage.network(
                         source["extra_pic"],

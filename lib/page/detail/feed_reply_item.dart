@@ -70,16 +70,19 @@ class _ReplyItemState extends State<ReplyItem> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ExtendedImage.network(
-                widget.data.userInfo.userSmallAvatar,
-                width: 42,
-                height: 42,
-                shape: BoxShape.circle,
+              child: GestureDetector(
+                onTap: () => UserSpacePage.entry(context, widget.data.uid),
+                child: ExtendedImage.network(
+                  widget.data.userInfo.userSmallAvatar,
+                  width: 42,
+                  height: 42,
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 16.0, top: 8, bottom: 8),
+                padding: const EdgeInsets.only(right: 16.0, top: 8, bottom: 0),
                 child: _buildContent(context),
               ),
             ),
@@ -96,17 +99,21 @@ class _ReplyItemState extends State<ReplyItem> {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Text(
-              widget.data.username,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                // fontWeight: FontWeight.bold,
-                fontSize: Theme.of(context).textTheme.button.fontSize + 2,
+            GestureDetector(
+              onTap: () => UserSpacePage.entry(context, widget.data.uid),
+              child: Text(
+                widget.data.username,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  // fontWeight: FontWeight.bold,
+                  fontSize: Theme.of(context).textTheme.button.fontSize + 2,
+                ),
               ),
             ),
             widget.data.isFeedAuthor == 1 ? FeedAuthorTag() : const SizedBox(),
+            Spacer(),
           ],
         ),
         Divider(color: Colors.transparent, height: 4),
@@ -128,6 +135,19 @@ class _ReplyItemState extends State<ReplyItem> {
         widget.data.replynum == 0 || widget.data.replyRows == null
             ? const SizedBox()
             : _buildInReplyColumn(context),
+        Align(
+          alignment: Alignment.centerRight,
+          child: ThumbUpButton(
+            feedID: widget.data.id,
+            initThumbNum: widget.data.likenum,
+            initThumbState:
+                ((widget.data.userAction?.like ?? 0) == 1 ? true : false),
+            isReply: true,
+          ),
+        ),
+        Divider(
+          height: 2,
+        ),
       ],
     );
   }
@@ -159,7 +179,7 @@ class _ReplyItemState extends State<ReplyItem> {
         shape: BoxShape.rectangle,
         color: Theme.of(context).scaffoldBackgroundColor,
       ),
-      margin: const EdgeInsets.only(top: 8, bottom: 16),
+      margin: const EdgeInsets.only(top: 8, bottom: 0),
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,12 +200,18 @@ class _ReplyItemState extends State<ReplyItem> {
   List<Widget> _buildShowMore(final BuildContext context) {
     return widget.data.replyRowsMore > widget.data.replyRowsCount
         ? [
+            Divider(height: 4),
             InkWell(
               onTap: () => onShowMoreReplyClick(context),
-              child: Text(
-                "显示更多",
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 6, 0, 2),
+                  child: Text(
+                    "——显示更多(${widget.data.replyRowsCount})——",
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                    ),
+                  ),
                 ),
               ),
             )
@@ -216,13 +242,12 @@ class InReplyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor16 =
-        Theme.of(context).primaryColor.value.toRadixString(16);
+    final accentColor16 = Theme.of(context).accentColor.value.toRadixString(16);
     final textColor16 =
         Theme.of(context).textTheme.bodyText1.color.value.toRadixString(16);
     final _picTag = (data.pic.isNotEmpty
         ? "<a href='pic=${data.pic}'" +
-            " style='color: #${Theme.of(context).primaryColor.value.toRadixString(16)}'>" +
+            " style='color: #${Theme.of(context).accentColor.value.toRadixString(16)}'>" +
             "[查看图片]</a" ">" // 是否有图片
         : "");
     return InkWell(
@@ -236,10 +261,10 @@ class InReplyItem extends StatelessWidget {
               // TODO: handle to user space
               handleOnLinkTap(url, context);
             },
-            html: "<a href='user=${data.uid}' style='color: #$primaryColor16'>" +
+            html: "<a href='user=${data.uid}' style='color: #$accentColor16'>" +
                 "${data.isFeedAuthor == 1 ? "[楼主]${data.username}" : data.username}</a>" + // 谁
                 (data.rusername.isNotEmpty ? " 回复 " : "") + // 回复
-                "<a href='user=${data.ruid}' style='color: #$primaryColor16'>${data.rusername}</a>" // 谁
+                "<a href='user=${data.ruid}' style='color: #$accentColor16'>${data.rusername}</a>" // 谁
                     ": ${data.message == "[图片]" ? _picTag : data.message + _picTag}",
             shrinkToFit: true,
           ),

@@ -129,7 +129,7 @@ class _TabTemplateState extends State<TabTemplate>
                 indicator: BoxDecoration(
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(44),
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).accentColor,
                 ),
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorWeight: 0,

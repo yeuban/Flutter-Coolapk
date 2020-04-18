@@ -6,6 +6,7 @@ import 'package:coolapk_flutter/page/login/login.page.dart';
 import 'package:coolapk_flutter/page/notification/notification.page.dart';
 import 'package:coolapk_flutter/page/search/search.page.dart';
 import 'package:coolapk_flutter/page/settings/settings.page.dart';
+import 'package:coolapk_flutter/page/user_space/user_space.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:extended_image/extended_image.dart';
@@ -85,7 +86,7 @@ class HomePageDrawerState extends State<HomePageDrawer>
           },
           decoration: InputDecoration(
             hintText: "搜索",
-            fillColor: Theme.of(context).primaryColor.withAlpha(30),
+            fillColor: Theme.of(context).accentColor.withAlpha(30),
             contentPadding: const EdgeInsets.all(8),
             filled: true,
             border:
@@ -215,7 +216,7 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
                 fontSize: 18,
               ),
             ),
-            textColor: Theme.of(context).primaryColor,
+            textColor: Theme.of(context).accentColor,
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 ScaleInRoute(widget: LoginPage()),
@@ -227,6 +228,10 @@ class _DrawerUserCardState extends State<DrawerUserCard> {
     return InkWell(
       onTap: () {
         // TODO:
+        if (Provider.of<UserStore>(context, listen: false).loginInfo?.uid !=
+            null)
+          UserSpacePage.entry(context,
+              Provider.of<UserStore>(context, listen: false).loginInfo.uid);
       },
       child: Container(
         width: double.infinity,

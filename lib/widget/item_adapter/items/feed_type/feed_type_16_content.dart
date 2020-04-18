@@ -126,7 +126,7 @@ class _FeedType16ContentState extends State<FeedType16Content> {
                     width: double.infinity,
                     alignment: Alignment.center,
                   ),
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).accentColor,
                   textColor: Theme.of(context).primaryTextTheme.bodyText1.color,
                   onPressed: this._options.any((opt) {
                     return opt.selected;
@@ -226,7 +226,7 @@ class _FeedType16ContentState extends State<FeedType16Content> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
               shape: BoxShape.rectangle,
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
             ),
             child: Text(
               widget.source["feedTypeName"],

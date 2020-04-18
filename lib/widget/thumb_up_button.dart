@@ -11,14 +11,16 @@ class ThumbUpButton extends StatefulWidget {
   final dynamic feedID;
   final int initThumbNum;
   final bool initThumbState;
-  final bool inPrimaryColor;
+  final bool inaccentColor;
+  final bool isReply;
 
   ThumbUpButton({
     Key key,
     @required this.initThumbNum,
     @required this.feedID,
     this.initThumbState = false,
-    this.inPrimaryColor = false,
+    this.inaccentColor = false,
+    this.isReply = false,
   }) : super(key: key);
 
   @override
@@ -42,20 +44,28 @@ class _ThumbUpButtonState extends State<ThumbUpButton> {
     this._inRequest = true;
     setState(() {});
     try {
-      final resp = await FeedApi.thumbUp(
+      final Map<String, dynamic> resp = await FeedApi.thumbUp(
+        isReply: widget.isReply,
         feedId: widget.feedID.toString(),
         unThumbup: this._thumbupState,
       );
+
       String message;
       if ((message = resp["message"]) != null) {
         Toast.show(message, context, duration: 2);
+        return;
       }
-      final newNum = resp["data"]["count"];
-      this._num = newNum;
+      final data = resp["data"];
+      if (data is Map) {
+        this._num = resp["data"]["count"];
+      } else {
+        this._num = data;
+      }
       this._thumbupState = !_thumbupState;
     } catch (err) {} finally {
       this._inRequest = false;
       setState(() {});
+      print("?? $_num");
     }
   }
 
@@ -68,9 +78,9 @@ class _ThumbUpButtonState extends State<ThumbUpButton> {
           width: 21,
           height: 21,
           filterQuality: FilterQuality.medium,
-          color: !widget.inPrimaryColor
+          color: !widget.inaccentColor
               ? this._thumbupState
-                  ? Theme.of(context).primaryColor
+                  ? Theme.of(context).accentColor
                   : Theme.of(context).iconTheme.color
               : Theme.of(context).primaryTextTheme.bodyText1.color,
         ),
@@ -85,10 +95,10 @@ class _ThumbUpButtonState extends State<ThumbUpButton> {
       label: Text(
         _num == null ? "" : _num.toString(),
         style: TextStyle(
-          color: widget.inPrimaryColor
+          color: widget.inaccentColor
               ? Theme.of(context).primaryTextTheme.bodyText1.color
               : this._thumbupState
-                  ? Theme.of(context).primaryColor
+                  ? Theme.of(context).accentColor
                   : Theme.of(context).textTheme.bodyText1.color,
         ),
       ),

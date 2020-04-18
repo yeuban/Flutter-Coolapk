@@ -102,7 +102,7 @@ class _FeedReplyListState extends State<FeedReplyList> {
             return FlatButton(
               child: Text(
                 "没有更多了，点击刷新",
-                style: TextStyle(color: Theme.of(context).primaryColor),
+                style: TextStyle(color: Theme.of(context).accentColor),
               ),
               onPressed: () {
                 _easyRefreshController.callRefresh();

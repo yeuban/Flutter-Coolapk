@@ -46,7 +46,7 @@ class _FutureSwitchState extends State<FutureSwitch> {
     return Container(
       margin: widget.margin,
       child: Material(
-        color: widget.color ?? Theme.of(context).primaryColor,
+        color: widget.color ?? Theme.of(context).accentColor,
         textStyle: TextStyle(
           color:
               widget.fontColor ?? Theme.of(context).textTheme.bodyText1.color,

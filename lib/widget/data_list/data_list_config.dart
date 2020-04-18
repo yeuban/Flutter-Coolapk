@@ -72,14 +72,18 @@ class DataListConfig with ChangeNotifier {
   }
 
   String _requestPath;
-  final Map<String, String> _requestExtParam = {};
+  final Map<String, dynamic> _requestExtParam = {};
 
   DataListConfigState state = DataListConfigState.Firstime;
 
-  DataListConfig({String title = "", @required String url}) {
-    this._requestExtParam.addAll({
-      "title": title,
-    });
+  DataListConfig(
+      {String title = "",
+      @required String url,
+      Map<String, dynamic> extParam}) {
+    this._requestExtParam.addAll(extParam ??
+        {
+          "title": title,
+        });
     if (url.startsWith("#/") || url.startsWith("/feed/")) {
       this._requestPath = "/page/dataList?url=${Uri.encodeComponent(url)}";
     } else {
@@ -99,7 +103,8 @@ class DataListConfig with ChangeNotifier {
   Future<void> get refresh => _fetchData(refresh: true);
 
   Future<void> _fetchData({nextPage = true, final refresh = false}) async {
-    if (state == DataListConfigState.Loading) return;
+    if (state == DataListConfigState.Loading ||
+        (!refresh && state == DataListConfigState.NoMore)) return;
     if (refresh) {
       _page = 1;
       _dataList.clear();

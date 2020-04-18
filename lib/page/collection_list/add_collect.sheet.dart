@@ -4,7 +4,6 @@ import 'package:coolapk_flutter/page/collection_list/new_collection.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
-import 'package:coolapk_flutter/widget/to_login_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
@@ -30,8 +29,9 @@ class _AddCollectSheetState extends State<AddCollectSheet> {
   Future<bool> fetchData() async {
     final uid = UserStore.getUserUid(context);
     if (uid == null) {
-      showToLoginSnackBar(context);
-      Navigator.pop(context);
+      // showToLoginSnackBar(context);
+      Toast.show("请先登录哦", context, duration: 2);
+      // Navigator.pop(context);
       return false;
     }
     _collectionModel =
@@ -105,10 +105,9 @@ class _AddCollectSheetState extends State<AddCollectSheet> {
             ),
             actions: <Widget>[
               FlatButton(
-                textColor: Theme.of(context).primaryColor,
+                textColor: Theme.of(context).accentColor,
                 child: Text("新建收藏单"),
                 onPressed: () {
-                  // TODO:
                   Navigator.of(context)
                       .push(ScaleInRoute(widget: NewCollectionPage()));
                 },
@@ -121,6 +120,9 @@ class _AddCollectSheetState extends State<AddCollectSheet> {
                 future: fetchData(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    if (snapshot.data == false){
+                      Navigator.pop(context);
+                    }
                     return ListView(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -143,10 +145,9 @@ class _AddCollectSheetState extends State<AddCollectSheet> {
               ? CircularProgressIndicator()
               : MaterialButton(
                   minWidth: double.infinity,
-                  textColor: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context).accentColor,
                   child: Text("完成"),
                   onPressed: () {
-                    // TODO:
                     commit();
                   },
                 ),
