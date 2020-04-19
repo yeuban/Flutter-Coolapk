@@ -126,25 +126,74 @@ class _FeedDetailPageState extends State<FeedDetailPage> {
   }
 }
 
-class FeedDetailMobile extends StatelessWidget {
+class FeedDetailMobile extends StatefulWidget {
   final Map<String, dynamic> data;
 
   const FeedDetailMobile(this.data, {Key key}) : super(key: key);
 
   @override
+  _FeedDetailMobileState createState() => _FeedDetailMobileState();
+}
+
+class _FeedDetailMobileState extends State<FeedDetailMobile> {
+  GlobalKey<_FeedReplyListState> _feedReplyListKey = GlobalKey();
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.comment),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => _buildReplyPage(context),
+              ));
+        },
+      ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          _buildAppBar(context, data, sliver: true),
+          _buildAppBar(context, widget.data, sliver: true, mobileMode: true),
         ],
         body: CustomScrollView(
           slivers: <Widget>[
             SliverList(
-              delegate: SliverChildListDelegate(_buildDetail(context, data)),
+              delegate:
+                  SliverChildListDelegate(_buildDetail(context, widget.data)),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildReplyPage(final BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("回复:"),
+        actions: [
+          FlatButton(
+            child: Text(
+              "写评论",
+              style: TextStyle(
+                color: Theme.of(context).primaryTextTheme.bodyText1.color,
+              ),
+            ),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) => ReplyInputBottomSheet(
+                  targetId: widget.data["entityId"],
+                  hintText: "楼主",
+                  onReplyDone: _feedReplyListKey.currentState.addReplyRow,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: FeedReplyList(
+        widget.data["entityId"],
+        key: _feedReplyListKey,
       ),
     );
   }
@@ -155,11 +204,66 @@ Widget _buildAppBar(
   final Map<String, dynamic> data, {
   final Function(ReplyDataEntity) onReplyDone,
   final sliver = false,
+  final bool mobileMode = false,
 }) {
   final t = DateTime.fromMillisecondsSinceEpoch(
           int.tryParse((data["lastupdate"]).toString()) * 1000)
       .toUtc();
   final collected = (data["userAction"]["collect"] ?? 0) == 0 ? false : true;
+  final action = [
+    ThumbUpButton(
+      feedID: data["entityId"],
+      initThumbNum: data["likenum"],
+      inaccentColor: true,
+    ),
+    FlatButton(
+      child: Text(
+        "写评论",
+        style: TextStyle(
+          color: Theme.of(context).primaryTextTheme.bodyText1.color,
+        ),
+      ),
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => ReplyInputBottomSheet(
+            targetId: data["entityId"],
+            hintText: "楼主",
+            onReplyDone: onReplyDone,
+          ),
+        );
+      },
+    ),
+    Builder(
+      builder: (context) => FlatButton.icon(
+        label: Text(collected ? "取消收藏" : "收藏动态"),
+        textColor: Theme.of(context).primaryTextTheme.bodyText1.color,
+        icon: Icon(collected ? Icons.star : Icons.star_border),
+        onPressed: () {
+          if (UserStore.getUserUid(context) == null) {
+            showToLoginSnackBar(context);
+            return;
+          }
+          showModalBottomSheet(
+              context: context,
+              builder: (context) =>
+                  AddCollectSheet(targetId: data["entityId"])).then(
+            (value) {
+              // value == true 收藏成功
+              if (value == null) return;
+            },
+          );
+        },
+      ),
+    ),
+    Builder(builder: (context) {
+      return FollowButton(
+        uid: data["uid"],
+        initIsFollow:
+            (data["userAction"]["followAuthor"] ?? 0) == 0 ? false : true,
+      );
+    }),
+  ];
   final tile = ListTile(
     contentPadding: const EdgeInsets.all(0),
     leading: ExtendedImage.network(
@@ -185,68 +289,31 @@ Widget _buildAppBar(
             Theme.of(context).primaryTextTheme.subtitle1.color.withAlpha(200),
       ),
     ),
-    trailing: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        ThumbUpButton(
-          feedID: data["entityId"],
-          initThumbNum: data["likenum"],
-          inaccentColor: true,
-        ),
-        FlatButton(
-          child: Text(
-            "写评论",
-            style: TextStyle(
-              color: Theme.of(context).primaryTextTheme.bodyText1.color,
-            ),
+    trailing: mobileMode
+        ? null
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: action,
           ),
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (context) => ReplyInputBottomSheet(
-                targetId: data["entityId"],
-                hintText: "楼主",
-                onReplyDone: onReplyDone,
-              ),
-            );
-          },
-        ),
-        Builder(
-          builder: (context) => FlatButton.icon(
-            label: Text(collected ? "取消收藏" : "收藏动态"),
-            textColor: Theme.of(context).primaryTextTheme.bodyText1.color,
-            icon: Icon(collected ? Icons.star : Icons.star_border),
-            onPressed: () {
-              if (UserStore.getUserUid(context) == null) {
-                showToLoginSnackBar(context);
-                return;
-              }
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) =>
-                      AddCollectSheet(targetId: data["entityId"])).then(
-                (value) {
-                  // value == true 收藏成功
-                  if (value == null) return;
-                },
-              );
-            },
-          ),
-        ),
-        Builder(builder: (context) {
-          return FollowButton(
-            uid: data["uid"],
-            initIsFollow:
-                (data["userAction"]["followAuthor"] ?? 0) == 0 ? false : true,
-          );
-        }),
-      ],
-    ),
   );
   final double titleSpacing = data != null ? 0 : null;
   final title = data == null ? Text("获取中...") : tile;
   return sliver
-      ? SliverAppBar(titleSpacing: titleSpacing, title: title)
+      ? SliverAppBar(
+          titleSpacing: titleSpacing,
+          title: title,
+          snap: true,
+          floating: true,
+          actions: [
+            action[1],
+            PopupMenuButton(
+              color: Theme.of(context).accentColor,
+              itemBuilder: (context) {
+                return action.map((e) => PopupMenuItem(child: e)).toList();
+              },
+            )
+          ],
+        )
       : AppBar(titleSpacing: titleSpacing, title: title);
 }
 
