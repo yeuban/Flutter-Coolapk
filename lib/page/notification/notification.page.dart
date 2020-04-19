@@ -1,6 +1,6 @@
 import 'package:coolapk_flutter/network/model/notification.model.dart';
 import 'package:coolapk_flutter/store/notifaction.store.dart';
-import 'file:///E:/coolapk_flutter/lib/widget/html_text.dart';
+import 'package:coolapk_flutter/widget/html_text.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';

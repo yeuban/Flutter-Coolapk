@@ -2,7 +2,7 @@
 
 ![Build Action](https://github.com/Cyenoch/Flutter-Coolapk/workflows/Build%20Action/badge.svg)
 
-[Flutter Coolapk官方网站](https://cyenoch.github.io/flutter-coolapk-website/)
+[Flutter Coolapk 官方网站](https://cyenoch.github.io/flutter-coolapk-website/)
 
 ## 兴趣使然
 
@@ -22,6 +22,10 @@
   - app-armeabi-v7a-release.apk
   - app-arm64-v8a-release.apk
   - app-x86_64-release.apk
+
+## 调试开发:
+
+- Windows: flutter run -d windows
 
 ## 目录结构说明->
 
