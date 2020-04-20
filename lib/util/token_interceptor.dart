@@ -14,12 +14,12 @@ class TokenInterceptors extends InterceptorsWrapper {
       "X-App-Id": "com.coolapk.market",
       "X-Requested-With": "XMLHttpRequest",
       "X-Api-Version": "10",
-      "X-App-Code": "2001021",
-      "X-App-Version": "10-beta1",
+      "X-App-Code": "2004201",
+      "X-App-Version": "10.1-beta1",
       "X-Sdk-Int": "23",
       "X-Sdk-Locale": "zh-CN",
       "X-App-Token": buildToken(),
-      "X-App-Device": buildDeviceStr("Flutter Coolapk"), // 会引发一些奇怪的bug
+      "X-App-Device": buildDeviceStr(), // 会引发一些奇怪的bug
     });
     return super.onRequest(options);
   }
@@ -51,7 +51,7 @@ class TokenInterceptors extends InterceptorsWrapper {
   }
 }
 
-buildDeviceStr(final String device) {
+buildDeviceStr() {
   final device = FakeDevice.get();
   final gs = GlobalStorage.instance;
 

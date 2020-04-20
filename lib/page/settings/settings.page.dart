@@ -1,11 +1,21 @@
+import 'dart:convert';
+
+import 'package:coolapk_flutter/network/api/main.api.dart';
+import 'package:coolapk_flutter/network/api/user.api.dart';
 import 'package:coolapk_flutter/page/model_selector/model_selector.page.dart';
 import 'package:coolapk_flutter/store/theme.store.dart';
+import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/fake_device.dart';
 import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
+import 'package:coolapk_flutter/widget/to_login_snackbar.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
+
+part 'block_manage.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key key}) : super(key: key);
@@ -32,6 +42,9 @@ class SettingPage extends StatelessWidget {
                   FakeDeviceTile(),
                   Divider(),
                   HideUnsupportItemTile(),
+                  BlockManageTile(),
+                  Divider(),
+                  Center(child: Text("Flutter Coolapk v0.0.2.4")),
                 ]),
               ),
             ],

@@ -12,7 +12,7 @@ class ScaleInRoute extends PageRouteBuilder {
               opacity: Tween<double>(begin: 0, end: 1).animate(
                 CurvedAnimation(
                   parent: anim,
-                  curve: Curves.fastOutSlowIn,
+                  curve: Curves.easeInOutQuart,
                 ),
               ),
               child: ScaleTransition(
@@ -23,7 +23,7 @@ class ScaleInRoute extends PageRouteBuilder {
                       .animate(
                     CurvedAnimation(
                       parent: anim,
-                      curve: Curves.fastOutSlowIn,
+                      curve: Curves.easeInOutQuart,
                     ),
                   ),
                   // child: HomePage(),

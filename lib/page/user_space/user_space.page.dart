@@ -168,21 +168,92 @@ class _UserSpacePageState extends State<UserSpacePage>
                 height: double.infinity,
                 color: Colors.black.withAlpha(70),
               ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 32, left: 32),
-                  child: Text(
-                    _data != null
-                        ? "${_data.bio ?? ""}\n\n${_data.follow}关注 ${_data.fans}粉丝\n"
-                        : "",
-                    style:
-                        Theme.of(context).primaryTextTheme.headline6.copyWith(
-                              fontSize: 16,
-                            ),
-                  ),
-                ),
-              ),
+              _data == null
+                  ? const SizedBox()
+                  : Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: 300),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 36, left: 32),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Lv.${_data.level}",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .accentTextTheme
+                                              .bodyText1
+                                              .color,
+                                          fontSize: 12,
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        "${(_data.nextLevelExperience * (double.parse(_data.nextLevelPercentage) / 100)).floor()}/${_data.nextLevelExperience}",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .accentTextTheme
+                                              .bodyText1
+                                              .color,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(
+                                    height: 2,
+                                    color: Colors.transparent,
+                                  ),
+                                  LinearProgressIndicator(
+                                    value: double.parse(
+                                            _data.nextLevelPercentage) /
+                                        100,
+                                    backgroundColor: Theme.of(context)
+                                        .cardColor
+                                        .withAlpha(100),
+                                  ),
+                                  // Text("${_data.levelTodayMessage}",
+                                  //     style: TextStyle(
+                                  //         color: Theme.of(context)
+                                  //             .accentTextTheme
+                                  //             .bodyText1
+                                  //             .color)),
+                                ],
+                              ),
+                              Divider(),
+                              Text(
+                                "${_data.bio ?? ""}",
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .headline6
+                                    .copyWith(
+                                      fontSize: 16,
+                                    ),
+                              ),
+                              Divider(height: 6),
+                              Text(
+                                "${_data.follow}关注 ${_data.fans}粉丝",
+                                style: Theme.of(context)
+                                    .primaryTextTheme
+                                    .headline6
+                                    .copyWith(
+                                      fontSize: 14,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),

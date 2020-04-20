@@ -1,6 +1,7 @@
 import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/network/model/login_info.model.dart';
 import 'package:coolapk_flutter/network/model/user_space.model.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class UserApi {
@@ -22,5 +23,17 @@ class UserApi {
     } catch (err) {
       return null;
     }
+  }
+
+  static Future<dynamic> updateConfig({
+    @required dynamic key,
+    @required dynamic value,
+  }) async {
+    return (await Network.apiDio.post("/account/updateConfig",
+            data: FormData.fromMap({
+              "key": key,
+              "value": value,
+            })))
+        .data;
   }
 }

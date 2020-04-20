@@ -64,6 +64,24 @@ class _ReplyItemState extends State<ReplyItem> {
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
+        onLongPress: () {
+          // showDialog(
+          //   context: context,
+          //   builder: (context) {
+          //     return SimpleDialog(
+          //       children: [
+          //         TextField(
+          //           controller:
+          //               TextEditingController(text: widget.data.toString()),
+          //           autocorrect: true,
+          //           minLines: 1,
+          //           maxLines: 100000,
+          //         )
+          //       ],
+          //     );
+          //   },
+          // );
+        },
         onTap: () => onReplyClick(context),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

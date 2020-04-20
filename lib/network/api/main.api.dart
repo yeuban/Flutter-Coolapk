@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:coolapk_flutter/network/dio_setup.dart';
 import 'package:coolapk_flutter/network/model/collection.model.dart';
 import 'package:coolapk_flutter/network/model/main_init.model.dart';
@@ -16,6 +18,23 @@ enum SearchType {
 }
 
 class MainApi {
+  /**
+   * spam_word_config={"node":{},"custom":{"76a701273e998432452cd01f99b741fa":"EMM"},"user":{}}
+   * {
+   *  "node": {},
+   *  "custom": {
+   *    "__key__": "EMM"
+   *  },
+   *  "user": {
+   *  
+   *  }
+   * }
+   */
+  static Future<Map> getSpamWordList() async {
+    return jsonDecode(((await Network.apiDio.get("/user/spamWordList"))
+        .data)["data"]["spam_word_config"]);
+  }
+
   static Future search({
     SearchType searchType = SearchType.feed,
     @required String searchValue,
