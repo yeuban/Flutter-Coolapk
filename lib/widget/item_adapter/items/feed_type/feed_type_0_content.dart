@@ -15,6 +15,14 @@ class FeedType0Content extends StatelessWidget {
           HtmlText(
             html: source["message"],
             shrinkToFit: true,
+            onLinkTap: (url) {
+              handleOnLinkTap(url, context, onEmptyUrl: () {
+                Navigator.of(context).push(ScaleInRoute(
+                    widget: FeedDetailPage(
+                  url: source["url"],
+                )));
+              });
+            },
           ),
           buildIfImageBox(source, context),
         ],

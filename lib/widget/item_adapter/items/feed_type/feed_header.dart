@@ -111,7 +111,7 @@ class FeedItemHeader extends StatelessWidget {
                   case 3:
                     break;
                   case 4:
-                    showQRCode(context, source["shareUrl"]);
+                    handleOnLinkTap(source["shareUrl"], context);
                     break;
                   case 5:
                     showSource(context);

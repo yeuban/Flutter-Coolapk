@@ -6,7 +6,6 @@ import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
 import 'package:coolapk_flutter/page/user_space/user_space.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
-import 'package:coolapk_flutter/util/show_qr_code.dart';
 import 'package:coolapk_flutter/widget/html_text.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:coolapk_flutter/widget/level_label.dart';
@@ -54,9 +53,11 @@ part './feed_item_imagebox.dart';
 ///   20: 出自 数码->交易列表，看起来能用0来代替
 class FeedItem extends StatelessWidget {
   final dynamic source;
+  final Widget extHeader;
   final Function(dynamic) requireDelete;
 
-  const FeedItem({Key key, this.source, this.requireDelete}) : super(key: key);
+  const FeedItem({Key key, this.source, this.requireDelete, this.extHeader})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +111,7 @@ class FeedItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          extHeader ?? const SizedBox(),
           FeedItemHeader(
             userName: source["username"],
             headImgUrl: source["userAvatar"],

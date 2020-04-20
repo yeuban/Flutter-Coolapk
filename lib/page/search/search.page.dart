@@ -35,7 +35,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   @override
   void initState() {
     _tabController = TabController(length: _tabs.length, vsync: this);
-    _textEditingController = TextEditingController(text: widget.searchString);
+    _textEditingController = TextEditingController(text: "");
     _tabsWidget = _tabs
         .map((tab) => SubSearch(
               key: GlobalKey(),
@@ -117,11 +117,13 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
             child: TextField(
               controller: _textEditingController,
               cursorColor: Theme.of(context).primaryTextTheme.bodyText1.color,
+              autofocus: false,
+              maxLines: 1,
               style: TextStyle(
                   color: Theme.of(context).primaryTextTheme.bodyText1.color),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "搜索",
+                hintText: "请输入搜索内容",
                 hintStyle: TextStyle(
                     color: Theme.of(context)
                         .primaryTextTheme

@@ -148,7 +148,18 @@ class _SpamWordManagePageState extends State<SpamWordManagePage> {
     TextEditingController _ctr = TextEditingController();
     return AlertDialog(
       title: Text("添加自定义屏蔽关键词"),
-      content: TextField(controller: _ctr, maxLength: 100),
+      content: TextFormField(
+        controller: _ctr,
+        maxLength: 15,
+        decoration: InputDecoration(hintText: "2-15字"),
+        validator: (str) {
+          if (str.length < 2) {
+            return "2-15字";
+          }
+          return null;
+        },
+        autovalidate: true,
+      ),
       actions: [
         FlatButton(
           child: Text("取消"),

@@ -68,7 +68,7 @@ class _SubSearchState extends State<SubSearch>
     super.build(context);
     return ListView.builder(
       padding: const EdgeInsets.only(top: 16, bottom: 16),
-      itemCount: _data.length,
+      itemCount: _data.length + (_nomore ? 1 : 0) + (_loading ? 1 : 0),
       itemBuilder: (context, index) {
         const topBorderRadius =
             const BorderRadius.vertical(top: const Radius.circular(8));
@@ -80,6 +80,41 @@ class _SubSearchState extends State<SubSearch>
             (_data.length > 0 && (index == 0 || index == _data.length - 1)) &&
                 needWhiteBackground;
         final radius = index == 0 ? topBorderRadius : bottomBorderRadius;
+        if (index >= _data.length) {
+          if (_loading) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "加载中...",
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .color
+                        .withAlpha(100),
+                  ),
+                ),
+              ),
+            );
+          }
+          if (_nomore) {
+            return Center(
+                child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                "再下面就是胖次了哦~不准看！",
+                style: TextStyle(
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      .color
+                      .withAlpha(100),
+                ),
+              ),
+            ));
+          }
+        }
         return LimitedContainer(
           boxDecoration: BoxDecoration(
             borderRadius: !needRadius ? null : radius,

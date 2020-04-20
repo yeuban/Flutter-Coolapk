@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
 import 'package:coolapk_flutter/util/global_storage.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed.item.dart';
+import 'package:coolapk_flutter/widget/item_adapter/items/feed_type/feed_dyh_header.item.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/user_type/user_card.item.dart';
 import 'package:coolapk_flutter/widget/limited_container.dart';
@@ -76,6 +77,12 @@ class AutoItemAdapter extends StatelessWidget {
         switch (template) {
           case "feed":
             item = FeedItem(
+              source: entity,
+              requireDelete: onRequireDeleteItem,
+            );
+            break;
+          case "feedByDyhHeader":
+            item = FeedByDyhDeaderItem(
               source: entity,
               requireDelete: onRequireDeleteItem,
             );

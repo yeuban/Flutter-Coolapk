@@ -51,44 +51,50 @@ void showQRCode(final BuildContext context, final String qrStr) {
       },
       pageBuilder: (context, anim1, __) {
         return Center(
-          child: Container(
-            width: 210,
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "使用手机酷安扫码打开~",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                Divider(
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                QrImage(
-                  data: qrStr,
-                  size: 200,
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      BackButton(),
-                      Text(
-                        "返回",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 210,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "使用手机酷安扫码打开~",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
-                    ],
-                  ),
+                    ),
+                    Divider(
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    QrImage(
+                      data: qrStr,
+                      size: 200,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          BackButton(),
+                          Text(
+                            "返回",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Text(qrStr),
+            ],
           ),
         );
       },

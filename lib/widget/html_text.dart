@@ -1,5 +1,5 @@
+import 'package:coolapk_flutter/page/detail/feed_detail.page.dart';
 import 'package:coolapk_flutter/util/emoji.dart';
-import 'package:coolapk_flutter/util/show_qr_code.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -28,9 +28,10 @@ class HtmlText extends StatelessWidget {
       useRichText: false,
       data: parseEmoji(html),
       showImages: true,
-      onLinkTap: onLinkTap ?? (link) {
-        showQRCode(context, link);
-      },
+      onLinkTap: onLinkTap ??
+          (link) {
+            handleOnLinkTap(link, context);
+          },
       renderNewlines: renderNewlines ?? true,
       shrinkToFit: shrinkToFit,
       linkStyle: linkStyle ?? TextStyle(color: Theme.of(context).accentColor),
@@ -49,6 +50,9 @@ class HtmlText extends StatelessWidget {
                 );
               } catch (err) {}
               break;
+          }
+          if (node.text == "查看更多") {
+            node.text = "";
           }
         }
         return null;

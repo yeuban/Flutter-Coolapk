@@ -6,6 +6,7 @@ import 'package:coolapk_flutter/page/collection_list/add_collect.sheet.dart';
 import 'package:coolapk_flutter/page/user_space/user_space.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
+import 'package:coolapk_flutter/util/show_qr_code.dart';
 import 'package:coolapk_flutter/widget/feed_author_tag.dart';
 import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
 import 'package:coolapk_flutter/util/image_url_size_parse.dart';
@@ -33,8 +34,9 @@ part 'util.dart';
 
 class FeedDetailPage extends StatefulWidget {
   final String url;
+  final dynamic feedId;
 
-  FeedDetailPage({Key key, this.url}) : super(key: key);
+  FeedDetailPage({Key key, this.url, this.feedId}) : super(key: key);
 
   @override
   _FeedDetailPageState createState() => _FeedDetailPageState();
@@ -46,7 +48,8 @@ class _FeedDetailPageState extends State<FeedDetailPage> {
   String get url => widget.url;
 
   String get feedId =>
-      url.startsWith("/feed/") ? url.replaceAll("/feed/", "") : null;
+      widget.feedId ??
+      (url.startsWith("/feed/") ? url.replaceAll("/feed/", "") : null);
 
   GlobalKey<_FeedReplyListState> _feedReplyListKey;
 

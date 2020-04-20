@@ -1,4 +1,5 @@
 part of './feed.item.dart';
+
 class FeedType11Content extends StatelessWidget {
   final dynamic source;
   const FeedType11Content(this.source, {Key key}) : super(key: key);

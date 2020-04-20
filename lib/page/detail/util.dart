@@ -1,19 +1,29 @@
 part of 'feed_detail.page.dart';
 
-void handleOnLinkTap(final String url, final BuildContext context) {
+void handleOnLinkTap(String url, final BuildContext context,
+    {final Function onEmptyUrl}) {
+  final surl = url;
+  url = url
+      .replaceAll(RegExp(r'https://'), "http://")
+      .replaceAll("http://www.coolapk.com/u/", "/u/")
+      .replaceAll("http://www.coolapk.com/feed/", "/feed/")
+      .replaceAll("user=", "/u/");
   if (url.startsWith("pic=")) {
     ImageBox.push(context, urls: [url.split("=")[1]]);
-  } else if (url.startsWith(RegExp(r'user=|/u/'))) {
-    // TODO: handle to user space
-    UserSpacePage.entry(context, url.replaceAll(RegExp(r'user=|/u/'), ""));
-  } else if (url.startsWith("https://www.coolapk.com/feed/")) {
+  } else if (url.startsWith(RegExp(r'/u/'))) {
+    UserSpacePage.entry(context, url.replaceAll(RegExp(r'/u/'), ""));
+  } else if (url.startsWith(RegExp(r'/feed/'))) {
     Navigator.push(
         context,
         ScaleInRoute(
             widget: FeedDetailPage(
-          url: url.split("?")[0].replaceAll("https://www.coolapk.com", ""),
+          feedId: url.replaceAll(RegExp(r'/feed/'), ""),
         )));
   } else {
+    if ((url.isEmpty)) {
+      onEmptyUrl?.call();
+      return;
+    }
     showDialog(
       context: context,
       builder: (context) {
@@ -32,6 +42,10 @@ void handleOnLinkTap(final String url, final BuildContext context) {
             ),
           ),
           actions: <Widget>[
+            FlatButton(
+              child: Text("使用酷安打开"),
+              onPressed: () => showQRCode(context, surl),
+            ),
             FlatButton(
               child: Text("取消"),
               onPressed: () => Navigator.pop(context),
