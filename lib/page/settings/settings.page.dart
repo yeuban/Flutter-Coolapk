@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coolapk_flutter/app_config.dart';
 import 'package:coolapk_flutter/network/api/main.api.dart';
 import 'package:coolapk_flutter/network/api/user.api.dart';
 import 'package:coolapk_flutter/page/model_selector/model_selector.page.dart';
@@ -44,7 +45,7 @@ class SettingPage extends StatelessWidget {
                   HideUnsupportItemTile(),
                   BlockManageTile(),
                   Divider(),
-                  Center(child: Text("Flutter Coolapk v0.0.2.4")),
+                  Center(child: Text("Flutter Coolapk $AppVersion")),
                 ]),
               ),
             ],
