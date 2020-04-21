@@ -1,5 +1,6 @@
 part of 'notification.page.dart';
 
+// TODO: 体验需要该进 2020/4/21
 class NotificationList extends StatefulWidget {
   NotificationList({Key key}) : super(key: key);
 
@@ -11,33 +12,45 @@ class _NotificationListState extends State<NotificationList> {
   EasyRefreshController _refreshCtr = EasyRefreshController();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return EasyRefresh(
-      controller: _refreshCtr,
-      onLoad: () async {
-        final store = NotificationStore.of(context);
-        if (store.nomore) {
+    return Selector<NotificationStore, bool>(
+      selector: (_, store) => store.nomore,
+      shouldRebuild: (previous, next) => previous != next,
+      builder: (context, nomore, child) => EasyRefresh(
+        firstRefresh: true,
+        controller: _refreshCtr,
+        enableControlFinishLoad: !nomore,
+        onLoad: () async {
+          final store = NotificationStore.of(context);
+          if (nomore) {
+            _refreshCtr.finishLoad();
+            return;
+          }
+          try {
+            await store.fetch();
+          } catch (err, stack) {
+            debugPrintStack(stackTrace: stack);
+            Toast.show(err.toString(), context, duration: 2);
+          }
           _refreshCtr.finishLoad();
-          return;
-        }
-        try {
-          await store.fetch();
-        } catch (err, stack) {
-          debugPrintStack(stackTrace: stack);
-          Toast.show(err.toString(), context, duration: 2);
-        }
-        _refreshCtr.finishLoad();
-      },
-      onRefresh: () async {
-        final store = NotificationStore.of(context);
-        try {
-          await store.fetch(refresh: true);
-        } catch (err, stack) {
-          debugPrintStack(stackTrace: stack);
-          Toast.show(err.toString(), context, duration: 2);
-        }
-        _refreshCtr.finishRefresh();
-      },
+        },
+        onRefresh: () async {
+          final store = NotificationStore.of(context);
+          try {
+            await store.fetch(refresh: true);
+          } catch (err, stack) {
+            debugPrintStack(stackTrace: stack);
+            Toast.show(err.toString(), context, duration: 2);
+          }
+          _refreshCtr.finishRefresh();
+        },
+        child: child,
+      ),
       child: CustomScrollView(
         slivers: _buildBase(context)
           ..add(

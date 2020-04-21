@@ -105,13 +105,25 @@ class FeedItemHeader extends StatelessWidget {
                 // TODO:
                 switch (value) {
                   case 1:
+                    if (UserStore.getUserUid(context) == null) {
+                      showToLoginSnackBar(context);
+                    } else {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) => AddCollectSheet(
+                                targetId: source["entityId"],
+                              ));
+                    }
                     break;
                   case 2:
+                    Toast.show("此功能暂未完成", context);
                     break;
                   case 3:
+                    Toast.show("此功能也暂未完成", context);
                     break;
                   case 4:
-                    handleOnLinkTap(source["shareUrl"], context);
+                    // handleOnLinkTap(source["shareUrl"], context);
+                    showQRCode(context, source["shareUrl"]);
                     break;
                   case 5:
                     showSource(context);
@@ -122,6 +134,17 @@ class FeedItemHeader extends StatelessWidget {
                     Toast.show(resp["data"] ?? resp["message"], context,
                         duration: 2);
                     delete?.call(source);
+                    break;
+                  case 7:
+                    if ((await showDialog(
+                            context: context,
+                            builder: (context) => BlockDialog(
+                                  source: this.source,
+                                ))) ??
+                        false) {
+                      delete.call(source);
+                    }
+                    ;
                     break;
                 }
               },
@@ -148,17 +171,19 @@ class FeedItemHeader extends StatelessWidget {
                     child: Text("查看源数据"),
                   ),
                 ]..addAll(source["uid"].toString() ==
-                        Provider.of<UserStore>(context, listen: false)
-                            .loginInfo
-                            .uid
-                            .toString()
+                        UserStore.getUserUid(context).toString()
                     ? [
                         PopupMenuItem(
                           value: 6,
                           child: Text("删除动态"),
                         )
                       ]
-                    : []);
+                    : [
+                        PopupMenuItem(
+                          value: 7,
+                          child: Text("屏蔽..."),
+                        ),
+                      ]);
               },
             ),
           ],

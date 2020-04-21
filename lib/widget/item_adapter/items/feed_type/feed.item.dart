@@ -1,18 +1,21 @@
 import 'dart:convert';
 
 import 'package:coolapk_flutter/network/api/feed.api.dart';
+import 'package:coolapk_flutter/page/collection_list/add_collect.sheet.dart';
 import 'package:coolapk_flutter/page/detail/feed_detail.page.dart';
 import 'package:coolapk_flutter/page/image_box/image_box.page.dart';
+import 'package:coolapk_flutter/page/settings/settings.page.dart';
 import 'package:coolapk_flutter/page/user_space/user_space.page.dart';
 import 'package:coolapk_flutter/store/user.store.dart';
 import 'package:coolapk_flutter/util/anim_page_route.dart';
+import 'package:coolapk_flutter/util/show_qr_code.dart';
 import 'package:coolapk_flutter/widget/html_text.dart';
 import 'package:coolapk_flutter/widget/item_adapter/items/items.dart';
 import 'package:coolapk_flutter/widget/level_label.dart';
 import 'package:coolapk_flutter/widget/thumb_up_button.dart';
+import 'package:coolapk_flutter/widget/to_login_snackbar.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 part './feed_type_cover_12_content.dart';

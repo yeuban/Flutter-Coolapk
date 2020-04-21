@@ -29,6 +29,7 @@ class UserApi {
     @required dynamic key,
     @required dynamic value,
   }) async {
+    // value must be json string
     return (await Network.apiDio.post("/account/updateConfig",
             data: FormData.fromMap({
               "key": key,

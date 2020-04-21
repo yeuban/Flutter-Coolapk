@@ -7,7 +7,8 @@ void handleOnLinkTap(String url, final BuildContext context,
       .replaceAll(RegExp(r'https://'), "http://")
       .replaceAll("http://www.coolapk.com/u/", "/u/")
       .replaceAll("http://www.coolapk.com/feed/", "/feed/")
-      .replaceAll("user=", "/u/");
+      .replaceAll("user=", "/u/")
+      .replaceAll("/user/", "/u/");
   if (url.startsWith("pic=")) {
     ImageBox.push(context, urls: [url.split("=")[1]]);
   } else if (url.startsWith(RegExp(r'/u/'))) {
