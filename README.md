@@ -18,6 +18,7 @@
 - 注意，版本的时间是错误的，要＋一天才是实际编译时间!!!
 - <http://github-mirror.bugkiller.org/Cyenoch/Flutter-Coolapk/releases/>
 - 根据你所用设备的版本进行下载
+- 如果提示缺少什么什么dll，请安装这个 [VC_redist.x64](https://cyenoch.lanzous.com/ibkt3eh)
 - 安卓版：（不懂就下载 armeabi-v7a 的）
   - app-armeabi-v7a-release.apk
   - app-arm64-v8a-release.apk
